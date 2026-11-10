@@ -139,17 +139,6 @@
   will-change: transform;
 }
 
-@keyframes beamDashMove {
-  to {
-    stroke-dashoffset: -50;
-  }
-}
-
-.animate-beam-dash {
-  stroke-dasharray: 8 6;
-  animation: beamDashMove 1s linear infinite;
-}
-
 /* Subtle Honeycomb Background Pattern matching S5.jpg & S6.jpg */
 .bg-honeycomb-pattern {
   background-color: #FAF8F5;

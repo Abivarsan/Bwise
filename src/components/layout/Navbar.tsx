@@ -18,19 +18,19 @@ export const Navbar: React.FC = () => {
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-white/20 backdrop-blur-md border-b border-white/30 transition-all py-2">
-      <div className="max-w-[1360px] mx-auto px-4 sm:px-8 h-16 sm:h-18 flex items-center justify-between">
-        {/* Brand Logo inside floating glass card matching image_10.png */}
+    <header className="sticky top-0 z-50 w-full bg-[#FAF8F5]/90 backdrop-blur-md border-b border-stone-200/60 transition-all">
+      <div className="max-w-[1360px] mx-auto px-4 sm:px-8 h-20 flex items-center justify-between">
+        {/* Brand Logo matching S1.jpg & S5.jpg */}
         <Link
           to="/"
-          className="focus:outline-none group flex items-center gap-2 bg-white/45 backdrop-blur-md px-4 py-2 rounded-2xl border border-white/60 shadow-[0_8px_24px_rgba(26,22,18,0.06)] hover:bg-white/65 hover:scale-[1.02] transition-all"
+          className="focus:outline-none group flex items-center gap-2"
           aria-label="Bwise Home"
         >
-          <BwiseLogo className="h-9 sm:h-10 transition-transform duration-300" />
+          <BwiseLogo className="h-11 sm:h-12 transition-transform duration-300 group-hover:scale-[1.02]" />
         </Link>
 
-        {/* Desktop Navigation Links + "Let's Connect" inside floating glass pill matching image_10.png */}
-        <nav className="hidden md:flex items-center gap-6 lg:gap-7 bg-white/40 backdrop-blur-md px-5 py-1.5 rounded-full border border-white/60 shadow-[0_8px_24px_rgba(26,22,18,0.06)]">
+        {/* Desktop Navigation Links + "Let's Connect" Pill CTA (matching S1.jpg & S5.jpg) */}
+        <nav className="hidden md:flex items-center gap-8 lg:gap-10">
           {navItems.map((item) =>
             item.hasDropdown ? (
               <div

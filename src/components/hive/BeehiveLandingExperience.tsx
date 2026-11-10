@@ -9,8 +9,6 @@ import { HoneycombGrid3D, ServiceIcon } from './HoneycombGrid3D';
 import { HoneycombTunnelCanvas } from './HoneycombTunnelCanvas';
 import { BeehiveInteriorRoom } from './BeehiveInteriorRoom';
 import { NaturalSkiesSkybox } from './NaturalSkiesSkybox';
-import { ConnectingLightBeams } from './ConnectingLightBeams';
-import { NaturalSkiesHoneycombGrid } from './NaturalSkiesHoneycombGrid';
 import { soundFX } from '../../utils/soundEffects';
 
 export type HiveAnimationStage = 'S1' | 'S2' | 'S3' | 'TUNNEL' | 'S4';
@@ -231,9 +229,6 @@ export const BeehiveLandingExperience: React.FC = () => {
       {/* Background Natural Skies Skybox in Stage S1 (Idea 5) */}
       {stage === 'S1' && <NaturalSkiesSkybox mouseTilt={mouseTilt} />}
 
-      {/* Luminous Connecting Light Beams between the Left Guide Card and Right Honeycomb Matrix */}
-      {stage === 'S1' && <ConnectingLightBeams hoveredServiceId={hoveredServiceId} />}
-
       {/* Full-Screen 3D Honeycomb Warp Tunnel Transition (Video 00:03–00:04) */}
       <AnimatePresence>
         {stage === 'TUNNEL' && (
@@ -269,17 +264,6 @@ export const BeehiveLandingExperience: React.FC = () => {
               flightTiltDeg={beePos.tilt}
               isFlying={beePos.isFlying}
             />
-
-            {/* Glowing Golden Cloud Vapor Cushion underneath Bee in S1 (matching image_10.png) */}
-            {stage === 'S1' && (
-              <div className="absolute -bottom-8 -left-10 w-72 h-24 pointer-events-none -z-10">
-                <div className="absolute inset-0 bg-white/70 blur-xl rounded-full" />
-                <div className="absolute -top-2 left-6 w-44 h-16 bg-amber-300/40 blur-lg rounded-full" />
-                <div className="absolute top-2 left-8 w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_8px_#F59E0B] animate-ping" />
-                <div className="absolute top-6 left-28 w-2.5 h-2.5 rounded-full bg-yellow-300 shadow-[0_0_10px_#F59E0B] animate-pulse" />
-                <div className="absolute top-4 left-44 w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_6px_#F59E0B]" />
-              </div>
-            )}
 
             {/* Animated Cursor Pointer appearing on the selected cell in Stage S3 (matching S3.jpg) */}
             {stage === 'S3' && selectedService && !beePos.isFlying && (
@@ -322,34 +306,40 @@ export const BeehiveLandingExperience: React.FC = () => {
           >
             <AnimatePresence mode="wait">
               {stage === 'S1' && (
-                /* S1 Glassmorphic Floating Cloud Guide Card matching image_10.png */
+                /* S1 Speech Bubble Popup Card with the 12 Priority Services (matching S1.jpg) */
                 <motion.div
                   key="s1-popup"
                   initial={{ opacity: 0, y: 18, scale: 0.94 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: -14, scale: 0.92 }}
                   transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                  className="relative w-full max-w-[450px] xl:max-w-[480px] bg-white/30 backdrop-blur-xl rounded-[32px] p-5 sm:p-6 shadow-[0_24px_64px_rgba(217,119,6,0.14)] border border-white/50 animate-float-slow"
+                  className="relative w-full max-w-[440px] xl:max-w-[470px] bg-white rounded-[26px] p-5 sm:p-6 shadow-[0_24px_60px_rgba(26,22,18,0.11)] border border-stone-200/70"
                 >
+                  {/* Speech bubble tail pointing left toward the Bwise Bee (matching S1.jpg) */}
+                  <div
+                    className="hidden lg:block absolute -left-3.5 top-[44%] -translate-y-1/2 w-7 h-7 bg-white rotate-45 border-l border-b border-stone-200/70 rounded-bl-sm"
+                    aria-hidden="true"
+                  />
+
                   <div className="flex items-center justify-between gap-2 mb-2">
-                    <span className="inline-flex items-center gap-1.5 text-[11px] font-extrabold uppercase tracking-wider text-amber-700 bg-amber-100/70 border border-amber-300/40 px-3 py-1 rounded-full shadow-xs">
-                      <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-                      BWAISE INTERACTIVE GUIDE
+                    <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-amber-600 bg-amber-50 px-2.5 py-1 rounded-full">
+                      <Sparkles className="w-3.5 h-3.5" />
+                      Bwise Interactive Guide
                     </span>
                     <button
                       type="button"
                       onClick={() => setStage('S2')}
-                      className="text-[11px] font-bold text-stone-600 hover:text-amber-700 transition cursor-pointer"
+                      className="text-[11px] font-semibold text-stone-500 hover:text-amber-600 transition cursor-pointer"
                     >
                       View Full Hive →
                     </button>
                   </div>
 
-                  <h1 className="text-xl sm:text-[23px] font-extrabold text-stone-900 leading-snug mb-3.5 tracking-tight">
+                  <h1 className="text-xl sm:text-[22px] font-extrabold text-stone-900 leading-snug mb-4">
                     What can we help you to build today?
                   </h1>
 
-                  {/* 12 Priority Services Glassmorphic Pill Buttons */}
+                  {/* 12 Priority Services Pill Buttons */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-[340px] overflow-y-auto pr-1">
                     {PRIORITY_SERVICES.map((service, idx) => (
                       <button
@@ -363,11 +353,11 @@ export const BeehiveLandingExperience: React.FC = () => {
                         onMouseLeave={() => setHoveredServiceId(null)}
                         className={`group flex items-center gap-2 px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-full border text-left text-xs font-semibold transition-all duration-200 cursor-pointer ${
                           hoveredServiceId === service.id
-                            ? 'border-amber-400 bg-amber-100/90 text-stone-950 shadow-[0_4px_18px_rgba(245,158,11,0.3)] scale-[1.03] -translate-y-0.5'
-                            : 'border-white/70 bg-white/55 backdrop-blur-sm hover:border-amber-400 hover:bg-amber-50/80 text-stone-800 shadow-xs'
+                            ? 'border-amber-500 bg-amber-50/90 text-stone-950 shadow-sm -translate-y-0.5'
+                            : 'border-stone-800/80 bg-white hover:border-amber-500 hover:bg-amber-50/50 text-stone-900'
                         }`}
                       >
-                        <span className="w-5 h-5 rounded-full bg-amber-100/90 text-amber-800 group-hover:bg-amber-500 group-hover:text-white flex items-center justify-center shrink-0 transition-colors shadow-xs">
+                        <span className="w-5 h-5 rounded-full bg-amber-100 text-amber-700 group-hover:bg-amber-500 group-hover:text-white flex items-center justify-center shrink-0 transition-colors">
                           <ServiceIcon name={service.iconName} className="w-3 h-3" />
                         </span>
                         <span className="truncate">{service.title}</span>
@@ -375,9 +365,9 @@ export const BeehiveLandingExperience: React.FC = () => {
                     ))}
                   </div>
 
-                  <p className="mt-3.5 text-[11px] text-stone-600 flex items-center justify-between border-t border-white/40 pt-2.5">
+                  <p className="mt-3.5 text-[11px] text-stone-500 flex items-center justify-between">
                     <span>Select any service to watch our Bee guide you into the Hive</span>
-                    <span className="font-extrabold text-amber-600">12 Studios</span>
+                    <span className="font-bold text-amber-600">12 Studios</span>
                   </p>
                 </motion.div>
               )}
@@ -402,7 +392,7 @@ export const BeehiveLandingExperience: React.FC = () => {
             </AnimatePresence>
           </div>
 
-          {/* Right Column: In S1 -> NaturalSkiesHoneycombGrid; in S2/S3 -> HoneycombGrid3D */}
+          {/* Right Column: Stage-Specific Honeycomb Display (12 Isometric Hexagonal Rooms) */}
           <div
             className={`relative z-20 flex items-center justify-center transition-all duration-700 ${
               stage === 'S3'
@@ -410,24 +400,14 @@ export const BeehiveLandingExperience: React.FC = () => {
                 : 'w-full lg:w-[54%]'
             }`}
           >
-            {stage === 'S1' ? (
-              <NaturalSkiesHoneycombGrid
-                selectedService={selectedService}
-                hoveredServiceId={hoveredServiceId}
-                onSelectService={startServiceFlightSequence}
-                onHoverService={setHoveredServiceId}
-                mouseTilt={mouseTilt}
-              />
-            ) : (
-              <HoneycombGrid3D
-                stage={stage === 'S2' || stage === 'S3' ? stage : 'S2'}
-                selectedService={selectedService}
-                hoveredServiceId={hoveredServiceId}
-                onSelectService={startServiceFlightSequence}
-                onHoverService={setHoveredServiceId}
-                mouseTilt={mouseTilt}
-              />
-            )}
+            <HoneycombGrid3D
+              stage={stage === 'S1' || stage === 'S2' || stage === 'S3' ? stage : 'S2'}
+              selectedService={selectedService}
+              hoveredServiceId={hoveredServiceId}
+              onSelectService={startServiceFlightSequence}
+              onHoverService={setHoveredServiceId}
+              mouseTilt={mouseTilt}
+            />
           </div>
         </div>
       )}
