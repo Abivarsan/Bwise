@@ -110,6 +110,46 @@
   animation: pulseHoneyGlow 1.8s infinite ease-in-out;
 }
 
+/* Cloud Drift & Energy Beam Animations for Idea 5 Natural Skies */
+@keyframes cloudDriftSlow {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes cloudDriftMedium {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.animate-cloud-drift-slow {
+  animation: cloudDriftSlow 115s linear infinite;
+  will-change: transform;
+}
+
+.animate-cloud-drift-medium {
+  animation: cloudDriftMedium 80s linear infinite;
+  will-change: transform;
+}
+
+@keyframes beamDashMove {
+  to {
+    stroke-dashoffset: -50;
+  }
+}
+
+.animate-beam-dash {
+  stroke-dasharray: 8 6;
+  animation: beamDashMove 1s linear infinite;
+}
+
 /* Subtle Honeycomb Background Pattern matching S5.jpg & S6.jpg */
 .bg-honeycomb-pattern {
   background-color: #FAF8F5;
