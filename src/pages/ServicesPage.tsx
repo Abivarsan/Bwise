@@ -14,6 +14,7 @@ import {
 import { PRIORITY_SERVICES, PriorityService, getServiceBySlug } from '../data/servicesData';
 import { ServiceIcon } from '../components/hive/HoneycombGrid3D';
 import { BwiseBeeCharacter } from '../components/hive/BwiseBeeCharacter';
+import { BwiseLogo } from '../components/layout/BwiseLogo';
 
 export const ServicesPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -165,10 +166,7 @@ export const ServicesPage: React.FC = () => {
                   <div className="rounded-xl bg-[#FAF8F5] overflow-hidden aspect-[16/10] p-4 sm:p-5 flex flex-col justify-between relative">
                     {/* Mini Navbar inside Screen */}
                     <div className="flex items-center justify-between border-b border-stone-200/80 pb-2">
-                      <div className="flex items-center gap-1.5">
-                        <span className="w-3 h-3 rounded-full bg-amber-500 inline-block" />
-                        <span className="text-[10px] font-extrabold text-stone-900">Bwise Studio</span>
-                      </div>
+                      <BwiseLogo className="h-4" />
                       <span className="px-2 py-0.5 rounded-full bg-amber-500 text-white text-[8px] font-bold">
                         {activeService.shortTitle}
                       </span>
@@ -223,7 +221,7 @@ export const ServicesPage: React.FC = () => {
                   <div className="w-8 h-1 bg-stone-700 rounded-full mx-auto mb-1" />
                   <div className="rounded-[14px] bg-white p-2 space-y-1.5 aspect-[9/16] flex flex-col justify-between">
                     <div className="flex items-center justify-between">
-                      <span className="w-2 h-2 rounded-full bg-amber-500" />
+                      <BwiseLogo variant="emblem" className="h-3" />
                       <span className="text-[7px] font-bold text-stone-400">BWISE</span>
                     </div>
                     <div className="space-y-1 my-auto">

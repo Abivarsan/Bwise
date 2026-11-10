@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight, CheckCircle2, RotateCcw, Sparkles } from 'lucide-react';
 import { PriorityService } from '../../data/servicesData';
 import { ServiceIcon } from './HoneycombGrid3D';
+import { BwiseLogo } from '../layout/BwiseLogo';
 
 interface BeehiveInteriorRoomProps {
   service: PriorityService;
@@ -86,10 +87,8 @@ export const BeehiveInteriorRoom: React.FC<BeehiveInteriorRoomProps> = ({
           transition={{ delay: 0.25 }}
           className="hidden md:flex absolute left-[12.5%] top-[22.5%] w-[21%] items-center justify-between bg-white/95 backdrop-blur-sm px-2.5 py-1.5 rounded-lg border border-stone-300/80 shadow-sm pointer-events-none"
         >
-          <div className="flex items-center gap-1.5 truncate">
-            <div className="p-1 rounded bg-amber-500 text-white shrink-0">
-              <ServiceIcon name={service.iconName} className="w-3.5 h-3.5" />
-            </div>
+          <div className="flex items-center gap-2 truncate">
+            <BwiseLogo variant="emblem" className="h-5 shrink-0" />
             <div className="truncate">
               <p className="text-[9px] uppercase tracking-wider font-bold text-amber-700 leading-none">
                 Bwise Blueprint

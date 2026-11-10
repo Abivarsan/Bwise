@@ -178,6 +178,8 @@ Bwise Portfolio Website/
     │   └── servicesData.ts                     # Master typed dataset for all 12 Priority Services
     ├── utils/
     │   └── soundEffects.ts                     # Web Audio API sound synthesizer & Web Speech API voice narrator
+    ├── assets/
+    │   └── branding/                           # High-res authentic Bwise logo assets (light, dark & favicon)
     ├── components/
     │   ├── hive/
     │   │   ├── BwiseBeeCharacter.tsx           # 3D Studio Bee character with alpha matting & 60fps wing flutter
@@ -186,7 +188,7 @@ Bwise Portfolio Website/
     │   │   ├── BeehiveInteriorRoom.tsx         # S4 Interior Beehive Conference Room (Whiteboard + Consultant Bee)
     │   │   └── BeehiveLandingExperience.tsx    # Master state machine & GSAP flight orchestrator (S1 -> S4)
     │   └── layout/
-    │       ├── BwiseLogo.tsx                   # Custom SVG recreation of the Bwise bee-in-B brand logo
+    │       ├── BwiseLogo.tsx                   # Authentic original Bwise brand logo with light/dark theme support
     │       ├── Navbar.tsx                      # Sticky header with 12-service mega-menu & "Let's Connect" CTA
     │       ├── Footer.tsx                      # Agency footer with direct links to all 12 studio rooms
     │       └── FloatingChatWidget.tsx          # Bottom-right orange chat concierge matching S1/S5/S6
