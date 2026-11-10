@@ -1,4 +1,5 @@
 import React from 'react';
+import { assetUrl } from '../../utils/assets';
 
 export interface BwiseLogoProps {
   className?: string;
@@ -20,10 +21,10 @@ export const BwiseLogo: React.FC<BwiseLogoProps> = ({
 }) => {
   const logoSrc =
     variant === 'emblem'
-      ? '/assets/branding/bwise-favicon.png'
+      ? assetUrl('/assets/branding/bwise-favicon.png')
       : lightText
-      ? '/assets/branding/bwise-logo-dark.png'
-      : '/assets/branding/bwise-logo-light.png';
+      ? assetUrl('/assets/branding/bwise-logo-dark.png')
+      : assetUrl('/assets/branding/bwise-logo-light.png');
 
   return (
     <div className={`inline-flex items-center select-none ${className}`}>

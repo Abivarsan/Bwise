@@ -4,6 +4,7 @@ import { ArrowRight, CheckCircle2, RotateCcw, Sparkles } from 'lucide-react';
 import { PriorityService } from '../../data/servicesData';
 import { ServiceIcon } from './HoneycombGrid3D';
 import { BwiseLogo } from '../layout/BwiseLogo';
+import { assetUrl } from '../../utils/assets';
 
 interface BeehiveInteriorRoomProps {
   service: PriorityService;
@@ -64,7 +65,7 @@ export const BeehiveInteriorRoom: React.FC<BeehiveInteriorRoomProps> = ({
       <div className="relative w-full max-w-[1360px] aspect-[16/9] rounded-3xl overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,0.55)] border border-amber-400/30 bg-stone-950">
         {/* Authentic High-Res 3D Beehive Conference Room Scene from S4.jpg */}
         <img
-          src="/reference/S4.jpg"
+          src={assetUrl('/reference/S4.jpg')}
           alt={`${service.title} Beehive Studio Room`}
           className="w-full h-full object-cover select-none"
           draggable={false}

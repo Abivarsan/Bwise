@@ -10,7 +10,7 @@ import { ContactPage } from './pages/ContactPage';
 
 export function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <div className="min-h-screen flex flex-col bg-[#FAF8F5] text-[#1A1612]">
         <Navbar />
         <main className="flex-1">

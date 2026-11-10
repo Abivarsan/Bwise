@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { PRIORITY_SERVICES, PriorityService } from '../../data/servicesData';
 import { BwiseBeeCharacter } from './BwiseBeeCharacter';
+import { assetUrl } from '../../utils/assets';
 
 interface HoneycombGrid3DProps {
   stage: 'S1' | 'S2' | 'S3';
@@ -154,7 +155,7 @@ const BeehiveRoomCell: React.FC<{
               <div
                 className="absolute inset-0 bg-no-repeat transition-transform duration-700 group-hover:scale-110"
                 style={{
-                  backgroundImage: `url('/reference/S2.jpg')`,
+                  backgroundImage: `url('${assetUrl('/reference/S2.jpg')}')`,
                   backgroundSize: '860% 520%',
                   backgroundPosition: `${service.hiveCell.s2Crop.x}% ${service.hiveCell.s2Crop.y}%`,
                   filter: isSelected
@@ -333,7 +334,7 @@ export const HoneycombGrid3D: React.FC<HoneycombGrid3DProps> = ({
               <div
                 className="w-full h-full clip-hexagon bg-stone-800 bg-no-repeat"
                 style={{
-                  backgroundImage: stage === 'S1' ? 'none' : `url('/reference/S2.jpg')`,
+                  backgroundImage: stage === 'S1' ? 'none' : `url('${assetUrl('/reference/S2.jpg')}')`,
                   backgroundSize: '860% 520%',
                   backgroundPosition: '35.5% 40.5%',
                   backgroundColor: stage === 'S1' ? '#F59E0B' : '#44403C',
