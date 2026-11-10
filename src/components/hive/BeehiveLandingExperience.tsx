@@ -12,6 +12,10 @@ import { soundFX } from '../../utils/soundEffects';
 
 export type HiveAnimationStage = 'S1' | 'S2' | 'S3' | 'TUNNEL' | 'S4';
 
+// S1 resting coordinates for the 3D Guide Bee (positioned on the left without covering the popup card)
+const S1_BEE_REST_X = 11;
+const S1_BEE_REST_Y = 50;
+
 export const BeehiveLandingExperience: React.FC = () => {
   const navigate = useNavigate();
 
@@ -23,14 +27,14 @@ export const BeehiveLandingExperience: React.FC = () => {
 
   // Bee position state (% of stage container) animated smoothly by GSAP
   const [beePos, setBeePos] = useState<{ x: number; y: number; scale: number; tilt: number; isFlying: boolean }>({
-    x: 19,
-    y: 52,
+    x: S1_BEE_REST_X,
+    y: S1_BEE_REST_Y,
     scale: 1,
     tilt: 0,
     isFlying: false,
   });
 
-  const beeProxyRef = useRef({ x: 19, y: 52, scale: 1, tilt: 0 });
+  const beeProxyRef = useRef({ x: S1_BEE_REST_X, y: S1_BEE_REST_Y, scale: 1, tilt: 0 });
   const timelineRef = useRef<gsap.core.Timeline | null>(null);
 
   // Subtle 3D mouse parallax across the studio stage
@@ -63,8 +67,8 @@ export const BeehiveLandingExperience: React.FC = () => {
     setStage('S1');
     setSelectedService(null);
     gsap.to(beeProxyRef.current, {
-      x: 19,
-      y: 52,
+      x: S1_BEE_REST_X,
+      y: S1_BEE_REST_Y,
       scale: 1,
       tilt: 0,
       duration: 0.75,
@@ -110,7 +114,7 @@ export const BeehiveLandingExperience: React.FC = () => {
 
       // Bee slightly lifts and prepares for flight in S2 while the 12 rooms reveal
       tl.to(beeProxyRef.current, {
-        x: 21,
+        x: 13,
         y: 46,
         scale: 0.96,
         tilt: 8,
@@ -138,8 +142,8 @@ export const BeehiveLandingExperience: React.FC = () => {
       const targetY = Math.max(24, Math.min(74, service.hiveCell.beeTargetY - 4));
 
       // Midpoint arc for a natural curved flight path
-      const midX = (21 + targetX) / 2;
-      const midY = Math.min(21, targetY) - 10;
+      const midX = (13 + targetX) / 2;
+      const midY = Math.min(13, targetY) - 10;
 
       tl.to(beeProxyRef.current, {
         x: midX,
@@ -287,7 +291,13 @@ export const BeehiveLandingExperience: React.FC = () => {
           </div>
 
           {/* Left / Center Interaction Column */}
-          <div className="relative z-30 w-full lg:w-[46%] flex flex-col items-center lg:items-end justify-center min-h-[420px]">
+          <div
+            className={`relative z-30 w-full transition-all duration-500 ${
+              stage === 'S1'
+                ? 'lg:w-[48%] xl:w-[45%] lg:ml-[21%] xl:ml-[19%] lg:mr-auto flex flex-col items-center lg:items-start justify-center min-h-[420px]'
+                : 'lg:w-[44%] flex flex-col items-center lg:items-start justify-center min-h-[420px]'
+            }`}
+          >
             <AnimatePresence mode="wait">
               {stage === 'S1' && (
                 /* S1 Speech Bubble Popup Card with the 12 Priority Services (matching S1.jpg) */
@@ -297,11 +307,11 @@ export const BeehiveLandingExperience: React.FC = () => {
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: -14, scale: 0.92 }}
                   transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                  className="relative w-full max-w-[430px] lg:mr-2 bg-white rounded-[26px] p-5 sm:p-6 shadow-[0_24px_60px_rgba(26,22,18,0.11)] border border-stone-200/70"
+                  className="relative w-full max-w-[440px] xl:max-w-[470px] bg-white rounded-[26px] p-5 sm:p-6 shadow-[0_24px_60px_rgba(26,22,18,0.11)] border border-stone-200/70"
                 >
-                  {/* Speech bubble tail pointing left toward the Bwise Bee */}
+                  {/* Speech bubble tail pointing left toward the Bwise Bee (matching S1.jpg) */}
                   <div
-                    className="hidden lg:block absolute -left-3.5 bottom-8 w-7 h-7 bg-white rotate-45 border-l border-b border-stone-200/70 rounded-bl-sm"
+                    className="hidden lg:block absolute -left-3.5 top-[44%] -translate-y-1/2 w-7 h-7 bg-white rotate-45 border-l border-b border-stone-200/70 rounded-bl-sm"
                     aria-hidden="true"
                   />
 
@@ -335,7 +345,7 @@ export const BeehiveLandingExperience: React.FC = () => {
                           soundFX.playClickChime(440 + idx * 22);
                         }}
                         onMouseLeave={() => setHoveredServiceId(null)}
-                        className={`group flex items-center gap-2 px-3.5 py-2.5 rounded-full border text-left text-xs font-semibold transition-all duration-200 cursor-pointer ${
+                        className={`group flex items-center gap-2 px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-full border text-left text-xs font-semibold transition-all duration-200 cursor-pointer ${
                           hoveredServiceId === service.id
                             ? 'border-amber-500 bg-amber-50/90 text-stone-950 shadow-sm -translate-y-0.5'
                             : 'border-stone-800/80 bg-white hover:border-amber-500 hover:bg-amber-50/50 text-stone-900'
@@ -422,7 +432,7 @@ export const BeehiveLandingExperience: React.FC = () => {
                     resetToS1();
                   } else if (item.id === 'S2') {
                     setStage('S2');
-                    setBeePos({ x: 18, y: 48, scale: 1, tilt: 0, isFlying: false });
+                    setBeePos({ x: 13, y: 48, scale: 1, tilt: 0, isFlying: false });
                   } else if (item.id === 'S3') {
                     const svc = selectedService || PRIORITY_SERVICES[5];
                     setSelectedService(svc);
