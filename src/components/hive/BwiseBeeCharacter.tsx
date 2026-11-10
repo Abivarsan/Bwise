@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { assetUrl } from '../../utils/assets';
 
 interface BwiseBeeCharacterProps {
   /** Size preset or custom classes */
@@ -15,7 +16,7 @@ interface BwiseBeeCharacterProps {
 
 // Static transparent 3D Bwise Bee mascot asset generated from the pristine studio reference S1
 // with intact legs, feet, antennae, and translucent wings
-const FULL_BEE_ASSET_URL = '/assets/branding/bwise-bee-full.png';
+const FULL_BEE_ASSET_URL = assetUrl('/assets/branding/bwise-bee-full.png');
 
 export const BwiseBeeCharacter: React.FC<BwiseBeeCharacterProps> = ({
   className = 'w-64 h-64',

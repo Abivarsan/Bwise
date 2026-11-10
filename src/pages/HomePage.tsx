@@ -5,6 +5,7 @@ import { BeehiveLandingExperience } from '../components/hive/BeehiveLandingExper
 import { PRIORITY_SERVICES } from '../data/servicesData';
 import { ServiceIcon } from '../components/hive/HoneycombGrid3D';
 import { BwiseBeeCharacter } from '../components/hive/BwiseBeeCharacter';
+import { assetUrl } from '../utils/assets';
 
 export const HomePage: React.FC = () => {
   const navigate = useNavigate();
@@ -162,7 +163,7 @@ export const HomePage: React.FC = () => {
             <div className="lg:col-span-6">
               <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-amber-300/50 bg-stone-900">
                 <img
-                  src="/reference/S4.jpg"
+                  src={assetUrl('/reference/S4.jpg')}
                   alt="Inside the Bwise Beehive Strategy Studio"
                   className="w-full h-auto object-cover"
                 />
