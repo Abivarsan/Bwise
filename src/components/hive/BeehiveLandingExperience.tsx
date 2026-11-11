@@ -14,8 +14,8 @@ import { soundFX } from '../../utils/soundEffects';
 export type HiveAnimationStage = 'S1' | 'S2' | 'S3' | 'TUNNEL' | 'S4';
 
 // S1 resting coordinates for the 3D Guide Bee (positioned matching Reference/S1.jpg)
-// Bee sits lower and inset from the left, gesturing towards the speech bubble
-const S1_BEE_REST_X = 17;
+// Bee sits comfortably on the left, gesturing towards the speech bubble with zero card overlap
+const S1_BEE_REST_X = 13.5;
 const S1_BEE_REST_Y = 56;
 const S1_BEE_START_X = -16;
 
@@ -421,7 +421,7 @@ export const BeehiveLandingExperience: React.FC = () => {
         <div className="relative flex-1 w-full max-w-[1440px] mx-auto px-4 sm:px-8 pt-4 pb-16 flex flex-col lg:flex-row items-center justify-between">
           {/* Animated 3D Bwise Guide Bee that flies dynamically from S1/S2 position to the selected S3 Hive Room */}
           <div
-            className="hidden lg:block absolute z-40 pointer-events-none"
+            className="hidden lg:block absolute z-20 pointer-events-none"
             style={{
               left: `${beePos.x}%`,
               top: `${beePos.y}%`,
@@ -468,7 +468,7 @@ export const BeehiveLandingExperience: React.FC = () => {
           {/* Left / Center Interaction Column */}
           <div
             className={`relative z-30 w-full transition-all duration-500 ${stage === 'S1'
-                ? 'lg:w-[48%] xl:w-[45%] lg:ml-[23%] xl:ml-[21%] lg:mr-auto flex flex-col items-center lg:items-start justify-start min-h-[420px] lg:-translate-y-10 xl:-translate-y-14'
+                ? 'lg:w-[48%] xl:w-[45%] lg:ml-[28%] xl:ml-[26%] lg:mr-auto flex flex-col items-center lg:items-start justify-start min-h-[420px] lg:-translate-y-10 xl:-translate-y-14'
                 : 'lg:w-[44%] flex flex-col items-center lg:items-start justify-center min-h-[420px]'
               }`}
           >
@@ -493,30 +493,37 @@ export const BeehiveLandingExperience: React.FC = () => {
                   }}
                   exit={{ opacity: 0, y: -14, scale: 0.92 }}
                   transition={{ duration: 0.6, ease: [0.34, 1.56, 0.64, 1] }}
-                  className="relative w-full max-w-[440px] xl:max-w-[470px] bg-white rounded-[28px] p-5 sm:p-6 shadow-[0_24px_60px_rgba(26,22,18,0.11)] border border-stone-200/80"
+                  className="relative w-full max-w-[440px] xl:max-w-[470px] bg-white rounded-[28px] lg:rounded-bl-none p-5 sm:p-6 shadow-[0_24px_60px_rgba(26,22,18,0.11)] border border-stone-200/80"
                 >
-                  {/* Organic Speech Bubble Tail pointing directly toward the Bwise Bee's cheek/head (matching Reference/S1.jpg) */}
+                  {/* Authentic Bottom-Left Speech Bubble Tail (matching Reference S1) */}
                   <div
-                    className="hidden lg:block absolute -left-[24px] bottom-8 xl:bottom-9 w-[28px] h-[36px] pointer-events-none z-10"
+                    className="hidden lg:block absolute -left-[30px] bottom-0 w-[32px] h-[40px] pointer-events-none z-10"
                     aria-hidden="true"
                   >
                     <svg
-                      width="28"
-                      height="36"
-                      viewBox="0 0 28 36"
+                      width="32"
+                      height="40"
+                      viewBox="0 0 32 40"
                       fill="none"
                       className="overflow-visible"
                     >
                       {/* Tail body seamless with the card */}
                       <path
-                        d="M28 2 C18 6, 8 16, 1 24 C10 24, 18 28, 28 35 Z"
+                        d="M32 0 C28 12, 18 28, 0 39.5 L32 39.5 Z"
                         fill="#FFFFFF"
                       />
                       {/* Seamless seam cover over card border */}
-                      <rect x="26" y="1" width="3" height="35" fill="#FFFFFF" />
-                      {/* Border outline matching card border-stone-200 */}
+                      <rect x="30" y="0" width="3" height="40" fill="#FFFFFF" />
+                      {/* Top curved border line of the tail */}
                       <path
-                        d="M28 2 C18 6, 8 16, 1 24 C10 24, 18 28, 28 35"
+                        d="M32 0 C28 12, 18 28, 0 39.5"
+                        stroke="#E7E5E4"
+                        strokeWidth="1.2"
+                        strokeLinecap="round"
+                      />
+                      {/* Bottom horizontal line continuing into the card bottom border */}
+                      <path
+                        d="M0 39.5 L32 39.5"
                         stroke="#E7E5E4"
                         strokeWidth="1.2"
                         strokeLinecap="round"
