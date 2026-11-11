@@ -613,7 +613,7 @@ export const BeehiveLandingExperience: React.FC = () => {
                     What can we help you to build today?
                   </h2>
                   <p className="mt-3 text-sm font-medium text-stone-700 bg-white/85 backdrop-blur-sm px-3.5 py-1.5 rounded-full shadow-sm pointer-events-auto">
-                    Click any hexagonal studio room in the Beehive →
+                    Explore our specialized digital solutions →
                   </p>
                 </motion.div>
               )}
