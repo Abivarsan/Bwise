@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, CheckCircle2, RotateCcw, Sparkles } from 'lucide-react';
-import { PriorityService } from '../../data/servicesData';
+import { PriorityService, ServiceCategory, getServiceBySlug } from '../../data/servicesData';
 import { ServiceIcon } from './HoneycombGrid3D';
 import { BwiseLogo } from '../layout/BwiseLogo';
 import { assetUrl } from '../../utils/assets';
 
 interface BeehiveInteriorRoomProps {
   service: PriorityService;
+  category?: ServiceCategory | null;
   onProceedToServicePage: () => void;
   onReturnToHive: () => void;
 }
@@ -23,11 +24,25 @@ interface BeehiveInteriorRoomProps {
  */
 export const BeehiveInteriorRoom: React.FC<BeehiveInteriorRoomProps> = ({
   service,
+  category,
   onProceedToServicePage,
   onReturnToHive,
 }) => {
   const [countdownProgress, setCountdownProgress] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+
+  // Derive display values based on whether a main category or an individual service was targeted
+  const displayTitle = category ? category.title : service.title;
+  const displayShortTitle = category ? category.title : service.shortTitle;
+  const displayQuestion = category
+    ? `Ready to explore our ${category.title} dedicated studios?`
+    : service.s4Room.consultantQuestion;
+  const displayModules = category
+    ? category.subServiceSlugs.map((slug) => getServiceBySlug(slug).title)
+    : service.s4Room.whiteboardModules;
+  const displayBadge = category
+    ? `${category.title} • ${category.badge}`
+    : `Room #${service.id} • ${service.shortTitle}`;
 
   // Automatically navigate to the relevant section under the Services page after 3.6 seconds
   // (matching the reference video flow where S4 transitions smoothly into S5)
@@ -114,17 +129,17 @@ export const BeehiveInteriorRoom: React.FC<BeehiveInteriorRoomProps> = ({
           <div className="flex items-center gap-2 mb-1.5">
             <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-amber-100 text-amber-800">
               <Sparkles className="w-3 h-3 text-amber-600" />
-              Room #{service.id} • {service.shortTitle}
+              {displayBadge}
             </span>
           </div>
 
           <h3 className="text-xs sm:text-base lg:text-lg font-extrabold text-stone-900 leading-snug">
-            {service.s4Room.consultantQuestion}
+            {displayQuestion}
           </h3>
 
           {/* Key Service Blueprint Modules */}
           <div className="hidden sm:flex flex-col gap-1 mt-2.5 pt-2.5 border-t border-stone-100">
-            {service.s4Room.whiteboardModules.map((mod, i) => (
+            {displayModules.map((mod, i) => (
               <div key={i} className="flex items-center gap-1.5 text-[11px] text-stone-600 font-medium">
                 <CheckCircle2 className="w-3.5 h-3.5 text-amber-500 shrink-0" />
                 <span className="truncate">{mod}</span>
@@ -139,7 +154,7 @@ export const BeehiveInteriorRoom: React.FC<BeehiveInteriorRoomProps> = ({
               onClick={onProceedToServicePage}
               className="flex-1 inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white text-xs sm:text-sm font-bold shadow-md shadow-amber-500/25 transition-all cursor-pointer"
             >
-              <span>Open {service.shortTitle} Section</span>
+              <span>Open {displayShortTitle} Section</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
@@ -163,7 +178,7 @@ export const BeehiveInteriorRoom: React.FC<BeehiveInteriorRoomProps> = ({
               Back to Beehive
             </button>
             <span className="text-xs sm:text-sm text-stone-300">
-              Inside <strong className="text-amber-300">{service.title}</strong> Studio Room
+              Inside <strong className="text-amber-300">{displayTitle}</strong> Studio Pod
             </span>
           </div>
 

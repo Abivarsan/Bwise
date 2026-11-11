@@ -66,7 +66,7 @@ export const HomePage: React.FC = () => {
           {PRIORITY_SERVICES.map((service) => (
             <div
               key={service.id}
-              onClick={() => navigate(`/services?service=${service.slug}#${service.slug}`)}
+              onClick={() => navigate(`/services?category=${service.categorySlug}&service=${service.slug}#${service.slug}`)}
               className="group bg-white rounded-3xl p-6 border border-stone-200/80 hover:border-amber-400 shadow-[0_10px_30px_rgba(26,22,18,0.04)] hover:shadow-[0_20px_45px_rgba(245,158,11,0.14)] transition-all duration-300 hover:-translate-y-1 cursor-pointer flex flex-col justify-between"
             >
               <div>

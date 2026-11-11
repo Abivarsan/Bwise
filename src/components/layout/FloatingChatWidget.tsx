@@ -14,7 +14,9 @@ export const FloatingChatWidget: React.FC = () => {
 
   const handleQuickServiceSelect = (slug: string) => {
     setIsOpen(false);
-    navigate(`/services?service=${slug}#${slug}`);
+    const svc = PRIORITY_SERVICES.find((s) => s.slug === slug);
+    const catSlug = svc?.categorySlug || 'software-solutions';
+    navigate(`/services?category=${catSlug}&service=${slug}#${slug}`);
   };
 
   const handleSend = (e: React.FormEvent) => {

@@ -22,6 +22,7 @@ interface HoneycombGrid3DProps {
   stage: 'S1' | 'S2' | 'S3';
   selectedService: PriorityService | null;
   hoveredServiceId: number | null;
+  hoveredCategorySlug?: string | null;
   onSelectService: (service: PriorityService) => void;
   onHoverService: (serviceId: number | null) => void;
   mouseTilt: { x: number; y: number };
@@ -223,6 +224,7 @@ export const HoneycombGrid3D: React.FC<HoneycombGrid3DProps> = ({
   stage,
   selectedService,
   hoveredServiceId,
+  hoveredCategorySlug,
   onSelectService,
   onHoverService,
   mouseTilt,
@@ -314,7 +316,7 @@ export const HoneycombGrid3D: React.FC<HoneycombGrid3DProps> = ({
               service={service}
               stage={stage}
               isSelected={selectedService?.id === service.id}
-              isHovered={hoveredServiceId === service.id}
+              isHovered={hoveredServiceId === service.id || (Boolean(hoveredCategorySlug) && service.categorySlug === hoveredCategorySlug)}
               onSelect={onSelectService}
               onHover={onHoverService}
             />
@@ -349,7 +351,7 @@ export const HoneycombGrid3D: React.FC<HoneycombGrid3DProps> = ({
                 service={service}
                 stage={stage}
                 isSelected={selectedService?.id === service.id}
-                isHovered={hoveredServiceId === service.id}
+                isHovered={hoveredServiceId === service.id || (Boolean(hoveredCategorySlug) && service.categorySlug === hoveredCategorySlug)}
                 onSelect={onSelectService}
                 onHover={onHoverService}
               />
@@ -371,7 +373,7 @@ export const HoneycombGrid3D: React.FC<HoneycombGrid3DProps> = ({
               service={service}
               stage={stage}
               isSelected={selectedService?.id === service.id}
-              isHovered={hoveredServiceId === service.id}
+              isHovered={hoveredServiceId === service.id || (Boolean(hoveredCategorySlug) && service.categorySlug === hoveredCategorySlug)}
               onSelect={onSelectService}
               onHover={onHoverService}
             />
