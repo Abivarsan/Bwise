@@ -15,8 +15,8 @@ export type HiveAnimationStage = 'S1' | 'S2' | 'S3' | 'TUNNEL' | 'S4';
 
 // S1 resting coordinates for the 3D Guide Bee (positioned matching Reference/S1.jpg)
 // Bee sits comfortably on the left, gesturing towards the speech bubble with zero card overlap
-const S1_BEE_REST_X = 13.5;
-const S1_BEE_REST_Y = 43;
+const S1_BEE_REST_X = 11.5;
+const S1_BEE_REST_Y = 39;
 const S1_BEE_START_X = -16;
 
 export const BeehiveLandingExperience: React.FC = () => {
@@ -468,7 +468,7 @@ export const BeehiveLandingExperience: React.FC = () => {
           {/* Left / Center Interaction Column */}
           <div
             className={`relative z-30 w-full transition-all duration-500 ${stage === 'S1'
-                ? 'lg:w-[48%] xl:w-[45%] lg:ml-[28%] xl:ml-[26%] lg:mr-auto flex flex-col items-center lg:items-start justify-start min-h-[420px] lg:-translate-y-22 xl:-translate-y-26'
+                ? 'lg:w-[48%] xl:w-[45%] lg:ml-[25%] xl:ml-[23%] lg:mr-auto flex flex-col items-center lg:items-start justify-start min-h-[420px] lg:-translate-y-28 xl:-translate-y-32'
                 : 'lg:w-[44%] flex flex-col items-center lg:items-start justify-center min-h-[420px]'
               }`}
           >
@@ -626,7 +626,7 @@ export const BeehiveLandingExperience: React.FC = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
             className={`relative z-20 flex items-center justify-center transition-all duration-700 ${stage === 'S1'
-                ? 'w-full lg:w-[54%] lg:-translate-y-12 xl:-translate-y-14'
+                ? 'w-full lg:w-[54%] lg:-translate-x-8 xl:-translate-x-10 lg:-translate-y-12 xl:-translate-y-14'
                 : stage === 'S3'
                   ? 'w-full lg:w-[68%] lg:-ml-[14%]'
                   : 'w-full lg:w-[54%]'
