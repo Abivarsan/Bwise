@@ -9,7 +9,6 @@ interface NaturalSkiesSkyboxProps {
  * Cinematic Natural Skies Atmospheric Environment (Idea 5)
  * - Multi-tier golden sunrise skybox
  * - Drifting parallax cloud formations
- * - Floating distant 3D cloud island silhouettes
  * - Shimmering ambient light particles & warm sunbeam glow
  */
 export const NaturalSkiesSkybox: React.FC<NaturalSkiesSkyboxProps> = ({
@@ -56,66 +55,7 @@ export const NaturalSkiesSkybox: React.FC<NaturalSkiesSkyboxProps> = ({
       <div className="absolute inset-0 bg-radial-[at_80%_40%] from-amber-300/25 via-transparent to-transparent pointer-events-none" />
 
       {/* =====================================================================
-          2. FLOATING DISTANT 3D CLOUD ISLAND SILHOUETTES
-         ===================================================================== */}
-      {/* Far-left distant floating island */}
-      <motion.div
-        animate={{ y: [-4, 5, -4] }}
-        transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut' }}
-        className="absolute top-[26%] left-[4%] opacity-55 blur-[0.4px] hidden md:block"
-        style={{
-          transform: `translate3d(${mouseTilt.x * -14}px, ${mouseTilt.y * -10}px, 0)`,
-        }}
-      >
-        <svg width="150" height="110" viewBox="0 0 150 110" fill="none">
-          {/* Island Rock Base */}
-          <path
-            d="M 25 45 Q 75 35, 125 45 Q 110 85, 75 95 Q 40 85, 25 45 Z"
-            fill="url(#islandGradFarLeft)"
-          />
-          {/* Soft White Cloud Skirt around the base */}
-          <ellipse cx="75" cy="50" rx="60" ry="16" fill="rgba(255, 255, 255, 0.85)" filter="blur(3px)" />
-          <ellipse cx="50" cy="52" rx="30" ry="14" fill="rgba(255, 255, 255, 0.95)" />
-          <ellipse cx="98" cy="51" rx="32" ry="13" fill="rgba(255, 255, 255, 0.9)" />
-          <defs>
-            <linearGradient id="islandGradFarLeft" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor="#C4B5A5" />
-              <stop offset="60%" stopColor="#8C7A6B" />
-              <stop offset="100%" stopColor="#57493D" />
-            </linearGradient>
-          </defs>
-        </svg>
-      </motion.div>
-
-      {/* Far-right distant floating cloud island */}
-      <motion.div
-        animate={{ y: [5, -4, 5] }}
-        transition={{ duration: 11, repeat: Infinity, ease: 'easeInOut' }}
-        className="absolute top-[18%] right-[3%] opacity-45 blur-[0.6px] hidden lg:block"
-        style={{
-          transform: `translate3d(${mouseTilt.x * -20}px, ${mouseTilt.y * -14}px, 0)`,
-        }}
-      >
-        <svg width="190" height="130" viewBox="0 0 190 130" fill="none">
-          <path
-            d="M 30 55 Q 95 42, 160 55 Q 145 105, 95 118 Q 45 105, 30 55 Z"
-            fill="url(#islandGradFarRight)"
-          />
-          <ellipse cx="95" cy="60" rx="75" ry="18" fill="rgba(255, 255, 255, 0.88)" filter="blur(4px)" />
-          <ellipse cx="65" cy="62" rx="40" ry="15" fill="rgba(255, 255, 255, 0.95)" />
-          <ellipse cx="125" cy="60" rx="42" ry="16" fill="rgba(255, 255, 255, 0.92)" />
-          <defs>
-            <linearGradient id="islandGradFarRight" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor="#D1C4B5" />
-              <stop offset="60%" stopColor="#9C8977" />
-              <stop offset="100%" stopColor="#695747" />
-            </linearGradient>
-          </defs>
-        </svg>
-      </motion.div>
-
-      {/* =====================================================================
-          3. MULTI-TIER PARALLAX DRIFTING CLOUD LAYERS (Continuous Flow)
+          2. MULTI-TIER PARALLAX DRIFTING CLOUD LAYERS (Continuous Flow)
          ===================================================================== */}
       {/* Tier 1: Background Deep Horizon Clouds (Slow drift) */}
       <div className="absolute -bottom-10 left-0 w-[200%] h-72 opacity-65 flex animate-cloud-drift-slow">
