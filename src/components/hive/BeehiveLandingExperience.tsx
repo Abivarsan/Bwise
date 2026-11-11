@@ -16,7 +16,7 @@ export type HiveAnimationStage = 'S1' | 'S2' | 'S3' | 'TUNNEL' | 'S4';
 // S1 resting coordinates for the 3D Guide Bee (positioned matching Reference/S1.jpg)
 // Bee sits comfortably on the left, gesturing towards the speech bubble with zero card overlap
 const S1_BEE_REST_X = 13.5;
-const S1_BEE_REST_Y = 56;
+const S1_BEE_REST_Y = 48;
 const S1_BEE_START_X = -16;
 
 export const BeehiveLandingExperience: React.FC = () => {
@@ -384,7 +384,7 @@ export const BeehiveLandingExperience: React.FC = () => {
   return (
     <section
       onMouseMove={handleMouseMove}
-      className="relative w-full min-h-[calc(100vh-80px)] overflow-hidden flex flex-col justify-between select-none"
+      className="relative w-full min-h-[calc(100vh-64px)] overflow-hidden flex flex-col justify-between select-none"
       style={{
         background:
           stage === 'S1'
@@ -418,7 +418,7 @@ export const BeehiveLandingExperience: React.FC = () => {
         />
       ) : (
         /* Stages S1, S2, and S3: Main Interactive Bee & 3D Beehive Stage */
-        <div className="relative flex-1 w-full max-w-[1440px] mx-auto px-4 sm:px-8 pt-4 pb-16 flex flex-col lg:flex-row items-center justify-between">
+        <div className="relative flex-1 w-full max-w-[1440px] mx-auto px-4 sm:px-8 pt-1 sm:pt-2 pb-10 flex flex-col lg:flex-row items-center justify-between">
           {/* Animated 3D Bwise Guide Bee that flies dynamically from S1/S2 position to the selected S3 Hive Room */}
           <div
             className="hidden lg:block absolute z-20 pointer-events-none"
@@ -468,7 +468,7 @@ export const BeehiveLandingExperience: React.FC = () => {
           {/* Left / Center Interaction Column */}
           <div
             className={`relative z-30 w-full transition-all duration-500 ${stage === 'S1'
-                ? 'lg:w-[48%] xl:w-[45%] lg:ml-[28%] xl:ml-[26%] lg:mr-auto flex flex-col items-center lg:items-start justify-start min-h-[420px] lg:-translate-y-10 xl:-translate-y-14'
+                ? 'lg:w-[48%] xl:w-[45%] lg:ml-[28%] xl:ml-[26%] lg:mr-auto flex flex-col items-center lg:items-start justify-start min-h-[420px] lg:-translate-y-16 xl:-translate-y-20'
                 : 'lg:w-[44%] flex flex-col items-center lg:items-start justify-center min-h-[420px]'
               }`}
           >
@@ -625,9 +625,11 @@ export const BeehiveLandingExperience: React.FC = () => {
             initial={{ opacity: 0, x: 80 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
-            className={`relative z-20 flex items-center justify-center transition-all duration-700 ${stage === 'S3'
-                ? 'w-full lg:w-[68%] lg:-ml-[14%]'
-                : 'w-full lg:w-[54%]'
+            className={`relative z-20 flex items-center justify-center transition-all duration-700 ${stage === 'S1'
+                ? 'w-full lg:w-[54%] lg:-translate-y-10 xl:-translate-y-12'
+                : stage === 'S3'
+                  ? 'w-full lg:w-[68%] lg:-ml-[14%]'
+                  : 'w-full lg:w-[54%]'
               }`}
           >
             <HoneycombGrid3D

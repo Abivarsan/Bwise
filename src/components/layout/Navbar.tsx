@@ -19,14 +19,14 @@ export const Navbar: React.FC = () => {
 
   return (
     <header className="sticky top-0 z-50 w-full bg-[#FAF8F5]/90 backdrop-blur-md border-b border-stone-200/60 transition-all">
-      <div className="max-w-[1360px] mx-auto px-4 sm:px-8 h-20 flex items-center justify-between">
+      <div className="max-w-[1360px] mx-auto px-4 sm:px-8 h-16 flex items-center justify-between">
         {/* Brand Logo matching S1.jpg & S5.jpg */}
         <Link
           to="/"
           className="focus:outline-none group flex items-center gap-2"
           aria-label="Bwise Home"
         >
-          <BwiseLogo className="h-11 sm:h-12 transition-transform duration-300 group-hover:scale-[1.02]" />
+          <BwiseLogo className="h-10 sm:h-11 transition-transform duration-300 group-hover:scale-[1.02]" />
         </Link>
 
         {/* Desktop Navigation Links + "Let's Connect" Pill CTA (matching S1.jpg & S5.jpg) */}
