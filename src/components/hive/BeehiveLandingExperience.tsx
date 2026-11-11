@@ -347,8 +347,8 @@ export const BeehiveLandingExperience: React.FC = () => {
           stage === 'S1'
             ? 'transparent'
             : stage === 'S2'
-            ? 'linear-gradient(90deg, #E2E2E4 0%, #E5E5E7 39.5%, #F2F2F3 39.6%, #F5F5F6 100%)'
-            : 'radial-gradient(circle at 50% 45%, #FFFFFF 0%, #F7F5F0 58%, #EFECE6 100%)',
+              ? 'linear-gradient(90deg, #E2E2E4 0%, #E5E5E7 39.5%, #F2F2F3 39.6%, #F5F5F6 100%)'
+              : 'radial-gradient(circle at 50% 45%, #FFFFFF 0%, #F7F5F0 58%, #EFECE6 100%)',
       }}
     >
       {/* Background Natural Skies Skybox in Stage S1 (Idea 5) */}
@@ -424,11 +424,10 @@ export const BeehiveLandingExperience: React.FC = () => {
 
           {/* Left / Center Interaction Column */}
           <div
-            className={`relative z-30 w-full transition-all duration-500 ${
-              stage === 'S1'
+            className={`relative z-30 w-full transition-all duration-500 ${stage === 'S1'
                 ? 'lg:w-[48%] xl:w-[45%] lg:ml-[21%] xl:ml-[19%] lg:mr-auto flex flex-col items-center lg:items-start justify-center min-h-[420px]'
                 : 'lg:w-[44%] flex flex-col items-center lg:items-start justify-center min-h-[420px]'
-            }`}
+              }`}
           >
             <AnimatePresence mode="wait">
               {stage === 'S1' && (
@@ -484,11 +483,10 @@ export const BeehiveLandingExperience: React.FC = () => {
                             setHoveredCategorySlug(null);
                             setHoveredServiceId(null);
                           }}
-                          className={`group relative flex items-center justify-between p-3.5 sm:p-4 rounded-2xl border text-left transition-all duration-300 cursor-pointer ${
-                            isHovered
+                          className={`group relative flex items-center justify-between p-3.5 sm:p-4 rounded-2xl border text-left transition-all duration-300 cursor-pointer ${isHovered
                               ? 'border-amber-500 bg-amber-50/95 shadow-[0_12px_28px_rgba(245,158,11,0.18)] -translate-y-0.5'
                               : 'border-stone-200/90 bg-stone-50/60 hover:border-amber-400 hover:bg-amber-50/50 shadow-xs'
-                          }`}
+                            }`}
                         >
                           <div className="flex items-center gap-3.5 min-w-0">
                             <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 text-white flex items-center justify-center shrink-0 shadow-sm group-hover:scale-105 transition-transform">
@@ -497,14 +495,9 @@ export const BeehiveLandingExperience: React.FC = () => {
                               {category.slug === 'digital-strategy-ideas' && <Lightbulb className="w-5 h-5" />}
                             </div>
                             <div className="min-w-0">
-                              <div className="flex items-center gap-2">
-                                <h3 className="text-sm sm:text-base font-extrabold text-stone-900 group-hover:text-amber-800 transition-colors truncate">
-                                  {category.title}
-                                </h3>
-                                <span className="inline-flex items-center text-[10px] font-bold text-amber-700 bg-amber-100/90 px-2 py-0.5 rounded-full shrink-0">
-                                  {category.badge}
-                                </span>
-                              </div>
+                              <h3 className="text-sm sm:text-base font-extrabold text-stone-900 group-hover:text-amber-800 transition-colors truncate">
+                                {category.title}
+                              </h3>
                               <p className="text-[11px] text-stone-500 truncate mt-0.5">
                                 {category.slug === 'software-solutions' && 'Web • Mobile • QA Testing • SEO • AIO • GEO'}
                                 {category.slug === 'social-media-marketing' && 'Advertising • Management • Content Marketing'}
@@ -522,7 +515,7 @@ export const BeehiveLandingExperience: React.FC = () => {
 
                   <p className="mt-3.5 text-[11px] text-stone-500 flex items-center justify-between">
                     <span>Select any category to watch our Bee guide you into the Studios</span>
-                    <span className="font-bold text-amber-600">3 Main Categories</span>
+                    <span className="font-bold text-amber-600">3 Studio Pods</span>
                   </p>
                 </motion.div>
               )}
@@ -549,11 +542,10 @@ export const BeehiveLandingExperience: React.FC = () => {
 
           {/* Right Column: Stage-Specific Honeycomb Display (12 Isometric Hexagonal Rooms) */}
           <div
-            className={`relative z-20 flex items-center justify-center transition-all duration-700 ${
-              stage === 'S3'
+            className={`relative z-20 flex items-center justify-center transition-all duration-700 ${stage === 'S3'
                 ? 'w-full lg:w-[68%] lg:-ml-[14%]'
                 : 'w-full lg:w-[54%]'
-            }`}
+              }`}
           >
             <HoneycombGrid3D
               stage={stage === 'S1' || stage === 'S2' || stage === 'S3' ? stage : 'S2'}
@@ -611,11 +603,10 @@ export const BeehiveLandingExperience: React.FC = () => {
                     setStage('S4');
                   }
                 }}
-                className={`px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer ${
-                  isActive
+                className={`px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer ${isActive
                     ? 'bg-amber-500 text-white shadow-sm'
                     : 'text-stone-600 hover:bg-amber-50 hover:text-amber-700'
-                }`}
+                  }`}
               >
                 {item.label}
               </button>
