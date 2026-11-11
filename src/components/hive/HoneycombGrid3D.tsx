@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { PriorityService, PRIORITY_SERVICES } from '../../data/servicesData';
 import { BwiseBeeCharacter } from './BwiseBeeCharacter';
+import { assetUrl } from '../../utils/assets';
 
 export interface HoneycombGrid3DProps {
   stage?: 'S1' | 'S2' | 'S3';
@@ -75,6 +76,7 @@ interface HoneycombCellProps {
   isSelected?: boolean;
   isDimmed?: boolean;
   isCategoryMatch?: boolean;
+  hasActiveCategory?: boolean;
   stage?: 'S1' | 'S2' | 'S3';
   delay?: number;
   onSelect?: (service: PriorityService) => void;
@@ -84,7 +86,8 @@ interface HoneycombCellProps {
 /**
  * Renders a double-sided 3D hexagonal/pentagonal honeycomb cell.
  * Front face: Studio-grade golden honey chamber (matching Reference/S1.jpg).
- * Back face: Interactive service chamber displaying vector icon and title.
+ * Back face: Interactive studio cell showcasing realistic service photography
+ * with category differentiation and glassmorphic hover name reveal.
  */
 const HoneycombCell: React.FC<HoneycombCellProps> = ({
   className = '',
@@ -96,6 +99,7 @@ const HoneycombCell: React.FC<HoneycombCellProps> = ({
   isSelected = false,
   isDimmed = false,
   isCategoryMatch = false,
+  hasActiveCategory = false,
   stage = 'S1',
   delay,
   onSelect,
@@ -104,9 +108,14 @@ const HoneycombCell: React.FC<HoneycombCellProps> = ({
   const isInteractive = stage === 'S2' && !!service;
   const staggerDelay = delay !== undefined ? delay : isFlipped ? row * 0.07 + col * 0.05 : 0;
 
+  // Determine highlighted vs muted category styling
+  const isHighlightedCategory = !hasActiveCategory || isCategoryMatch;
+
   return (
     <div
-      className={`relative w-[124px] h-[142px] sm:w-[148px] sm:h-[168px] lg:w-[166px] lg:h-[188px] select-none ${className}`}
+      className={`relative w-[124px] h-[142px] sm:w-[148px] sm:h-[168px] lg:w-[166px] lg:h-[188px] select-none transition-all duration-300 ${
+        isInteractive ? 'hover:z-50' : ''
+      } ${isSelected ? 'z-40' : ''} ${className}`}
       style={{
         perspective: '1200px',
       }}
@@ -178,7 +187,7 @@ const HoneycombCell: React.FC<HoneycombCellProps> = ({
           )}
         </div>
 
-        {/* BACK FACE: Service Face (Stage S2 & S3) or Golden Chamber for decorative caps */}
+        {/* BACK FACE: Service Face with Realistic Image (Stage S2 & S3) or Golden Chamber for decorative caps */}
         {service ? (
           <div
             className={`absolute inset-0 w-full h-full backface-hidden preserve-3d transition-all duration-300 ${
@@ -187,8 +196,10 @@ const HoneycombCell: React.FC<HoneycombCellProps> = ({
               isSelected
                 ? 'scale-110 z-30'
                 : isDimmed
-                ? 'opacity-35 scale-95'
-                : ''
+                ? 'opacity-30 scale-95'
+                : isHighlightedCategory
+                ? 'opacity-100'
+                : 'opacity-70 hover:opacity-100'
             }`}
             style={{
               transform: 'rotateY(180deg)',
@@ -196,9 +207,23 @@ const HoneycombCell: React.FC<HoneycombCellProps> = ({
               WebkitBackfaceVisibility: 'hidden',
             }}
           >
+            {/* 3D Extruded Depth Side Wall */}
+            <div
+              className="absolute inset-0 clip-hexagon pointer-events-none transition-all duration-300"
+              style={{
+                background: isSelected
+                  ? 'linear-gradient(135deg, #FEF08A 0%, #F59E0B 55%, #B45309 100%)'
+                  : isHighlightedCategory
+                  ? 'linear-gradient(135deg, #F59E0B 0%, #D97706 55%, #92400E 100%)'
+                  : 'linear-gradient(135deg, #475569 0%, #334155 55%, #0F172A 100%)',
+                transform: 'translate3d(10px, 8px, -16px)',
+              }}
+            />
+
             <button
               type="button"
               disabled={!isInteractive}
+              aria-label={`Select ${service.title} service`}
               onClick={() => {
                 if (isInteractive && onSelect) {
                   onSelect(service);
@@ -214,88 +239,93 @@ const HoneycombCell: React.FC<HoneycombCellProps> = ({
                   onHover(null);
                 }
               }}
-              className={`group w-full h-full relative focus:outline-none transition-transform duration-300 text-left ${
-                isInteractive ? 'cursor-pointer hover:scale-108 hover:z-40' : 'cursor-default'
+              className={`group w-full h-full relative clip-hexagon focus:outline-none transition-all duration-300 text-left ${
+                isInteractive ? 'cursor-pointer hover:scale-108 hover:z-50' : 'cursor-default'
               }`}
             >
-              {/* 3D Extruded Depth */}
+              {/* Outer Bezel Frame (Radiant Gold for Active Category, Muted Slate for Other Categories) */}
               <div
-                className="absolute inset-0 clip-hexagon pointer-events-none"
-                style={{
-                  background: isSelected
-                    ? 'linear-gradient(135deg, #FEF08A 0%, #F59E0B 55%, #B45309 100%)'
-                    : 'linear-gradient(135deg, #F59E0B 0%, #D97706 55%, #92400E 100%)',
-                  transform: 'translate3d(12px, 8px, -18px)',
-                }}
-              />
-
-              {/* Outer Golden Bezel Frame */}
-              <div
-                className={`absolute inset-0 clip-hexagon p-[4px] sm:p-[5px] transition-all duration-300 ${
+                className={`w-full h-full clip-hexagon p-[5px] sm:p-[6px] transition-all duration-300 ${
                   isSelected
-                    ? 'ring-4 ring-amber-300 shadow-[0_0_35px_rgba(245,158,11,0.9)]'
-                    : isCategoryMatch
-                    ? 'shadow-[0_0_18px_rgba(245,158,11,0.5)]'
-                    : ''
+                    ? 'shadow-[0_0_40px_rgba(245,158,11,0.95)]'
+                    : isHighlightedCategory
+                    ? 'shadow-[0_0_20px_rgba(245,158,11,0.55)] group-hover:shadow-[0_0_32px_rgba(251,191,36,0.9)]'
+                    : 'shadow-md group-hover:shadow-[0_0_28px_rgba(251,191,36,0.8)]'
                 }`}
                 style={{
                   background: isSelected
                     ? 'linear-gradient(160deg, #FFFFFF 0%, #FEF08A 35%, #F59E0B 75%, #B45309 100%)'
-                    : isCategoryMatch
-                    ? 'linear-gradient(160deg, #FEF08A 0%, #F59E0B 50%, #92400E 100%)'
-                    : 'linear-gradient(160deg, #FDE68A 0%, #F59E0B 50%, #B45309 100%)',
+                    : isHighlightedCategory
+                    ? 'linear-gradient(160deg, #FEF08A 0%, #F59E0B 48%, #B45309 100%)'
+                    : 'linear-gradient(160deg, #CBD5E1 0%, #64748B 50%, #334155 100%)',
                 }}
               >
-                {/* Inner Recessed Studio Chamber */}
-                <div
-                  className="relative w-full h-full clip-hexagon overflow-hidden flex flex-col items-center justify-center p-2 text-center"
-                  style={{
-                    background: isSelected
-                      ? 'radial-gradient(circle at 50% 25%, #451a03 0%, #291804 55%, #180d02 100%)'
-                      : isCategoryMatch
-                      ? 'radial-gradient(circle at 50% 25%, #2e1e07 0%, #1c1407 60%, #0d0903 100%)'
-                      : 'radial-gradient(circle at 50% 25%, #292524 0%, #1c1917 65%, #0c0a09 100%)',
-                    boxShadow: 'inset 0 6px 16px rgba(0, 0, 0, 0.8)',
-                  }}
-                >
-                  {/* Subtle dot matrix grid background */}
+                {/* Inner Studio Chamber with Realistic Photography */}
+                <div className="relative w-full h-full clip-hexagon overflow-hidden bg-stone-950">
+                  {/* Realistic High-Quality Photograph */}
+                  <img
+                    src={assetUrl(service.serviceImage)}
+                    alt={service.title}
+                    loading="eager"
+                    className={`w-full h-full object-cover transition-all duration-500 group-hover:scale-112 ${
+                      isSelected
+                        ? 'scale-105 brightness-100 contrast-105'
+                        : isHighlightedCategory
+                        ? 'brightness-95 contrast-105 saturate-110 group-hover:brightness-110'
+                        : 'grayscale-[55%] brightness-[0.65] contrast-95 group-hover:grayscale-0 group-hover:brightness-105 group-hover:saturate-110'
+                    }`}
+                  />
+
+                  {/* Subtle Perimeter Rim Lighting & Shading */}
                   <div
-                    className="absolute inset-0 opacity-15 pointer-events-none"
+                    className="absolute inset-0 pointer-events-none transition-opacity duration-300"
                     style={{
-                      backgroundImage: 'radial-gradient(circle at 50% 50%, #f59e0b 1px, transparent 1px)',
-                      backgroundSize: '10px 10px',
+                      background: isSelected
+                        ? 'radial-gradient(circle at 50% 50%, transparent 35%, rgba(245, 158, 11, 0.45) 100%)'
+                        : isHighlightedCategory
+                        ? 'linear-gradient(180deg, rgba(251,191,36,0.18) 0%, transparent 35%, rgba(12,10,9,0.5) 100%)'
+                        : 'linear-gradient(180deg, rgba(15,23,42,0.4) 0%, rgba(15,23,42,0.2) 50%, rgba(12,10,9,0.7) 100%)',
                     }}
                   />
 
-                  {/* Glassmorphic Icon Shield */}
-                  <div
-                    className={`relative z-10 w-8 h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center mb-1 transition-all duration-300 ${
-                      isSelected
-                        ? 'bg-gradient-to-br from-amber-300 via-amber-400 to-amber-500 text-stone-950 scale-110 shadow-[0_0_16px_rgba(251,191,36,0.85)]'
-                        : 'bg-gradient-to-br from-amber-400 to-amber-600 text-stone-950 group-hover:scale-110 group-hover:from-amber-300 group-hover:to-amber-500 shadow-sm'
-                    }`}
-                  >
-                    <ServiceIcon name={service.iconName} className="w-4.5 h-4.5 sm:w-5.5 sm:h-5.5" />
-                  </div>
-
-                  {/* Service Title */}
-                  <span
-                    className={`relative z-10 text-[11px] sm:text-xs font-black tracking-tight leading-tight px-1 max-w-[92%] transition-colors duration-200 line-clamp-2 ${
-                      isSelected
-                        ? 'text-amber-200 drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]'
-                        : 'text-stone-100 group-hover:text-amber-300 drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]'
-                    }`}
-                  >
-                    {service.shortTitle}
-                  </span>
-
-                  {/* Category Match Badge */}
-                  {isCategoryMatch && (
-                    <span className="relative z-10 mt-1 inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[8.5px] font-extrabold uppercase tracking-wider bg-amber-400/20 text-amber-300 border border-amber-400/40">
-                      <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
-                      Match
-                    </span>
+                  {/* Glowing Inner Border highlight for matching category cells */}
+                  {isHighlightedCategory && hasActiveCategory && !isSelected && (
+                    <div className="absolute inset-[3px] clip-hexagon border border-amber-300/60 pointer-events-none" />
                   )}
+
+                  {/* Subtle Amber Glow Indicator Dot on Active Category Match when not hovered */}
+                  {isCategoryMatch && hasActiveCategory && !isSelected && (
+                    <div className="absolute top-3 left-1/2 -translate-x-1/2 z-10 pointer-events-none group-hover:opacity-0 transition-opacity duration-200">
+                      <span className="block w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_8px_#FBBF24] animate-pulse" />
+                    </div>
+                  )}
+
+                  {/* Glassmorphic Hover Overlay revealing Service Name, Icon & Action */}
+                  <div
+                    className={`absolute inset-0 clip-hexagon flex flex-col items-center justify-center p-2.5 text-center transition-all duration-300 ${
+                      isSelected
+                        ? 'opacity-100 bg-stone-950/65 backdrop-blur-[2px]'
+                        : 'opacity-0 group-hover:opacity-100 bg-stone-950/78 backdrop-blur-[3px]'
+                    }`}
+                  >
+                    <div
+                      className={`w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center mb-1.5 shadow-md transition-transform duration-300 ${
+                        isSelected
+                          ? 'bg-amber-400 text-stone-950 scale-110 shadow-[0_0_16px_rgba(251,191,36,0.85)]'
+                          : 'bg-gradient-to-br from-amber-300 to-amber-500 text-stone-950 scale-90 group-hover:scale-100'
+                      }`}
+                    >
+                      <ServiceIcon name={service.iconName} className="w-4 h-4 sm:w-5 sm:h-5" />
+                    </div>
+
+                    <span className="text-[11.5px] sm:text-[13px] font-black text-white leading-[1.15] drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)] max-w-[92%] line-clamp-3">
+                      {service.title}
+                    </span>
+
+                    <span className="mt-1 px-2 py-0.5 rounded-full text-[8.5px] font-bold uppercase tracking-wider bg-amber-400/20 text-amber-200 border border-amber-400/40 whitespace-nowrap">
+                      {isSelected ? 'Selected Pod' : 'Explore →'}
+                    </span>
+                  </div>
                 </div>
               </div>
             </button>
@@ -303,8 +333,8 @@ const HoneycombCell: React.FC<HoneycombCellProps> = ({
         ) : (
           /* Ambient Golden Chamber for decorative caps */
           <div
-            className={`absolute inset-0 w-full h-full backface-hidden preserve-3d transition-opacity duration-300 ${
-              isFlipped ? 'opacity-90' : 'opacity-0 pointer-events-none'
+            className={`absolute inset-0 w-full h-full backface-hidden preserve-3d transition-opacity duration-300 pointer-events-none ${
+              isFlipped ? (hasActiveCategory ? 'opacity-50' : 'opacity-90') : 'opacity-0'
             }`}
             style={{
               transform: 'rotateY(180deg)',
@@ -356,6 +386,30 @@ export const HoneycombGrid3D: React.FC<HoneycombGrid3DProps> = ({
 }) => {
   const isFlipped = stage === 'S2' || stage === 'S3';
   const isS3 = stage === 'S3';
+  const hasActiveCategory = Boolean(selectedCategorySlug);
+
+  // Measure viewport so all 5 honeycomb rows (12 services + crown + base) fit cleanly in S2
+  const [viewport, setViewport] = React.useState<{ w: number; h: number }>({
+    w: typeof window !== 'undefined' ? window.innerWidth : 1280,
+    h: typeof window !== 'undefined' ? window.innerHeight : 800,
+  });
+
+  React.useEffect(() => {
+    const updateViewport = () => {
+      setViewport({ w: window.innerWidth, h: window.innerHeight });
+    };
+    updateViewport();
+    window.addEventListener('resize', updateViewport);
+    return () => window.removeEventListener('resize', updateViewport);
+  }, []);
+
+  // Unscaled 5-row height & width by Tailwind breakpoint (<640, 640-1023, >=1024)
+  const baseGridHeight = viewport.w >= 1024 ? 824 : viewport.w >= 640 ? 730 : 624;
+  const baseGridWidth = viewport.w >= 1024 ? 854 : viewport.w >= 640 ? 764 : 508;
+  const s2HeightScale = (viewport.h - 210) / baseGridHeight;
+  const s2WidthScale = (viewport.w - 40) / baseGridWidth;
+  const s2Scale = Math.min(0.84, Math.max(0.54, Math.min(s2HeightScale, s2WidthScale)));
+  const s2CollapseMarginPx = stage === 'S2' ? -Math.round(((1 - s2Scale) * baseGridHeight) / 2) : 0;
 
   // Row 0 Services (4)
   const row0Services = React.useMemo(
@@ -383,16 +437,18 @@ export const HoneycombGrid3D: React.FC<HoneycombGrid3DProps> = ({
     if (stage === 'S3' && selectedService) {
       const colOffset = (1.5 - selectedService.hiveCell.col) * 16;
       const rowOffset = (1 - selectedService.hiveCell.row) * 18;
-      return `translate3d(${colOffset}%, ${rowOffset}%, 180px) rotateY(${tiltY * 0.3}deg) rotateX(${tiltX * 0.3}deg) scale(1.42)`;
+      return `translate3d(${colOffset}%, ${rowOffset}%, 160px) rotateY(${tiltY * 0.3}deg) rotateX(${tiltX * 0.3}deg) scale(1.36)`;
     }
 
     if (stage === 'S2') {
-      return `rotateY(${-3 + tiltY * 0.5}deg) rotateX(${2 + tiltX * 0.5}deg) scale(1)`;
+      return `rotateY(${-2 + tiltY * 0.45}deg) rotateX(${1.5 + tiltX * 0.45}deg) scale(${s2Scale.toFixed(3)})`;
     }
 
     // Default S1: Tilted 3D isometric golden cluster matching Reference/S1.jpg
     return `rotateY(${-18 + tiltY}deg) rotateX(${5 + tiltX}deg) scale(0.88)`;
   };
+
+  const selectedRow = selectedService?.hiveCell.row;
 
   return (
     <div className="relative flex items-center justify-center perspective-hive select-none">
@@ -413,18 +469,24 @@ export const HoneycombGrid3D: React.FC<HoneycombGrid3DProps> = ({
 
       {/* Master 3D Beehive Honeycomb Matrix */}
       <div
-        className="relative preserve-3d transition-transform duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)]"
+        className="relative preserve-3d transition-all duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)]"
         style={{
           transform: getStageTransform(),
+          marginTop: s2CollapseMarginPx ? `${s2CollapseMarginPx}px` : undefined,
+          marginBottom: s2CollapseMarginPx ? `${s2CollapseMarginPx}px` : undefined,
         }}
       >
         {/* Top Golden Crown Cap Cell (matching top of S1.jpg & S2.jpg) */}
-        <div className="flex justify-center -mb-[32px] sm:-mb-[38px] lg:-mb-[42px] relative z-0">
-          <HoneycombCell isFlipped={isFlipped} stage={stage} delay={0.04} />
+        <div className="flex justify-center -mb-[32px] sm:-mb-[38px] lg:-mb-[42px] relative z-0 pointer-events-none">
+          <HoneycombCell isFlipped={isFlipped} hasActiveCategory={hasActiveCategory} stage={stage} delay={0.04} />
         </div>
 
         {/* Row 0: 4 Honeycomb Cells */}
-        <div className="flex items-center justify-center gap-1 sm:gap-1.5 -mb-[32px] sm:-mb-[38px] lg:-mb-[42px] relative z-10">
+        <div
+          className={`flex items-center justify-center gap-1 sm:gap-1.5 -mb-[32px] sm:-mb-[38px] lg:-mb-[42px] relative transition-all duration-300 ${
+            isS3 && selectedRow === 0 ? 'z-30' : 'z-10 hover:z-40'
+          }`}
+        >
           {row0Services.map((service, colIdx) => (
             <HoneycombCell
               key={service.id}
@@ -435,6 +497,7 @@ export const HoneycombGrid3D: React.FC<HoneycombGrid3DProps> = ({
               isSelected={selectedService?.id === service.id}
               isDimmed={isS3 && selectedService?.id !== service.id}
               isCategoryMatch={selectedCategorySlug === service.categorySlug}
+              hasActiveCategory={hasActiveCategory}
               stage={stage}
               onSelect={onSelectService}
               onHover={onHoverService}
@@ -443,11 +506,16 @@ export const HoneycombGrid3D: React.FC<HoneycombGrid3DProps> = ({
         </div>
 
         {/* Row 1 (Offset Honeycomb Row): Left Cell + 4 Center/Right Cells */}
-        <div className="flex items-center justify-center gap-1 sm:gap-1.5 -mb-[32px] sm:-mb-[38px] lg:-mb-[42px] relative z-20 -ml-[62px] sm:-ml-[74px] lg:-ml-[83px]">
+        <div
+          className={`flex items-center justify-center gap-1 sm:gap-1.5 -mb-[32px] sm:-mb-[38px] lg:-mb-[42px] relative -ml-[62px] sm:-ml-[74px] lg:-ml-[83px] transition-all duration-300 ${
+            isS3 && selectedRow === 1 ? 'z-30' : 'z-20 hover:z-40'
+          }`}
+        >
           {/* Left Decorative Cell (matching S1.jpg geometry) */}
           <HoneycombCell
-            className="hidden sm:block opacity-90"
+            className="hidden sm:block opacity-90 pointer-events-none"
             isFlipped={isFlipped}
+            hasActiveCategory={hasActiveCategory}
             stage={stage}
             delay={0.14}
           />
@@ -462,6 +530,7 @@ export const HoneycombGrid3D: React.FC<HoneycombGrid3DProps> = ({
               isSelected={selectedService?.id === service.id}
               isDimmed={isS3 && selectedService?.id !== service.id}
               isCategoryMatch={selectedCategorySlug === service.categorySlug}
+              hasActiveCategory={hasActiveCategory}
               stage={stage}
               onSelect={onSelectService}
               onHover={onHoverService}
@@ -470,7 +539,11 @@ export const HoneycombGrid3D: React.FC<HoneycombGrid3DProps> = ({
         </div>
 
         {/* Row 2: 4 Honeycomb Cells */}
-        <div className="flex items-center justify-center gap-1 sm:gap-1.5 -mb-[32px] sm:-mb-[38px] lg:-mb-[42px] relative z-10">
+        <div
+          className={`flex items-center justify-center gap-1 sm:gap-1.5 -mb-[32px] sm:-mb-[38px] lg:-mb-[42px] relative transition-all duration-300 ${
+            isS3 && selectedRow === 2 ? 'z-30' : 'z-10 hover:z-40'
+          }`}
+        >
           {row2Services.map((service, colIdx) => (
             <HoneycombCell
               key={service.id}
@@ -481,6 +554,7 @@ export const HoneycombGrid3D: React.FC<HoneycombGrid3DProps> = ({
               isSelected={selectedService?.id === service.id}
               isDimmed={isS3 && selectedService?.id !== service.id}
               isCategoryMatch={selectedCategorySlug === service.categorySlug}
+              hasActiveCategory={hasActiveCategory}
               stage={stage}
               onSelect={onSelectService}
               onHover={onHoverService}
@@ -489,8 +563,8 @@ export const HoneycombGrid3D: React.FC<HoneycombGrid3DProps> = ({
         </div>
 
         {/* Bottom Golden Base Cell */}
-        <div className="flex justify-center relative z-0">
-          <HoneycombCell isFlipped={isFlipped} stage={stage} delay={0.24} />
+        <div className="flex justify-center relative z-0 pointer-events-none">
+          <HoneycombCell isFlipped={isFlipped} hasActiveCategory={hasActiveCategory} stage={stage} delay={0.24} />
         </div>
 
         {/* Soft Studio Floor Shadow underneath the floating 3D Beehive */}
