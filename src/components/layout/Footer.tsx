@@ -40,7 +40,7 @@ export const Footer: React.FC = () => {
               {PRIORITY_SERVICES.slice(0, 6).map((service) => (
                 <li key={service.id}>
                   <Link
-                    to={`/services?service=${service.slug}#${service.slug}`}
+                    to={`/services?category=${service.categorySlug}&service=${service.slug}#${service.slug}`}
                     className="text-stone-400 hover:text-amber-300 transition inline-flex items-center gap-1 group"
                   >
                     <span>{service.title}</span>
@@ -60,7 +60,7 @@ export const Footer: React.FC = () => {
               {PRIORITY_SERVICES.slice(6, 12).map((service) => (
                 <li key={service.id}>
                   <Link
-                    to={`/services?service=${service.slug}#${service.slug}`}
+                    to={`/services?category=${service.categorySlug}&service=${service.slug}#${service.slug}`}
                     className="text-stone-400 hover:text-amber-300 transition inline-flex items-center gap-1 group"
                   >
                     <span>{service.title}</span>

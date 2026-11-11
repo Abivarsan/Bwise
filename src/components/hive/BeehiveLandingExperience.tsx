@@ -2,8 +2,8 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import gsap from 'gsap';
-import { Sparkles, Compass, Volume2, VolumeX, Play, RotateCcw } from 'lucide-react';
-import { PRIORITY_SERVICES, PriorityService } from '../../data/servicesData';
+import { Sparkles, Compass, Volume2, VolumeX, Play, RotateCcw, Cpu, Megaphone, Lightbulb, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { PRIORITY_SERVICES, PriorityService, MAIN_SERVICE_CATEGORIES, ServiceCategory, getServicesByCategory } from '../../data/servicesData';
 import { BwiseBeeCharacter } from './BwiseBeeCharacter';
 import { HoneycombGrid3D, ServiceIcon } from './HoneycombGrid3D';
 import { HoneycombTunnelCanvas } from './HoneycombTunnelCanvas';
@@ -22,7 +22,9 @@ export const BeehiveLandingExperience: React.FC = () => {
 
   const [stage, setStage] = useState<HiveAnimationStage>('S1');
   const [selectedService, setSelectedService] = useState<PriorityService | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<ServiceCategory | null>(null);
   const [hoveredServiceId, setHoveredServiceId] = useState<number | null>(null);
+  const [hoveredCategorySlug, setHoveredCategorySlug] = useState<string | null>(null);
   const [isMuted, setIsMuted] = useState<boolean>(soundFX.isMuted);
   const [mouseTilt, setMouseTilt] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
 
@@ -67,6 +69,8 @@ export const BeehiveLandingExperience: React.FC = () => {
     if (timelineRef.current) timelineRef.current.kill();
     setStage('S1');
     setSelectedService(null);
+    setSelectedCategory(null);
+    setHoveredCategorySlug(null);
     gsap.to(beeProxyRef.current, {
       x: S1_BEE_REST_X,
       y: S1_BEE_REST_Y,
@@ -85,6 +89,120 @@ export const BeehiveLandingExperience: React.FC = () => {
       },
     });
   }, []);
+
+  /**
+   * Triggers the multi-stage choreography when a user selects one of the 3 Main Service Categories:
+   * S1 (Interactive Guide category click) -> S2 (12 Hive rooms reveal & Bee takes off)
+   * -> S3 (Bee flies to the category's primary hub room & camera zooms in)
+   * -> TUNNEL (3D Honeycomb Warp Fly-Through)
+   * -> S4 (Interior Studio Room with Whiteboard showing the category & sub-services)
+   * -> Navigation to the dedicated Common Service section under `/services?category=...`
+   */
+  const startCategoryFlightSequence = useCallback(
+    (category: ServiceCategory) => {
+      if (timelineRef.current) {
+        timelineRef.current.kill();
+      }
+
+      setSelectedCategory(category);
+      const hubService =
+        PRIORITY_SERVICES.find((s) => s.slug === category.hubServiceSlug) ||
+        PRIORITY_SERVICES.find((s) => s.categorySlug === category.slug) ||
+        PRIORITY_SERVICES[0];
+      setSelectedService(hubService);
+
+      soundFX.playClickChime(659.25);
+      soundFX.speak(`Welcome to the Bwise Hive! Let's explore our ${category.title} studios.`);
+
+      const tl = gsap.timeline();
+      timelineRef.current = tl;
+
+      // Step 1: Transition to S2 (Beehive Navigation View)
+      tl.call(() => {
+        setStage('S2');
+        setBeePos((prev) => ({ ...prev, isFlying: true }));
+      });
+
+      // Bee slightly lifts and prepares for flight in S2 while the rooms reveal
+      tl.to(beeProxyRef.current, {
+        x: 13,
+        y: 46,
+        scale: 0.96,
+        tilt: 8,
+        duration: 0.7,
+        ease: 'power2.inOut',
+        onUpdate: () => {
+          setBeePos({
+            x: beeProxyRef.current.x,
+            y: beeProxyRef.current.y,
+            scale: beeProxyRef.current.scale,
+            tilt: beeProxyRef.current.tilt,
+            isFlying: true,
+          });
+        },
+      });
+
+      // Step 2: Transition to S3 (Selected Beehive Section Zoom & Curved Bee Flight)
+      tl.call(() => {
+        setStage('S3');
+        soundFX.playBeeFlightSwoosh(1.35);
+      });
+
+      // Calculate where the bee hovers beside the hub cell in S3
+      const targetX = Math.max(24, Math.min(72, hubService.hiveCell.beeTargetX - 11));
+      const targetY = Math.max(24, Math.min(74, hubService.hiveCell.beeTargetY - 4));
+
+      // Midpoint arc for a natural curved flight path
+      const midX = (13 + targetX) / 2;
+      const midY = Math.min(13, targetY) - 10;
+
+      tl.to(beeProxyRef.current, {
+        x: midX,
+        y: midY,
+        scale: 0.88,
+        tilt: 16,
+        duration: 0.55,
+        ease: 'power2.in',
+        onUpdate: () => {
+          setBeePos({
+            x: beeProxyRef.current.x,
+            y: beeProxyRef.current.y,
+            scale: beeProxyRef.current.scale,
+            tilt: beeProxyRef.current.tilt,
+            isFlying: true,
+          });
+        },
+      });
+
+      tl.to(beeProxyRef.current, {
+        x: targetX,
+        y: targetY,
+        scale: 0.84,
+        tilt: -4,
+        duration: 0.75,
+        ease: 'back.out(1.3)',
+        onUpdate: () => {
+          setBeePos({
+            x: beeProxyRef.current.x,
+            y: beeProxyRef.current.y,
+            scale: beeProxyRef.current.scale,
+            tilt: beeProxyRef.current.tilt,
+            isFlying: false,
+          });
+        },
+      });
+
+      // S3 camera stabilization pause
+      tl.to({}, { duration: 1.05 });
+
+      // Step 3: Dive into the selected cell -> 3D Honeycomb Warp Tunnel
+      tl.call(() => {
+        soundFX.playTunnelWarp(1.55);
+        setStage('TUNNEL');
+      });
+    },
+    []
+  );
 
   /**
    * Triggers the complete multi-stage choreography when a user selects any of the 12 Priority Services:
@@ -202,16 +320,23 @@ export const BeehiveLandingExperience: React.FC = () => {
   // Called when the 3D Honeycomb Warp Tunnel completes -> Emerge into S4 Interior Room
   const handleTunnelComplete = useCallback(() => {
     setStage('S4');
-    if (selectedService) {
+    if (selectedCategory) {
+      soundFX.speak(`Welcome to our ${selectedCategory.title} studio pod. Let us explore your requirements.`);
+    } else if (selectedService) {
       soundFX.speak(selectedService.s4Room.voiceNarration);
     }
-  }, [selectedService]);
+  }, [selectedService, selectedCategory]);
 
   // Called when S4 Interior Room completes -> Navigate to the relevant service section under Services page (S5 & S6)
   const handleProceedToServicesPage = useCallback(() => {
-    const targetSlug = selectedService ? selectedService.slug : PRIORITY_SERVICES[8].slug;
-    navigate(`/services?service=${targetSlug}#${targetSlug}`);
-  }, [navigate, selectedService]);
+    if (selectedCategory) {
+      navigate(`/services?category=${selectedCategory.slug}#${selectedCategory.slug}`);
+    } else if (selectedService) {
+      navigate(`/services?category=${selectedService.categorySlug}&service=${selectedService.slug}#${selectedService.slug}`);
+    } else {
+      navigate('/services');
+    }
+  }, [navigate, selectedService, selectedCategory]);
 
   return (
     <section
@@ -244,6 +369,7 @@ export const BeehiveLandingExperience: React.FC = () => {
       {stage === 'S4' && selectedService ? (
         <BeehiveInteriorRoom
           service={selectedService}
+          category={selectedCategory}
           onProceedToServicePage={handleProceedToServicesPage}
           onReturnToHive={resetToS1}
         />
@@ -339,35 +465,64 @@ export const BeehiveLandingExperience: React.FC = () => {
                     What can we help you to build today?
                   </h1>
 
-                  {/* 12 Priority Services Pill Buttons */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-[340px] overflow-y-auto pr-1">
-                    {PRIORITY_SERVICES.map((service, idx) => (
-                      <button
-                        key={service.id}
-                        type="button"
-                        onClick={() => startServiceFlightSequence(service)}
-                        onMouseEnter={() => {
-                          setHoveredServiceId(service.id);
-                          soundFX.playClickChime(440 + idx * 22);
-                        }}
-                        onMouseLeave={() => setHoveredServiceId(null)}
-                        className={`group flex items-center gap-2 px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-full border text-left text-xs font-semibold transition-all duration-200 cursor-pointer ${
-                          hoveredServiceId === service.id
-                            ? 'border-amber-500 bg-amber-50/90 text-stone-950 shadow-sm -translate-y-0.5'
-                            : 'border-stone-800/80 bg-white hover:border-amber-500 hover:bg-amber-50/50 text-stone-900'
-                        }`}
-                      >
-                        <span className="w-5 h-5 rounded-full bg-amber-100 text-amber-700 group-hover:bg-amber-500 group-hover:text-white flex items-center justify-center shrink-0 transition-colors">
-                          <ServiceIcon name={service.iconName} className="w-3 h-3" />
-                        </span>
-                        <span className="truncate">{service.title}</span>
-                      </button>
-                    ))}
+                  {/* 3 Main Service Categories (Interactive Guide Display) */}
+                  <div className="flex flex-col gap-2.5">
+                    {MAIN_SERVICE_CATEGORIES.map((category, idx) => {
+                      const isHovered = hoveredCategorySlug === category.slug;
+                      return (
+                        <button
+                          key={category.id}
+                          type="button"
+                          onClick={() => startCategoryFlightSequence(category)}
+                          onMouseEnter={() => {
+                            setHoveredCategorySlug(category.slug);
+                            const servicesInCat = getServicesByCategory(category.slug);
+                            setHoveredServiceId(servicesInCat[0]?.id || null);
+                            soundFX.playClickChime(480 + idx * 45);
+                          }}
+                          onMouseLeave={() => {
+                            setHoveredCategorySlug(null);
+                            setHoveredServiceId(null);
+                          }}
+                          className={`group relative flex items-center justify-between p-3.5 sm:p-4 rounded-2xl border text-left transition-all duration-300 cursor-pointer ${
+                            isHovered
+                              ? 'border-amber-500 bg-amber-50/95 shadow-[0_12px_28px_rgba(245,158,11,0.18)] -translate-y-0.5'
+                              : 'border-stone-200/90 bg-stone-50/60 hover:border-amber-400 hover:bg-amber-50/50 shadow-xs'
+                          }`}
+                        >
+                          <div className="flex items-center gap-3.5 min-w-0">
+                            <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 text-white flex items-center justify-center shrink-0 shadow-sm group-hover:scale-105 transition-transform">
+                              {category.slug === 'software-solutions' && <Cpu className="w-5 h-5" />}
+                              {category.slug === 'social-media-marketing' && <Megaphone className="w-5 h-5" />}
+                              {category.slug === 'digital-strategy-ideas' && <Lightbulb className="w-5 h-5" />}
+                            </div>
+                            <div className="min-w-0">
+                              <div className="flex items-center gap-2">
+                                <h3 className="text-sm sm:text-base font-extrabold text-stone-900 group-hover:text-amber-800 transition-colors truncate">
+                                  {category.title}
+                                </h3>
+                                <span className="inline-flex items-center text-[10px] font-bold text-amber-700 bg-amber-100/90 px-2 py-0.5 rounded-full shrink-0">
+                                  {category.badge}
+                                </span>
+                              </div>
+                              <p className="text-[11px] text-stone-500 truncate mt-0.5">
+                                {category.slug === 'software-solutions' && 'Web • Mobile • QA Testing • SEO • AIO • GEO'}
+                                {category.slug === 'social-media-marketing' && 'Advertising • Management • Content Marketing'}
+                                {category.slug === 'digital-strategy-ideas' && 'Brand Management • Logo Design • Digital Analytics'}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="w-7 h-7 rounded-full bg-stone-100 group-hover:bg-amber-500 text-stone-400 group-hover:text-white flex items-center justify-center shrink-0 ml-2 transition-all">
+                            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+                          </div>
+                        </button>
+                      );
+                    })}
                   </div>
 
                   <p className="mt-3.5 text-[11px] text-stone-500 flex items-center justify-between">
-                    <span>Select any service to watch our Bee guide you into the Hive</span>
-                    <span className="font-bold text-amber-600">12 Studios</span>
+                    <span>Select any category to watch our Bee guide you into the Studios</span>
+                    <span className="font-bold text-amber-600">3 Main Categories</span>
                   </p>
                 </motion.div>
               )}
@@ -404,6 +559,7 @@ export const BeehiveLandingExperience: React.FC = () => {
               stage={stage === 'S1' || stage === 'S2' || stage === 'S3' ? stage : 'S2'}
               selectedService={selectedService}
               hoveredServiceId={hoveredServiceId}
+              hoveredCategorySlug={hoveredCategorySlug}
               onSelectService={startServiceFlightSequence}
               onHoverService={setHoveredServiceId}
               mouseTilt={mouseTilt}

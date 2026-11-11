@@ -19,13 +19,87 @@ export interface ServiceProcessStep {
   iconName: string;
 }
 
+export type MainCategorySlug = 'software-solutions' | 'social-media-marketing' | 'digital-strategy-ideas';
+
+export interface ServiceCategory {
+  id: string;
+  slug: MainCategorySlug;
+  title: string;
+  tagline: string;
+  description: string;
+  badge: string;
+  iconName: 'Cpu' | 'Megaphone' | 'Lightbulb';
+  accentColor: string;
+  accentGradient: string;
+  hubServiceSlug: string;
+  subServiceSlugs: string[];
+}
+
+export const MAIN_SERVICE_CATEGORIES: ServiceCategory[] = [
+  {
+    id: 'software-solutions',
+    slug: 'software-solutions',
+    title: 'Software Solutions',
+    tagline: 'High-performance web, native mobile apps, automated QA testing, and modern AI search optimization.',
+    description: 'Our software engineering pod constructs enterprise-grade digital systems. From mission-critical cloud apps to cross-platform mobile experiences and automated QA pipelines, we deliver fault-tolerant, scalable codebases.',
+    badge: '6 Core Services',
+    iconName: 'Cpu',
+    accentColor: '#3B82F6',
+    accentGradient: 'from-blue-500 to-indigo-600',
+    hubServiceSlug: 'web-development',
+    subServiceSlugs: [
+      'web-development',
+      'mobile-app-development',
+      'application-testing',
+      'search-engine-optimisation',
+      'artificial-intelligence-optimization',
+      'generative-engine-optimisation',
+    ],
+  },
+  {
+    id: 'social-media-marketing',
+    slug: 'social-media-marketing',
+    title: 'Social Media Marketing',
+    tagline: 'Precision advertising, high-engagement community management, and compounding content ecosystems.',
+    description: 'Transform social attention into revenue pipelines. We combine data-driven paid social acquisition, active multi-channel community stewardship, and viral content production that builds enduring audience loyalty.',
+    badge: '3 Core Services',
+    iconName: 'Megaphone',
+    accentColor: '#EC4899',
+    accentGradient: 'from-pink-500 to-rose-600',
+    hubServiceSlug: 'social-media-advertising',
+    subServiceSlugs: [
+      'social-media-advertising',
+      'social-media-management',
+      'content-marketing',
+    ],
+  },
+  {
+    id: 'digital-strategy-ideas',
+    slug: 'digital-strategy-ideas',
+    title: 'Digital Strategy Ideas',
+    tagline: 'Strategic brand architecture, memorable visual identities, and executive-level analytics attribution.',
+    description: 'Define your market category and master your metrics. We engineer cohesive brand identities, iconic logos, and end-to-end data pipelines that empower decisive leadership and compounding enterprise valuation.',
+    badge: '3 Core Services',
+    iconName: 'Lightbulb',
+    accentColor: '#F59E0B',
+    accentGradient: 'from-amber-500 to-orange-600',
+    hubServiceSlug: 'digital-analytics',
+    subServiceSlugs: [
+      'brand-management',
+      'unique-logo-design',
+      'digital-analytics',
+    ],
+  },
+];
+
 export interface PriorityService {
   id: number;
   slug: string;
   title: string;
   shortTitle: string;
   tagline: string;
-  category: 'Strategy & Growth' | 'Search & AI' | 'Creative & Brand' | 'Engineering';
+  category: string;
+  categorySlug: MainCategorySlug;
   iconName:
     | 'Lightbulb'
     | 'Search'
@@ -89,125 +163,126 @@ export interface PriorityService {
 export const PRIORITY_SERVICES: PriorityService[] = [
   {
     id: 1,
-    slug: 'digital-strategy-ideas',
-    title: 'Digital Strategy Ideas',
-    shortTitle: 'Digital Strategy',
-    tagline: 'Data-backed digital roadmaps that turn ambitious brand visions into measurable market dominance.',
-    category: 'Strategy & Growth',
-    iconName: 'Lightbulb',
+    slug: 'application-testing',
+    title: 'Application Testing',
+    shortTitle: 'App Testing',
+    tagline: 'Enterprise-grade QA, automated end-to-end testing, and performance validation ensuring zero-defect deployments.',
+    category: 'Software Solutions',
+    categorySlug: 'software-solutions',
+    iconName: 'FileCheck',
     hiveCell: {
       row: 0,
       col: 0,
       beeTargetX: 39,
       beeTargetY: 28,
       s2Crop: { x: 41.2, y: 21.8, w: 11.2, h: 20.5 },
-      roomGradient: 'from-amber-500/85 via-amber-700/75 to-stone-900/90',
-      frameColor: '#F59E0B',
-      glowColor: 'rgba(245, 158, 11, 0.7)',
-      roomInteriorLabel: 'Executive Strategy Lab',
+      roomGradient: 'from-blue-600/85 via-indigo-700/75 to-stone-900/90',
+      frameColor: '#3B82F6',
+      glowColor: 'rgba(59, 130, 246, 0.7)',
+      roomInteriorLabel: 'Automated QA & Testing Lab',
     },
     s4Room: {
-      consultantQuestion: 'Ready to map out your next high-growth Digital Strategy roadmap?',
-      voiceNarration: 'Welcome to the Digital Strategy Ideas room. Let us architect your market growth roadmap.',
-      whiteboardHeading: 'Omnichannel Growth & Funnel Blueprint',
-      whiteboardModules: ['Market Opportunity Matrix', 'Customer Journey Architecture', 'Q1–Q4 Revenue Attribution'],
-      kpiHighlight: '+240% Avg. Pipeline Velocity',
+      consultantQuestion: 'Ready to bulletproof your software with automated testing & continuous QA?',
+      voiceNarration: 'Welcome to the Application Testing studio. We engineer automated test suites, security scans, and performance benchmarks for flawless releases.',
+      whiteboardHeading: 'Automated QA & Performance Testing Matrix',
+      whiteboardModules: ['End-to-End Cypress & Playwright Suites', 'API Load & Chaos Resilience Testing', 'CI/CD Automated Regression Gates'],
+      kpiHighlight: '99.98% Crash-Free Release Rate',
     },
     detail: {
-      overviewTitle: 'Digital Strategy Ideas Overview',
+      overviewTitle: 'Application Testing & Quality Assurance Overview',
       overviewDescription:
-        'We architect comprehensive digital transformation and go-to-market blueprints. By combining competitive intelligence, behavioral economics, and multi-channel attribution, we eliminate guesswork and align every dollar of spend with revenue growth.',
-      desktopMockupHeadline: 'Enterprise Growth Roadmap & Funnel Command',
-      desktopMockupSubtext: 'Unified multi-channel positioning, audience segmentation, and ROI forecasting.',
-      mobileMockupStat: '3.8x ROI Velocity',
+        'We ensure your web and mobile applications operate flawlessly under enterprise workloads. From automated cross-browser suites and API stress testing to security penetration audits, our QA engineers catch regressions before your customers ever do.',
+      desktopMockupHeadline: 'Continuous Automated QA Pipeline & Test Analytics',
+      desktopMockupSubtext: 'Real-time regression coverage, load stress benchmarks, and accessibility compliance monitoring.',
+      mobileMockupStat: '0.02% Defect Escape Rate',
       problemsSolved: [
         {
-          title: 'Disconnected marketing channels & wasted ad spend',
-          description: 'Unify paid, owned, and earned touchpoints into one compounding acquisition engine.',
+          title: 'Undetected regressions breaking critical checkout and sign-up flows',
+          description: 'Automate critical user journey tests across all browsers, operating systems, and device form factors.',
         },
         {
-          title: 'Unclear market positioning against agile competitors',
-          description: 'Establish a defensible value proposition supported by category-defining messaging.',
+          title: 'System slowdowns and server crashes during high-traffic spikes',
+          description: 'Execute continuous load, stress, and chaos tests simulating 50,000+ concurrent real-world users.',
         },
         {
-          title: 'Stagnant conversion rates across the buyer journey',
-          description: 'Redesign full-funnel micro-conversions from first impression to enterprise close.',
+          title: 'Manual testing bottlenecks delaying fast product release cycles',
+          description: 'Embed automated test runners directly into your GitHub Actions / GitLab CI/CD pipelines.',
         },
       ],
       modernTechSummary:
-        'Powered by predictive market intelligence, cohort modeling, and real-time attribution frameworks trusted by category leaders.',
-      techStack: ['GA4 BigQuery', 'HubSpot Enterprise', 'Mixpanel', 'Similarweb Pro', 'Figma FigJam', 'Looker Studio'],
-      ratingScore: '4.9 / 5.0 Client Strategy Rating',
+        'Leveraging industry-standard automated test runners, headless browser clusters, and performance profilers.',
+      techStack: ['Playwright', 'Cypress', 'Jest & Vitest', 'k6 Load Testing', 'Postman API', 'SonarQube', 'Appium'],
+      ratingScore: '4.9 / 5.0 QA Engineering Rating',
       previousProjects: [
         {
-          title: 'FinTech Series-B Go-To-Market',
-          category: 'Growth Architecture',
-          metrics: '+310% Qualified Pipeline',
-          description: 'Full-funnel repositioning and enterprise ABM rollout across North America and EMEA.',
-          accentColor: '#F59E0B',
+          title: 'FinTech Payment Gateway Hardening',
+          category: 'Automated E2E QA',
+          metrics: '100% Core Flow Coverage',
+          description: 'Architected zero-tolerance automated test suites for high-volume PCI-compliant payment flows.',
+          accentColor: '#10B981',
           theme: 'dark',
         },
         {
-          title: 'Global Retail Omnichannel Shift',
-          category: 'Digital Transformation',
-          metrics: '$14.2M Incremental ARR',
-          description: 'Unified D2C e-commerce experience and retention loyalty ecosystem.',
+          title: 'E-Commerce Black Friday Load Optimization',
+          category: 'Stress & Load Testing',
+          metrics: 'Zero Downtime at 40k RPS',
+          description: 'Simulated flash sale traffic surges, resolved connection pool bottlenecks, and optimized cache hit ratios.',
+          accentColor: '#F59E0B',
+          theme: 'amber',
+        },
+        {
+          title: 'Healthcare Mobile App Compliance Audit',
+          category: 'Security & Regression QA',
+          metrics: 'HIPAA & WCAG 2.1 AA',
+          description: 'Automated cross-device regression suites and accessibility compliance verification for 500k+ active patients.',
           accentColor: '#3B82F6',
           theme: 'light',
         },
         {
-          title: 'SaaS Category Creation Blueprint',
-          category: 'Market Positioning',
-          metrics: '42% Lower CAC',
-          description: 'Restructured pricing tiers, onboarding flows, and self-serve product-led growth.',
-          accentColor: '#EAB308',
-          theme: 'amber',
-        },
-        {
-          title: 'HealthTech Patient Acquisition Hub',
-          category: 'Strategy & Funnel',
-          metrics: '2.9x Booking Conversion',
-          description: 'End-to-end digital patient intake strategy across 45 regional clinics.',
-          accentColor: '#10B981',
+          title: 'SaaS Multi-Tenant API Contract Testing',
+          category: 'Integration QA',
+          metrics: '<0.01% API Regression Rate',
+          description: 'Automated schema validation and integration tests across 80+ microservices.',
+          accentColor: '#EC4899',
           theme: 'slate',
         },
       ],
       processDelivery: [
         {
           stepNumber: '01',
-          title: 'Client Engagement',
-          description: 'Deep-dive stakeholder alignment, business model audit, and unit economics baseline.',
-          iconName: 'Users',
-        },
-        {
-          stepNumber: '02',
-          title: 'Market Intelligence',
-          description: 'Competitor teardown, ICP interviewing, and whitespace opportunity mapping.',
+          title: 'Test Architecture & Strategy',
+          description: 'Map critical business pathways, risk profiles, and test automation coverage requirements.',
           iconName: 'Compass',
         },
         {
+          stepNumber: '02',
+          title: 'Automated Test Suite Authoring',
+          description: 'Write maintainable, flake-resistant Playwright, Cypress, and unit test suites.',
+          iconName: 'Code2',
+        },
+        {
           stepNumber: '03',
-          title: 'Product Delivery',
-          description: '90-day and 12-month actionable execution playbook with channel budgets.',
+          title: 'API & Integration Testing',
+          description: 'Validate microservices, third-party webhook contracts, and database transaction integrity.',
           iconName: 'Layers',
         },
         {
           stepNumber: '04',
-          title: 'Process Solutions',
-          description: 'MarTech stack integration, CRM pipeline automation, and KPI dashboarding.',
-          iconName: 'Workflow',
+          title: 'Load & Performance Stress',
+          description: 'Run distributed k6 simulations measuring p95 latency, database saturation, and memory leaks.',
+          iconName: 'Zap',
         },
         {
           stepNumber: '05',
-          title: 'Process Delivery',
-          description: 'Cross-functional sprint launches with weekly growth experiment velocity.',
-          iconName: 'Rocket',
+          title: 'CI/CD Pipeline Integration',
+          description: 'Enforce automated pull request validation and deployment blocker gates.',
+          iconName: 'Workflow',
         },
         {
           stepNumber: '06',
-          title: 'Continuous Scaling',
-          description: 'Executive board reporting, cohort optimization, and budget reallocation.',
-          iconName: 'TrendingUp',
+          title: 'Continuous Quality Monitoring',
+          description: 'Real-time crash analytics, synthetic monitoring, and monthly regression audits.',
+          iconName: 'ShieldCheck',
         },
       ],
     },
@@ -215,10 +290,11 @@ export const PRIORITY_SERVICES: PriorityService[] = [
   {
     id: 2,
     slug: 'search-engine-optimisation',
-    title: 'Search Engine Optimisation',
-    shortTitle: 'SEO Mastery',
+    title: 'SEO (Search Engine Optimisation)',
+    shortTitle: 'SEO',
     tagline: 'Technical SEO precision and high-authority content ecosystems that capture high-intent search demand.',
-    category: 'Search & AI',
+    category: 'Software Solutions',
+    categorySlug: 'software-solutions',
     iconName: 'Search',
     hiveCell: {
       row: 0,
@@ -343,7 +419,8 @@ export const PRIORITY_SERVICES: PriorityService[] = [
     title: 'Social Media Advertising',
     shortTitle: 'Social Ads',
     tagline: 'High-converting paid social campaigns engineered with thumb-stopping creative and precision ROAS bidding.',
-    category: 'Strategy & Growth',
+    category: 'Social Media Marketing',
+    categorySlug: 'social-media-marketing',
     iconName: 'Megaphone',
     hiveCell: {
       row: 0,
@@ -468,7 +545,8 @@ export const PRIORITY_SERVICES: PriorityService[] = [
     title: 'Social Media Management',
     shortTitle: 'Social Management',
     tagline: 'Authentic community building, executive thought leadership, and viral short-form storytelling.',
-    category: 'Creative & Brand',
+    category: 'Social Media Marketing',
+    categorySlug: 'social-media-marketing',
     iconName: 'MessageSquare',
     hiveCell: {
       row: 0,
@@ -590,10 +668,11 @@ export const PRIORITY_SERVICES: PriorityService[] = [
   {
     id: 5,
     slug: 'generative-engine-optimisation',
-    title: 'Generative Engine Optimisation',
+    title: 'GEO (Generative Engine Optimisation)',
     shortTitle: 'GEO & AI Search',
     tagline: 'Position your brand as the primary cited answer inside ChatGPT, Gemini, Perplexity, and Google AI Overviews.',
-    category: 'Search & AI',
+    category: 'Software Solutions',
+    categorySlug: 'software-solutions',
     iconName: 'Cog',
     hiveCell: {
       row: 1,
@@ -718,7 +797,8 @@ export const PRIORITY_SERVICES: PriorityService[] = [
     title: 'Content Marketing',
     shortTitle: 'Content Marketing',
     tagline: 'Editorial-grade storytelling, research reports, and multi-format content engines that educate and convert.',
-    category: 'Creative & Brand',
+    category: 'Social Media Marketing',
+    categorySlug: 'social-media-marketing',
     iconName: 'FileCheck',
     hiveCell: {
       row: 1,
@@ -843,7 +923,8 @@ export const PRIORITY_SERVICES: PriorityService[] = [
     title: 'Digital Analytics',
     shortTitle: 'Digital Analytics',
     tagline: 'End-to-end data warehousing, multi-touch attribution, and live executive BI dashboards.',
-    category: 'Strategy & Growth',
+    category: 'Digital Strategy Ideas',
+    categorySlug: 'digital-strategy-ideas',
     iconName: 'TrendingUp',
     hiveCell: {
       row: 1,
@@ -965,10 +1046,11 @@ export const PRIORITY_SERVICES: PriorityService[] = [
   {
     id: 8,
     slug: 'artificial-intelligence-optimization',
-    title: 'Artificial Intelligence Optimization',
+    title: 'AIO (Artificial Intelligence Optimization)',
     shortTitle: 'AI Optimization',
     tagline: 'Custom AI agents, RAG knowledge workflows, and intelligent automation that multiply team output.',
-    category: 'Search & AI',
+    category: 'Software Solutions',
+    categorySlug: 'software-solutions',
     iconName: 'Cpu',
     hiveCell: {
       row: 1,
@@ -1093,7 +1175,8 @@ export const PRIORITY_SERVICES: PriorityService[] = [
     title: 'Web Development',
     shortTitle: 'Web Development',
     tagline: 'Blazing-fast, interactive 3D and full-stack web applications engineered for conversion and scale.',
-    category: 'Engineering',
+    category: 'Software Solutions',
+    categorySlug: 'software-solutions',
     iconName: 'Monitor',
     hiveCell: {
       row: 2,
@@ -1218,7 +1301,8 @@ export const PRIORITY_SERVICES: PriorityService[] = [
     title: 'Mobile App Development',
     shortTitle: 'Mobile Apps',
     tagline: 'Native-grade iOS and Android applications crafted with fluid gestures, offline sync, and biometric security.',
-    category: 'Engineering',
+    category: 'Software Solutions',
+    categorySlug: 'software-solutions',
     iconName: 'Smartphone',
     hiveCell: {
       row: 2,
@@ -1339,11 +1423,12 @@ export const PRIORITY_SERVICES: PriorityService[] = [
   },
   {
     id: 11,
-    slug: 'brand-handling',
-    title: 'Brand Handling',
+    slug: 'brand-management',
+    title: 'Brand Management',
     shortTitle: 'Brand Handling',
     tagline: 'End-to-end brand stewardship, reputation management, visual identity systems, and market positioning.',
-    category: 'Creative & Brand',
+    category: 'Digital Strategy Ideas',
+    categorySlug: 'digital-strategy-ideas',
     iconName: 'Tag',
     hiveCell: {
       row: 2,
@@ -1464,11 +1549,12 @@ export const PRIORITY_SERVICES: PriorityService[] = [
   },
   {
     id: 12,
-    slug: 'unique-logo-designing',
-    title: 'Unique Logo Designing',
+    slug: 'unique-logo-design',
+    title: 'Unique Logo Design',
     shortTitle: 'Logo Designing',
     tagline: 'Timeless geometric marks, custom wordmarks, and animated 3D brand emblems crafted for instant recognition.',
-    category: 'Creative & Brand',
+    category: 'Digital Strategy Ideas',
+    categorySlug: 'digital-strategy-ideas',
     iconName: 'PenTool',
     hiveCell: {
       row: 2,
@@ -1590,6 +1676,28 @@ export const PRIORITY_SERVICES: PriorityService[] = [
 ];
 
 export const getServiceBySlug = (slug: string | null | undefined): PriorityService => {
-  if (!slug) return PRIORITY_SERVICES[8]; // Default to Web Development (or first service)
-  return PRIORITY_SERVICES.find((s) => s.slug === slug) || PRIORITY_SERVICES[0];
+  if (!slug) return PRIORITY_SERVICES.find((s) => s.slug === 'web-development') || PRIORITY_SERVICES[0];
+
+  // Backward compatibility alias normalization
+  let normalized = slug.trim().toLowerCase();
+  if (normalized === 'brand-handling') normalized = 'brand-management';
+  if (normalized === 'unique-logo-designing') normalized = 'unique-logo-design';
+  if (normalized === 'digital-strategy-ideas') normalized = 'digital-analytics';
+
+  return PRIORITY_SERVICES.find((s) => s.slug === normalized) || PRIORITY_SERVICES[0];
+};
+
+export const getMainCategoryBySlug = (slug: string | null | undefined): ServiceCategory => {
+  if (!slug) return MAIN_SERVICE_CATEGORIES[0];
+  const normalized = slug.trim().toLowerCase();
+  return MAIN_SERVICE_CATEGORIES.find((c) => c.slug === normalized) || MAIN_SERVICE_CATEGORIES[0];
+};
+
+export const getServicesByCategory = (categorySlug: string): PriorityService[] => {
+  return PRIORITY_SERVICES.filter((s) => s.categorySlug === categorySlug);
+};
+
+export const getCategoryForService = (serviceSlug: string): ServiceCategory => {
+  const service = getServiceBySlug(serviceSlug);
+  return getMainCategoryBySlug(service.categorySlug);
 };

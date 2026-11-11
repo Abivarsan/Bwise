@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { Menu, X, ChevronDown, Sparkles } from 'lucide-react';
+import { Menu, X, ChevronDown, Sparkles, Cpu, Megaphone, Lightbulb } from 'lucide-react';
 import { BwiseLogo } from './BwiseLogo';
-import { PRIORITY_SERVICES } from '../../data/servicesData';
+import { PRIORITY_SERVICES, MAIN_SERVICE_CATEGORIES } from '../../data/servicesData';
 import { ServiceIcon } from '../hive/HoneycombGrid3D';
 
 export const Navbar: React.FC = () => {
@@ -60,7 +60,7 @@ export const Navbar: React.FC = () => {
                       <div className="flex items-center justify-between pb-3 mb-3 border-b border-stone-100">
                         <span className="text-xs font-bold uppercase tracking-wider text-amber-600 flex items-center gap-1.5">
                           <Sparkles className="w-3.5 h-3.5" />
-                          12 Priority Beehive Studios
+                          3 Main Service Categories
                         </span>
                         <Link
                           to="/services"
@@ -70,6 +70,32 @@ export const Navbar: React.FC = () => {
                           View All Services →
                         </Link>
                       </div>
+
+                      {/* 3 Main Categories Featured Row */}
+                      <div className="grid grid-cols-3 gap-2 mb-3 pb-3 border-b border-stone-100">
+                        {MAIN_SERVICE_CATEGORIES.map((cat) => (
+                          <button
+                            key={cat.id}
+                            type="button"
+                            onClick={() => {
+                              setServicesDropdownOpen(false);
+                              navigate(`/services?category=${cat.slug}#${cat.slug}`);
+                            }}
+                            className="p-2.5 rounded-xl bg-amber-50/70 hover:bg-amber-100 border border-amber-200/80 text-left transition group cursor-pointer"
+                          >
+                            <div className="w-7 h-7 rounded-lg bg-amber-500 text-white flex items-center justify-center mb-1.5 shadow-2xs group-hover:scale-105 transition-transform">
+                              {cat.slug === 'software-solutions' && <Cpu className="w-3.5 h-3.5" />}
+                              {cat.slug === 'social-media-marketing' && <Megaphone className="w-3.5 h-3.5" />}
+                              {cat.slug === 'digital-strategy-ideas' && <Lightbulb className="w-3.5 h-3.5" />}
+                            </div>
+                            <p className="text-xs font-extrabold text-stone-900 leading-tight group-hover:text-amber-800">
+                              {cat.title}
+                            </p>
+                            <span className="text-[10px] font-bold text-amber-700">{cat.badge}</span>
+                          </button>
+                        ))}
+                      </div>
+
                       <div className="grid grid-cols-2 gap-1.5">
                         {PRIORITY_SERVICES.map((svc) => (
                           <button
@@ -77,7 +103,7 @@ export const Navbar: React.FC = () => {
                             type="button"
                             onClick={() => {
                               setServicesDropdownOpen(false);
-                              navigate(`/services?service=${svc.slug}#${svc.slug}`);
+                              navigate(`/services?category=${svc.categorySlug}&service=${svc.slug}#${svc.slug}`);
                             }}
                             className="flex items-center gap-2.5 p-2 rounded-xl hover:bg-amber-50/90 text-left transition group cursor-pointer"
                           >
@@ -157,17 +183,44 @@ export const Navbar: React.FC = () => {
           </div>
 
           <div className="pt-2 border-t border-stone-100">
-            <p className="px-4 text-xs font-bold uppercase tracking-wider text-stone-400 mb-2">
-              Priority Hive Services
+            <p className="px-4 text-xs font-bold uppercase tracking-wider text-amber-700 mb-2">
+              Main Service Categories
             </p>
-            <div className="grid grid-cols-2 gap-1.5 px-2 max-h-56 overflow-y-auto">
+            <div className="grid grid-cols-1 gap-1.5 px-2 mb-3">
+              {MAIN_SERVICE_CATEGORIES.map((cat) => (
+                <button
+                  key={cat.id}
+                  type="button"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    navigate(`/services?category=${cat.slug}#${cat.slug}`);
+                  }}
+                  className="flex items-center justify-between p-2.5 rounded-xl bg-amber-50/80 hover:bg-amber-100 text-left text-xs font-bold text-stone-900 border border-amber-200/80"
+                >
+                  <div className="flex items-center gap-2">
+                    {cat.slug === 'software-solutions' && <Cpu className="w-4 h-4 text-amber-600" />}
+                    {cat.slug === 'social-media-marketing' && <Megaphone className="w-4 h-4 text-amber-600" />}
+                    {cat.slug === 'digital-strategy-ideas' && <Lightbulb className="w-4 h-4 text-amber-600" />}
+                    <span>{cat.title}</span>
+                  </div>
+                  <span className="text-[10px] text-amber-800 bg-amber-100 px-2 py-0.5 rounded-full">
+                    {cat.badge}
+                  </span>
+                </button>
+              ))}
+            </div>
+
+            <p className="px-4 text-xs font-bold uppercase tracking-wider text-stone-400 mb-2">
+              All 12 Hive Studios
+            </p>
+            <div className="grid grid-cols-2 gap-1.5 px-2 max-h-48 overflow-y-auto">
               {PRIORITY_SERVICES.map((svc) => (
                 <button
                   key={svc.id}
                   type="button"
                   onClick={() => {
                     setMobileMenuOpen(false);
-                    navigate(`/services?service=${svc.slug}#${svc.slug}`);
+                    navigate(`/services?category=${svc.categorySlug}&service=${svc.slug}#${svc.slug}`);
                   }}
                   className="flex items-center gap-2 p-2 rounded-lg bg-stone-50 hover:bg-amber-50 text-left text-xs font-semibold text-stone-800"
                 >
