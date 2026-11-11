@@ -13,9 +13,11 @@ import { soundFX } from '../../utils/soundEffects';
 
 export type HiveAnimationStage = 'S1' | 'S2' | 'S3' | 'TUNNEL' | 'S4';
 
-// S1 resting coordinates for the 3D Guide Bee (positioned on the left without covering the popup card)
-const S1_BEE_REST_X = 11;
-const S1_BEE_REST_Y = 50;
+// S1 resting coordinates for the 3D Guide Bee (positioned matching Reference/S1.jpg)
+// Bee sits lower and inset from the left, gesturing towards the speech bubble
+const S1_BEE_REST_X = 17;
+const S1_BEE_REST_Y = 56;
+const S1_BEE_START_X = -16;
 
 export const BeehiveLandingExperience: React.FC = () => {
   const navigate = useNavigate();
@@ -27,17 +29,20 @@ export const BeehiveLandingExperience: React.FC = () => {
   const [hoveredCategorySlug, setHoveredCategorySlug] = useState<string | null>(null);
   const [isMuted, setIsMuted] = useState<boolean>(soundFX.isMuted);
   const [mouseTilt, setMouseTilt] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const [isGuideVisible, setIsGuideVisible] = useState<boolean>(false);
+  const [hasEntered, setHasEntered] = useState<boolean>(false);
 
   // Bee position state (% of stage container) animated smoothly by GSAP
+  // Starts off-screen to the left on first visit for the entrance flight
   const [beePos, setBeePos] = useState<{ x: number; y: number; scale: number; tilt: number; isFlying: boolean }>({
-    x: S1_BEE_REST_X,
+    x: S1_BEE_START_X,
     y: S1_BEE_REST_Y,
     scale: 1,
-    tilt: 0,
-    isFlying: false,
+    tilt: 10,
+    isFlying: true,
   });
 
-  const beeProxyRef = useRef({ x: S1_BEE_REST_X, y: S1_BEE_REST_Y, scale: 1, tilt: 0 });
+  const beeProxyRef = useRef({ x: S1_BEE_START_X, y: S1_BEE_REST_Y, scale: 1, tilt: 10 });
   const timelineRef = useRef<gsap.core.Timeline | null>(null);
 
   // Subtle 3D mouse parallax across the studio stage
@@ -53,8 +58,45 @@ export const BeehiveLandingExperience: React.FC = () => {
     setIsMuted(muted);
   };
 
-  // Clean up any active GSAP timeline on unmount
+  // Coordinated landing page entrance choreography matching Reference/S1.jpg:
+  // 1. Bee flies smoothly in from the left
+  // 2. 3D HoneycombGrid enters from the right
+  // 3. Once bee reaches final position, guide emerges from behind bee's head as a speech bubble
   useEffect(() => {
+    const entranceTl = gsap.timeline({
+      delay: 0.15,
+      onComplete: () => {
+        setHasEntered(true);
+      },
+    });
+    timelineRef.current = entranceTl;
+
+    soundFX.playBeeFlightSwoosh(1.1);
+
+    entranceTl.to(beeProxyRef.current, {
+      x: S1_BEE_REST_X,
+      y: S1_BEE_REST_Y,
+      scale: 1,
+      tilt: 0,
+      duration: 1.1,
+      ease: 'power3.out',
+      onUpdate: () => {
+        setBeePos({
+          x: beeProxyRef.current.x,
+          y: beeProxyRef.current.y,
+          scale: beeProxyRef.current.scale,
+          tilt: beeProxyRef.current.tilt,
+          isFlying: true,
+        });
+      },
+    });
+
+    entranceTl.call(() => {
+      setBeePos((prev) => ({ ...prev, isFlying: false, tilt: 0 }));
+      setIsGuideVisible(true);
+      soundFX.playClickChime(587.33);
+    });
+
     return () => {
       if (timelineRef.current) {
         timelineRef.current.kill();
@@ -71,6 +113,7 @@ export const BeehiveLandingExperience: React.FC = () => {
     setSelectedService(null);
     setSelectedCategory(null);
     setHoveredCategorySlug(null);
+    setIsGuideVisible(true);
     gsap.to(beeProxyRef.current, {
       x: S1_BEE_REST_X,
       y: S1_BEE_REST_Y,
@@ -425,26 +468,61 @@ export const BeehiveLandingExperience: React.FC = () => {
           {/* Left / Center Interaction Column */}
           <div
             className={`relative z-30 w-full transition-all duration-500 ${stage === 'S1'
-                ? 'lg:w-[48%] xl:w-[45%] lg:ml-[21%] xl:ml-[19%] lg:mr-auto flex flex-col items-center lg:items-start justify-center min-h-[420px]'
+                ? 'lg:w-[48%] xl:w-[45%] lg:ml-[23%] xl:ml-[21%] lg:mr-auto flex flex-col items-center lg:items-start justify-start min-h-[420px] lg:-translate-y-10 xl:-translate-y-14'
                 : 'lg:w-[44%] flex flex-col items-center lg:items-start justify-center min-h-[420px]'
               }`}
           >
             <AnimatePresence mode="wait">
-              {stage === 'S1' && (
-                /* S1 Speech Bubble Popup Card with the 12 Priority Services (matching S1.jpg) */
+              {stage === 'S1' && isGuideVisible && (
+                /* S1 Speech Bubble Popup Card with the 3 Main Service Categories (matching Reference/S1.jpg) */
                 <motion.div
                   key="s1-popup"
-                  initial={{ opacity: 0, y: 18, scale: 0.94 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  initial={{
+                    opacity: 0,
+                    scale: 0.18,
+                    x: -30,
+                    y: 15,
+                    transformOrigin: 'bottom left',
+                  }}
+                  animate={{
+                    opacity: 1,
+                    scale: 1,
+                    x: 0,
+                    y: 0,
+                    transformOrigin: 'bottom left',
+                  }}
                   exit={{ opacity: 0, y: -14, scale: 0.92 }}
-                  transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                  className="relative w-full max-w-[440px] xl:max-w-[470px] bg-white rounded-[26px] p-5 sm:p-6 shadow-[0_24px_60px_rgba(26,22,18,0.11)] border border-stone-200/70"
+                  transition={{ duration: 0.6, ease: [0.34, 1.56, 0.64, 1] }}
+                  className="relative w-full max-w-[440px] xl:max-w-[470px] bg-white rounded-[28px] p-5 sm:p-6 shadow-[0_24px_60px_rgba(26,22,18,0.11)] border border-stone-200/80"
                 >
-                  {/* Speech bubble tail pointing left toward the Bwise Bee (matching S1.jpg) */}
+                  {/* Organic Speech Bubble Tail pointing directly toward the Bwise Bee's cheek/head (matching Reference/S1.jpg) */}
                   <div
-                    className="hidden lg:block absolute -left-3.5 top-[44%] -translate-y-1/2 w-7 h-7 bg-white rotate-45 border-l border-b border-stone-200/70 rounded-bl-sm"
+                    className="hidden lg:block absolute -left-[24px] bottom-8 xl:bottom-9 w-[28px] h-[36px] pointer-events-none z-10"
                     aria-hidden="true"
-                  />
+                  >
+                    <svg
+                      width="28"
+                      height="36"
+                      viewBox="0 0 28 36"
+                      fill="none"
+                      className="overflow-visible"
+                    >
+                      {/* Tail body seamless with the card */}
+                      <path
+                        d="M28 2 C18 6, 8 16, 1 24 C10 24, 18 28, 28 35 Z"
+                        fill="#FFFFFF"
+                      />
+                      {/* Seamless seam cover over card border */}
+                      <rect x="26" y="1" width="3" height="35" fill="#FFFFFF" />
+                      {/* Border outline matching card border-stone-200 */}
+                      <path
+                        d="M28 2 C18 6, 8 16, 1 24 C10 24, 18 28, 28 35"
+                        stroke="#E7E5E4"
+                        strokeWidth="1.2"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                  </div>
 
                   <div className="flex items-center justify-between gap-2 mb-2">
                     <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-amber-600 bg-amber-50 px-2.5 py-1 rounded-full">
@@ -536,7 +614,10 @@ export const BeehiveLandingExperience: React.FC = () => {
           </div>
 
           {/* Right Column: Stage-Specific Honeycomb Display (12 Isometric Hexagonal Rooms) */}
-          <div
+          <motion.div
+            initial={{ opacity: 0, x: 80 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
             className={`relative z-20 flex items-center justify-center transition-all duration-700 ${stage === 'S3'
                 ? 'w-full lg:w-[68%] lg:-ml-[14%]'
                 : 'w-full lg:w-[54%]'
@@ -551,7 +632,7 @@ export const BeehiveLandingExperience: React.FC = () => {
               onHoverService={setHoveredServiceId}
               mouseTilt={mouseTilt}
             />
-          </div>
+          </motion.div>
         </div>
       )}
 
