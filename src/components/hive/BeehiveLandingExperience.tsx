@@ -512,11 +512,6 @@ export const BeehiveLandingExperience: React.FC = () => {
                       );
                     })}
                   </div>
-
-                  <p className="mt-3.5 text-[11px] text-stone-500 flex items-center justify-between">
-                    <span>Select any category to watch our Bee guide you into the Studios</span>
-                    <span className="font-bold text-amber-600">3 Studio Pods</span>
-                  </p>
                 </motion.div>
               )}
 
