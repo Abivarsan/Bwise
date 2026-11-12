@@ -456,7 +456,7 @@ export const ServicesPage: React.FC = () => {
       {/* =====================================================================
           STICKY TOP CATEGORY SWITCHER BAR (3 Main Categories)
          ===================================================================== */}
-      <div className="bg-white/90 backdrop-blur-md border-b border-amber-200/60 sticky top-16 sm:top-[72px] z-30 shadow-xs">
+      <div className="bg-white/90 backdrop-blur-md border-b border-amber-200/60 sticky top-[72px] sm:top-[80px] z-30 shadow-xs">
         <div className="max-w-[1240px] mx-auto px-4 sm:px-8 py-3">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="flex items-center gap-2">
