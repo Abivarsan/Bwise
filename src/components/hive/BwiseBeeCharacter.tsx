@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { assetUrl } from '../../utils/assets';
+import React from 'react';
+import bwiseBeeFullImg from '../../assets/branding/bwise-bee-full.png';
 
 interface BwiseBeeCharacterProps {
   /** Size preset or custom classes */
@@ -14,10 +14,6 @@ interface BwiseBeeCharacterProps {
   variant?: 'hero' | 'worker' | 'waving';
 }
 
-// Static transparent 3D Bwise Bee mascot asset generated from the pristine studio reference S1
-// with intact legs, feet, antennae, and translucent wings
-const FULL_BEE_ASSET_URL = assetUrl('/assets/branding/bwise-bee-full.png');
-
 export const BwiseBeeCharacter: React.FC<BwiseBeeCharacterProps> = ({
   className = 'w-64 h-64',
   flightTiltDeg = 0,
@@ -25,7 +21,6 @@ export const BwiseBeeCharacter: React.FC<BwiseBeeCharacterProps> = ({
   flipHorizontal = false,
   variant = 'hero',
 }) => {
-  const [beeImgSrc, setBeeImgSrc] = useState<string>(FULL_BEE_ASSET_URL);
 
   if (variant === 'worker') {
     // Small 3D golden worker bee hovering inside the S1 honeycomb
@@ -109,7 +104,7 @@ export const BwiseBeeCharacter: React.FC<BwiseBeeCharacterProps> = ({
 
         {/* Studio 3D Rendered Bwise Bee Character with complete legs, feet, and translucent wings */}
         <img
-          src={beeImgSrc}
+          src={bwiseBeeFullImg}
           alt="Bwise 3D Guide Bee"
           className="relative z-10 w-full h-full object-contain drop-shadow-[0_22px_32px_rgba(26,22,18,0.22)]"
           draggable={false}
