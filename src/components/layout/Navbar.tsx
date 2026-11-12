@@ -21,11 +21,22 @@ export const Navbar: React.FC = () => {
 
   const isServicesActive = location.pathname.startsWith('/services');
 
-  const primaryLinks = [
-    { label: 'Home', to: '/' },
-    { label: 'About', to: '/about' },
+  const orderedNavLinks = [
+    { label: 'Portfolio', to: '/portfolio' },
+    { label: 'Industries', to: '/industries' },
+    { label: 'About Us', to: '/about' },
+    { label: 'Careers', to: '/careers' },
     { label: 'Contact', to: '/contact' },
   ];
+
+  const handleLogoHomeClick = () => {
+    setServicesDropdownOpen(false);
+    setIsHoverPreview(false);
+    setMobileMenuOpen(false);
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
 
   // Close menus on route change
   useEffect(() => {
@@ -60,43 +71,25 @@ export const Navbar: React.FC = () => {
 
   return (
     <header className="sticky top-0 z-50 w-full px-3 sm:px-6 py-2 sm:py-2.5 pointer-events-none">
-      {/* Floating Centered Dark Glassmorphic Capsule matching reference style */}
-      <div className="pointer-events-auto relative mx-auto flex h-12 sm:h-[52px] w-full md:w-fit max-w-[calc(100vw-1.5rem)] items-center justify-between gap-3 md:gap-4 lg:gap-7 rounded-full bg-[#14111B]/90 backdrop-blur-xl backdrop-saturate-150 border border-white/15 pl-4 sm:pl-5 pr-1.5 sm:pr-2 py-1.5 shadow-[0_14px_40px_rgba(15,12,24,0.28),inset_0_1px_0_rgba(255,255,255,0.08)]">
-        {/* Brand Logo (Dark-surface crisp white & gold wordmark) */}
+      {/* Floating Centered Dark Glassmorphic Capsule — Slightly Increased Height for Balanced Proportions */}
+      <div className="pointer-events-auto relative mx-auto flex h-14 sm:h-[60px] w-full lg:w-fit max-w-[calc(100vw-1.5rem)] items-center justify-between gap-3 lg:gap-6 xl:gap-8 rounded-full bg-[#14111B]/90 backdrop-blur-xl backdrop-saturate-150 border border-white/15 pl-4 sm:pl-6 pr-2 sm:pr-2.5 py-2 shadow-[0_14px_40px_rgba(15,12,24,0.28),inset_0_1px_0_rgba(255,255,255,0.08)]">
+        {/* Brand Logo — Navigates to Home section on click */}
         <Link
           to="/"
+          onClick={handleLogoHomeClick}
           className="shrink-0 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white rounded-full group flex items-center"
-          aria-label="Bwise Home"
+          aria-label="BWise Home"
         >
           <BwiseLogo
             lightText
-            className="h-7 sm:h-8 transition-transform duration-300 group-hover:scale-[1.03]"
+            className="h-8 sm:h-9 transition-transform duration-300 group-hover:scale-[1.03]"
           />
         </Link>
 
-        {/* Primary Site Navigation Tree (Semantic <ul>/<li>, regular Tab order) */}
-        <nav aria-label="Primary" className="hidden md:flex items-center gap-3 lg:gap-6">
-          <ul className="flex items-center gap-1 lg:gap-2">
-            {/* Home & About */}
-            {primaryLinks.slice(0, 2).map((item) => (
-              <li key={item.to}>
-                <NavLink
-                  to={item.to}
-                  end={item.to === '/'}
-                  className={({ isActive }) =>
-                    `inline-flex items-center px-3 py-1.5 rounded-full text-[13.5px] lg:text-sm whitespace-nowrap transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white ${
-                      isActive
-                        ? 'text-white font-semibold bg-white/[0.12] ring-1 ring-white/15'
-                        : 'text-stone-300/90 font-medium hover:text-white hover:bg-white/[0.06]'
-                    }`
-                  }
-                >
-                  {item.label}
-                </NavLink>
-              </li>
-            ))}
-
-            {/* Services Interactive Dropdown */}
+        {/* Primary Site Navigation Tree: 1. Services, 2. Portfolio, 3. Industries, 4. About Us, 5. Careers, 6. Contact */}
+        <nav aria-label="Primary" className="hidden lg:flex items-center gap-4 xl:gap-6">
+          <ul className="flex items-center gap-0.5 xl:gap-1.5">
+            {/* 1. Services Interactive Dropdown */}
             <li
               ref={servicesItemRef}
               className="relative"
@@ -128,7 +121,7 @@ export const Navbar: React.FC = () => {
                     setIsHoverPreview(false);
                   }
                 }}
-                className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-[13.5px] lg:text-sm whitespace-nowrap transition-all cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white ${
+                className={`inline-flex items-center gap-1 px-3.5 py-2 rounded-full text-[13.5px] xl:text-sm whitespace-nowrap transition-all cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white ${
                   isServicesActive || servicesDropdownOpen
                     ? 'text-white font-semibold bg-white/[0.12] ring-1 ring-white/15'
                     : 'text-stone-300/90 font-medium hover:text-white hover:bg-white/[0.06]'
@@ -223,41 +216,43 @@ export const Navbar: React.FC = () => {
               )}
             </li>
 
-            {/* Contact */}
-            <li>
-              <NavLink
-                to="/contact"
-                className={({ isActive }) =>
-                  `inline-flex items-center px-3 py-1.5 rounded-full text-[13.5px] lg:text-sm whitespace-nowrap transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white ${
-                    isActive
-                      ? 'text-white font-semibold bg-white/[0.12] ring-1 ring-white/15'
-                      : 'text-stone-300/90 font-medium hover:text-white hover:bg-white/[0.06]'
-                  }`
-                }
-              >
-                Contact
-              </NavLink>
-            </li>
+            {/* 2. Portfolio, 3. Industries, 4. About Us, 5. Careers, 6. Contact */}
+            {orderedNavLinks.map((item) => (
+              <li key={item.to}>
+                <NavLink
+                  to={item.to}
+                  className={({ isActive }) =>
+                    `inline-flex items-center px-3.5 py-2 rounded-full text-[13.5px] xl:text-sm whitespace-nowrap transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white ${
+                      isActive
+                        ? 'text-white font-semibold bg-white/[0.12] ring-1 ring-white/15'
+                        : 'text-stone-300/90 font-medium hover:text-white hover:bg-white/[0.06]'
+                    }`
+                  }
+                >
+                  {item.label}
+                </NavLink>
+              </li>
+            ))}
           </ul>
 
           {/* Right CTA Cluster matching reference screenshot: Outlined Pill + Solid White Pill */}
           <div className="flex items-center gap-2 shrink-0 pl-1">
             <Link
               to="/services"
-              className="hidden lg:inline-flex items-center justify-center rounded-full border border-white/20 bg-white/[0.04] hover:bg-white/[0.12] text-white px-4 py-1.5 text-[13px] font-medium whitespace-nowrap transition-all active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+              className="hidden xl:inline-flex items-center justify-center rounded-full border border-white/20 bg-white/[0.04] hover:bg-white/[0.12] text-white px-4 py-2 text-[13px] font-medium whitespace-nowrap transition-all active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
             >
               Explore Studios
             </Link>
             <Link
               to="/contact"
-              className="inline-flex items-center justify-center rounded-full bg-white hover:bg-stone-100 text-[#14111B] px-4 sm:px-5 py-1.5 text-[13px] font-semibold whitespace-nowrap shadow-xs transition-all active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400"
+              className="inline-flex items-center justify-center rounded-full bg-white hover:bg-stone-100 text-[#14111B] px-4 sm:px-5 py-2 text-[13px] font-semibold whitespace-nowrap shadow-xs transition-all active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400"
             >
               Let&apos;s Connect
             </Link>
           </div>
         </nav>
 
-        {/* Mobile Hamburger Toggle inside the Floating Pill */}
+        {/* Mobile/Tablet Hamburger Toggle inside the Floating Pill */}
         <button
           ref={mobileToggleRef}
           type="button"
@@ -265,50 +260,19 @@ export const Navbar: React.FC = () => {
           aria-expanded={mobileMenuOpen}
           aria-controls={mobileMenuId}
           aria-label={mobileMenuOpen ? 'Close Menu' : 'Open Menu'}
-          className="md:hidden inline-flex items-center justify-center w-9 h-9 rounded-full border border-white/20 bg-white/[0.06] hover:bg-white/[0.14] text-white transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+          className="lg:hidden inline-flex items-center justify-center w-10 h-10 rounded-full border border-white/20 bg-white/[0.06] hover:bg-white/[0.14] text-white transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
         >
           {mobileMenuOpen ? <X className="w-4 h-4" aria-hidden="true" /> : <Menu className="w-4 h-4" aria-hidden="true" />}
         </button>
       </div>
 
-      {/* Mobile Floating Glassmorphic Navigation Drawer/Panel */}
+      {/* Mobile/Tablet Floating Glassmorphic Navigation Drawer/Panel */}
       {mobileMenuOpen && (
         <div
           id={mobileMenuId}
-          className="pointer-events-auto md:hidden mx-auto mt-2.5 max-w-[calc(100dvw-1.5rem)] max-h-[calc(100dvh-5.5rem)] overflow-y-auto rounded-3xl bg-[#14111B]/95 backdrop-blur-xl border border-white/15 px-4 pt-3.5 pb-5 space-y-4 shadow-[0_24px_60px_rgba(0,0,0,0.5)] text-stone-100"
+          className="pointer-events-auto lg:hidden mx-auto mt-2.5 max-w-[calc(100dvw-1.5rem)] max-h-[calc(100dvh-5.5rem)] overflow-y-auto rounded-3xl bg-[#14111B]/95 backdrop-blur-xl border border-white/15 px-4 pt-3.5 pb-5 space-y-4 shadow-[0_24px_60px_rgba(0,0,0,0.5)] text-stone-100"
         >
           <ul className="flex flex-col space-y-1">
-            <li>
-              <NavLink
-                to="/"
-                end
-                onClick={() => setMobileMenuOpen(false)}
-                className={({ isActive }) =>
-                  `block px-4 py-2.5 rounded-2xl text-sm font-semibold transition-colors ${
-                    isActive
-                      ? 'bg-white/[0.14] text-white ring-1 ring-white/15'
-                      : 'text-stone-300 hover:bg-white/[0.06] hover:text-white'
-                  }`
-                }
-              >
-                Home
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/about"
-                onClick={() => setMobileMenuOpen(false)}
-                className={({ isActive }) =>
-                  `block px-4 py-2.5 rounded-2xl text-sm font-semibold transition-colors ${
-                    isActive
-                      ? 'bg-white/[0.14] text-white ring-1 ring-white/15'
-                      : 'text-stone-300 hover:bg-white/[0.06] hover:text-white'
-                  }`
-                }
-              >
-                About
-              </NavLink>
-            </li>
             <li>
               <NavLink
                 to="/services"
@@ -324,21 +288,23 @@ export const Navbar: React.FC = () => {
                 Services
               </NavLink>
             </li>
-            <li>
-              <NavLink
-                to="/contact"
-                onClick={() => setMobileMenuOpen(false)}
-                className={({ isActive }) =>
-                  `block px-4 py-2.5 rounded-2xl text-sm font-semibold transition-colors ${
-                    isActive
-                      ? 'bg-white/[0.14] text-white ring-1 ring-white/15'
-                      : 'text-stone-300 hover:bg-white/[0.06] hover:text-white'
-                  }`
-                }
-              >
-                Contact
-              </NavLink>
-            </li>
+            {orderedNavLinks.map((item) => (
+              <li key={item.to}>
+                <NavLink
+                  to={item.to}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={({ isActive }) =>
+                    `block px-4 py-2.5 rounded-2xl text-sm font-semibold transition-colors ${
+                      isActive
+                        ? 'bg-white/[0.14] text-white ring-1 ring-white/15'
+                        : 'text-stone-300 hover:bg-white/[0.06] hover:text-white'
+                    }`
+                  }
+                >
+                  {item.label}
+                </NavLink>
+              </li>
+            ))}
           </ul>
 
           <div className="pt-3 border-t border-white/10">

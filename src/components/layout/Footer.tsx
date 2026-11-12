@@ -11,7 +11,14 @@ export const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 pb-12 border-b border-stone-800">
           {/* Column 1: Brand & Mission */}
           <div className="lg:col-span-4 space-y-4">
-            <BwiseLogo className="h-12" lightText />
+            <Link
+              to="/"
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              className="inline-block focus:outline-none focus-visible:outline-2 focus-visible:outline-amber-400 rounded-lg"
+              aria-label="BWise Home"
+            >
+              <BwiseLogo className="h-12" lightText />
+            </Link>
             <p className="text-sm text-stone-400 leading-relaxed max-w-sm">
               Bwise is a full-service Digital Marketing &amp; Software Solutions agency organized like a high-precision Beehive—where 12 specialized studios collaborate to scale your brand, search visibility, AI capabilities, and software products.
             </p>
@@ -78,23 +85,33 @@ export const Footer: React.FC = () => {
             </h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link to="/" className="text-stone-400 hover:text-white transition">
-                  Interactive Beehive (Home)
+                <Link to="/services" className="text-stone-400 hover:text-white transition">
+                  Services
+                </Link>
+              </li>
+              <li>
+                <Link to="/portfolio" className="text-stone-400 hover:text-white transition">
+                  Portfolio
+                </Link>
+              </li>
+              <li>
+                <Link to="/industries" className="text-stone-400 hover:text-white transition">
+                  Industries
                 </Link>
               </li>
               <li>
                 <Link to="/about" className="text-stone-400 hover:text-white transition">
-                  About Us &amp; Philosophy
+                  About Us
                 </Link>
               </li>
               <li>
-                <Link to="/services" className="text-stone-400 hover:text-white transition">
-                  All 12 Services
+                <Link to="/careers" className="text-stone-400 hover:text-white transition">
+                  Careers
                 </Link>
               </li>
               <li>
                 <Link to="/contact" className="text-stone-400 hover:text-white transition">
-                  Book a Consultation
+                  Contact
                 </Link>
               </li>
             </ul>
