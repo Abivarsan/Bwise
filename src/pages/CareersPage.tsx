@@ -183,7 +183,7 @@ export const CareersPage: React.FC = () => {
       {/* =====================================================================
           1. DOCUMENTARY STUDIO PHOTO MOSAIC HERO ("INSIDE THE HIVE")
          ===================================================================== */}
-      <section className="pt-8 sm:pt-12 pb-16 sm:pb-24 px-4 sm:px-8 border-b border-stone-200/80">
+      <section className="pt-24 sm:pt-28 pb-16 sm:pb-24 px-4 sm:px-8 border-b border-stone-200/80">
         <div className="max-w-[1240px] mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-end mb-10 sm:mb-14">
             <div className="lg:col-span-7">
