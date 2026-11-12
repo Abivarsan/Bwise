@@ -14,20 +14,23 @@ import {
   PenTool,
   LayoutGrid,
 } from 'lucide-react';
-import { PRIORITY_SERVICES, PriorityService } from '../../data/servicesData';
+import { PriorityService, PRIORITY_SERVICES } from '../../data/servicesData';
 import { BwiseBeeCharacter } from './BwiseBeeCharacter';
-import { assetUrl } from '../../utils/assets';
 
-interface HoneycombGrid3DProps {
-  stage: 'S1' | 'S2' | 'S3';
-  selectedService: PriorityService | null;
-  hoveredServiceId: number | null;
+export interface HoneycombGrid3DProps {
+  stage?: 'S1' | 'S2' | 'S3';
+  selectedService?: PriorityService | null;
+  selectedCategorySlug?: string | null;
+  hoveredServiceId?: number | null;
   hoveredCategorySlug?: string | null;
-  onSelectService: (service: PriorityService) => void;
-  onHoverService: (serviceId: number | null) => void;
+  onSelectService?: (service: PriorityService) => void;
+  onHoverService?: (serviceId: number | null) => void;
   mouseTilt: { x: number; y: number };
 }
 
+/**
+ * Common Service Icon component used across Navbar, ServicesPage, ContactPage, etc.
+ */
 export const ServiceIcon: React.FC<{ name: PriorityService['iconName']; className?: string }> = ({
   name,
   className = 'w-7 h-7',
@@ -62,196 +65,333 @@ export const ServiceIcon: React.FC<{ name: PriorityService['iconName']; classNam
   }
 };
 
+interface HoneycombCellProps {
+  className?: string;
+  hasWorkerBee?: boolean;
+  service?: PriorityService;
+  row?: number;
+  col?: number;
+  isFlipped?: boolean;
+  isSelected?: boolean;
+  isDimmed?: boolean;
+  isCategoryMatch?: boolean;
+  stage?: 'S1' | 'S2' | 'S3';
+  delay?: number;
+  onSelect?: (service: PriorityService) => void;
+  onHover?: (serviceId: number | null) => void;
+}
+
 /**
- * Renders a single 3D hexagonal/pentagonal beehive cell.
- * In S1: renders warm translucent golden honey cells tilted in 3D isometric perspective.
- * In S2 & S3: renders the 3D recessed architectural studio room from S2.jpg/S3.jpg with
- * extruded golden walls, crisp vector iconography, and interactive glow states.
+ * Renders a double-sided 3D hexagonal/pentagonal honeycomb cell.
+ * Front face: Studio-grade golden honey chamber (matching Reference/S1.jpg).
+ * Back face: Interactive service chamber displaying vector icon and title.
  */
-const BeehiveRoomCell: React.FC<{
-  service: PriorityService;
-  stage: 'S1' | 'S2' | 'S3';
-  isSelected: boolean;
-  isHovered: boolean;
-  onSelect: (s: PriorityService) => void;
-  onHover: (id: number | null) => void;
-}> = ({ service, stage, isSelected, isHovered, onSelect, onHover }) => {
-  const isS1 = stage === 'S1';
-  const activeHighlight = isSelected || isHovered;
+const HoneycombCell: React.FC<HoneycombCellProps> = ({
+  className = '',
+  hasWorkerBee = false,
+  service,
+  row = 0,
+  col = 0,
+  isFlipped = false,
+  isSelected = false,
+  isDimmed = false,
+  isCategoryMatch = false,
+  stage = 'S1',
+  delay,
+  onSelect,
+  onHover,
+}) => {
+  const isInteractive = stage === 'S2' && !!service;
+  const staggerDelay = delay !== undefined ? delay : isFlipped ? row * 0.07 + col * 0.05 : 0;
 
   return (
-    <button
-      type="button"
-      onClick={() => onSelect(service)}
-      onMouseEnter={() => onHover(service.id)}
-      onMouseLeave={() => onHover(null)}
-      aria-label={`Explore ${service.title} Beehive Room`}
-      className={`group relative w-[124px] h-[142px] sm:w-[148px] sm:h-[168px] lg:w-[166px] lg:h-[188px] focus:outline-none transition-all duration-500 preserve-3d cursor-pointer ${
-        isSelected && stage === 'S3'
-          ? 'z-30 scale-110'
-          : isHovered
-          ? 'z-20 scale-105'
-          : 'z-10 scale-100'
-      }`}
+    <div
+      className={`relative w-[124px] h-[142px] sm:w-[148px] sm:h-[168px] lg:w-[166px] lg:h-[188px] select-none ${className}`}
+      style={{
+        perspective: '1200px',
+      }}
     >
-      {/* 3D Extruded Back/Side Thickness Wall (gives realistic 3D depth like S1.jpg & S2.jpg) */}
+      {/* 3D Flipper Container that smoothly rotates 180 degrees */}
       <div
-        className="absolute inset-0 clip-hexagon transition-transform duration-500 pointer-events-none"
+        className="w-full h-full relative preserve-3d transition-transform duration-700 ease-[cubic-bezier(0.34,1.3,0.64,1)]"
         style={{
-          background: isS1
-            ? 'linear-gradient(135deg, #F59E0B 0%, #D97706 55%, #92400E 100%)'
-            : activeHighlight
-            ? 'linear-gradient(135deg, #FDE68A 0%, #F59E0B 50%, #B45309 100%)'
-            : 'linear-gradient(135deg, #E5A93B 0%, #B47B26 55%, #6B4415 100%)',
-          transform: isS1 ? 'translate3d(12px, 8px, -18px)' : 'translate3d(6px, 6px, -12px)',
-        }}
-      />
-
-      {/* Outer Golden Bezel Frame */}
-      <div
-        className={`absolute inset-0 clip-hexagon p-[5px] sm:p-[6px] transition-all duration-500 ${
-          activeHighlight ? 'animate-honey-glow' : ''
-        }`}
-        style={{
-          background: isS1
-            ? 'linear-gradient(160deg, #FEF08A 0%, #F59E0B 45%, #B45309 100%)'
-            : activeHighlight
-            ? 'linear-gradient(160deg, #FEF08A 0%, #FBBF24 50%, #D97706 100%)'
-            : 'linear-gradient(160deg, #FCD34D 0%, #D97706 55%, #78350F 100%)',
+          transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
+          transitionDelay: `${staggerDelay}s`,
         }}
       >
-        {/* Inner Recessed 3D Room Chamber */}
-        <div className="relative w-full h-full clip-hexagon overflow-hidden bg-stone-900">
-          {isS1 ? (
-            /* S1 Mode: Translucent Golden Honeycomb Chamber (matching S1.jpg right side) */
-            <div
-              className="w-full h-full transition-all duration-500 relative"
-              style={{
-                background:
-                  'radial-gradient(circle at 35% 30%, #FEF08A 0%, #FBBF24 42%, #D97706 82%, #92400E 100%)',
-                boxShadow: 'inset 0 12px 24px rgba(146, 64, 14, 0.55), inset 0 -8px 18px rgba(254, 240, 138, 0.5)',
-              }}
-            >
-              {/* Recessed inner hexagonal bevel */}
+        {/* FRONT FACE: Golden Honey Chamber (matching Reference/S1.jpg) */}
+        <div
+          className={`absolute inset-0 w-full h-full backface-hidden preserve-3d transition-opacity duration-300 ${
+            isFlipped ? 'opacity-0 pointer-events-none' : 'opacity-100 pointer-events-auto'
+          }`}
+          style={{
+            transform: 'rotateY(0deg)',
+            backfaceVisibility: 'hidden',
+            WebkitBackfaceVisibility: 'hidden',
+          }}
+        >
+          {/* 3D Extruded Back/Side Thickness Wall */}
+          <div
+            className="absolute inset-0 clip-hexagon pointer-events-none"
+            style={{
+              background: 'linear-gradient(135deg, #F59E0B 0%, #D97706 55%, #92400E 100%)',
+              transform: 'translate3d(12px, 8px, -18px)',
+            }}
+          />
+
+          {/* Outer Golden Bezel Frame */}
+          <div
+            className="absolute inset-0 clip-hexagon p-[5px] sm:p-[6px]"
+            style={{
+              background: 'linear-gradient(160deg, #FEF08A 0%, #F59E0B 45%, #B45309 100%)',
+            }}
+          >
+            {/* Inner Recessed 3D Honey Chamber */}
+            <div className="relative w-full h-full clip-hexagon overflow-hidden bg-stone-900">
               <div
-                className="absolute inset-[14%] clip-hexagon border-2 border-amber-200/60"
+                className="w-full h-full relative"
                 style={{
                   background:
-                    'linear-gradient(145deg, rgba(180, 83, 9, 0.45) 0%, rgba(251, 191, 36, 0.35) 60%, rgba(254, 243, 199, 0.6) 100%)',
-                  boxShadow: 'inset 0 6px 14px rgba(120, 53, 15, 0.5)',
+                    'radial-gradient(circle at 35% 30%, #FEF08A 0%, #FBBF24 42%, #D97706 82%, #92400E 100%)',
+                  boxShadow:
+                    'inset 0 12px 24px rgba(146, 64, 14, 0.55), inset 0 -8px 18px rgba(254, 240, 138, 0.5)',
                 }}
-              />
-              {/* Subtle hover hint on S1 cell */}
-              <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-amber-950/65 backdrop-blur-[2px] p-2 text-center">
-                <ServiceIcon name={service.iconName} className="w-6 h-6 text-amber-300 mb-1" />
-                <span className="text-[10px] sm:text-xs font-bold text-white leading-tight">
-                  {service.shortTitle}
-                </span>
+              >
+                {/* Recessed inner hexagonal bevel */}
+                <div
+                  className="absolute inset-[14%] clip-hexagon border-2 border-amber-200/60"
+                  style={{
+                    background:
+                      'linear-gradient(145deg, rgba(180, 83, 9, 0.45) 0%, rgba(251, 191, 36, 0.35) 60%, rgba(254, 243, 199, 0.6) 100%)',
+                    boxShadow: 'inset 0 6px 14px rgba(120, 53, 15, 0.5)',
+                  }}
+                />
               </div>
             </div>
-          ) : (
-            /* S2 & S3 Mode: 3D Architectural Miniature Room Interior (matching S2.jpg & S3.jpg) */
-            <div className="relative w-full h-full flex flex-col items-center justify-center p-2.5 text-center select-none">
-              {/* Authentic 3D Room Interior Texture mapped from S3.jpg / S2.jpg */}
-              <div
-                className="absolute inset-0 bg-no-repeat transition-transform duration-700 group-hover:scale-110"
-                style={{
-                  backgroundImage: `url('${assetUrl('/reference/S2.jpg')}')`,
-                  backgroundSize: '860% 520%',
-                  backgroundPosition: `${service.hiveCell.s2Crop.x}% ${service.hiveCell.s2Crop.y}%`,
-                  filter: isSelected
-                    ? 'brightness(1.08) contrast(1.08)'
-                    : 'brightness(0.88) contrast(1.05)',
-                }}
-              />
+          </div>
 
-              {/* Architectural Room Ceiling Light Beams & 3D Depth Overlay */}
-              <div
-                className={`absolute inset-0 transition-opacity duration-500 ${
-                  isSelected
-                    ? 'bg-gradient-to-b from-amber-400/90 via-amber-500/85 to-amber-600/95'
-                    : `bg-gradient-to-b ${service.hiveCell.roomGradient} opacity-65 group-hover:opacity-50`
-                }`}
-              />
-
-              {/* Top Left & Right Architectural Studio Ceiling LED Bars (like S2.jpg / S3.jpg) */}
-              <div className="absolute top-[14%] left-[20%] w-[24%] h-[3px] bg-amber-100/90 rotate-[-28deg] rounded-full shadow-[0_0_8px_#FEF08A]" />
-              <div className="absolute top-[14%] right-[20%] w-[24%] h-[3px] bg-amber-100/90 rotate-[28deg] rounded-full shadow-[0_0_8px_#FEF08A]" />
-
-              {/* Inner Hexagonal Rim Glow */}
-              <div
-                className={`absolute inset-[5px] clip-hexagon border transition-colors duration-300 pointer-events-none ${
-                  isSelected
-                    ? 'border-yellow-100 border-2 shadow-[inset_0_0_25px_rgba(254,240,138,0.85)]'
-                    : 'border-amber-200/35 group-hover:border-amber-300/80'
-                }`}
-              />
-
-              {/* Crisp White Icon + Service Name (matching S2.jpg & S3.jpg) */}
-              <div className="relative z-10 flex flex-col items-center justify-center gap-1.5 px-1">
-                <div
-                  className={`p-2 rounded-xl transition-transform duration-300 ${
-                    isSelected
-                      ? 'bg-white/25 text-white scale-110 shadow-sm'
-                      : 'bg-black/25 text-white/95 group-hover:scale-110 group-hover:bg-amber-500/30'
-                  }`}
-                >
-                  <ServiceIcon
-                    name={service.iconName}
-                    className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]"
-                  />
-                </div>
-                <span className="text-[11px] sm:text-[12px] lg:text-[13px] font-bold tracking-tight text-white leading-[1.15] drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)] max-w-[125px]">
-                  {service.title}
-                </span>
-
-                {/* S3 Active Room Preview Micro-Copy */}
-                {isSelected && stage === 'S3' && (
-                  <span className="mt-0.5 text-[9px] font-medium text-amber-950 bg-amber-100/95 px-2 py-0.5 rounded-full shadow-sm animate-pulse">
-                    Entering Hive Room...
-                  </span>
-                )}
-              </div>
+          {/* Small 3D Worker Bee hovering inside cell (matching Reference/S1.jpg) */}
+          {hasWorkerBee && (
+            <div className="absolute inset-0 flex items-center justify-center z-30 pointer-events-none">
+              <BwiseBeeCharacter variant="worker" className="w-20 h-20 sm:w-24 sm:h-24" />
             </div>
           )}
         </div>
+
+        {/* BACK FACE: Service Face (Stage S2 & S3) or Golden Chamber for decorative caps */}
+        {service ? (
+          <div
+            className={`absolute inset-0 w-full h-full backface-hidden preserve-3d transition-all duration-300 ${
+              isFlipped ? 'opacity-100' : 'opacity-0 pointer-events-none'
+            } ${
+              isSelected
+                ? 'scale-110 z-30'
+                : isDimmed
+                ? 'opacity-35 scale-95'
+                : ''
+            }`}
+            style={{
+              transform: 'rotateY(180deg)',
+              backfaceVisibility: 'hidden',
+              WebkitBackfaceVisibility: 'hidden',
+            }}
+          >
+            <button
+              type="button"
+              disabled={!isInteractive}
+              onClick={() => {
+                if (isInteractive && onSelect) {
+                  onSelect(service);
+                }
+              }}
+              onMouseEnter={() => {
+                if (isInteractive && onHover) {
+                  onHover(service.id);
+                }
+              }}
+              onMouseLeave={() => {
+                if (isInteractive && onHover) {
+                  onHover(null);
+                }
+              }}
+              className={`group w-full h-full relative focus:outline-none transition-transform duration-300 text-left ${
+                isInteractive ? 'cursor-pointer hover:scale-108 hover:z-40' : 'cursor-default'
+              }`}
+            >
+              {/* 3D Extruded Depth */}
+              <div
+                className="absolute inset-0 clip-hexagon pointer-events-none"
+                style={{
+                  background: isSelected
+                    ? 'linear-gradient(135deg, #FEF08A 0%, #F59E0B 55%, #B45309 100%)'
+                    : 'linear-gradient(135deg, #F59E0B 0%, #D97706 55%, #92400E 100%)',
+                  transform: 'translate3d(12px, 8px, -18px)',
+                }}
+              />
+
+              {/* Outer Golden Bezel Frame */}
+              <div
+                className={`absolute inset-0 clip-hexagon p-[4px] sm:p-[5px] transition-all duration-300 ${
+                  isSelected
+                    ? 'ring-4 ring-amber-300 shadow-[0_0_35px_rgba(245,158,11,0.9)]'
+                    : isCategoryMatch
+                    ? 'shadow-[0_0_18px_rgba(245,158,11,0.5)]'
+                    : ''
+                }`}
+                style={{
+                  background: isSelected
+                    ? 'linear-gradient(160deg, #FFFFFF 0%, #FEF08A 35%, #F59E0B 75%, #B45309 100%)'
+                    : isCategoryMatch
+                    ? 'linear-gradient(160deg, #FEF08A 0%, #F59E0B 50%, #92400E 100%)'
+                    : 'linear-gradient(160deg, #FDE68A 0%, #F59E0B 50%, #B45309 100%)',
+                }}
+              >
+                {/* Inner Recessed Studio Chamber */}
+                <div
+                  className="relative w-full h-full clip-hexagon overflow-hidden flex flex-col items-center justify-center p-2 text-center"
+                  style={{
+                    background: isSelected
+                      ? 'radial-gradient(circle at 50% 25%, #451a03 0%, #291804 55%, #180d02 100%)'
+                      : isCategoryMatch
+                      ? 'radial-gradient(circle at 50% 25%, #2e1e07 0%, #1c1407 60%, #0d0903 100%)'
+                      : 'radial-gradient(circle at 50% 25%, #292524 0%, #1c1917 65%, #0c0a09 100%)',
+                    boxShadow: 'inset 0 6px 16px rgba(0, 0, 0, 0.8)',
+                  }}
+                >
+                  {/* Subtle dot matrix grid background */}
+                  <div
+                    className="absolute inset-0 opacity-15 pointer-events-none"
+                    style={{
+                      backgroundImage: 'radial-gradient(circle at 50% 50%, #f59e0b 1px, transparent 1px)',
+                      backgroundSize: '10px 10px',
+                    }}
+                  />
+
+                  {/* Glassmorphic Icon Shield */}
+                  <div
+                    className={`relative z-10 w-8 h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center mb-1 transition-all duration-300 ${
+                      isSelected
+                        ? 'bg-gradient-to-br from-amber-300 via-amber-400 to-amber-500 text-stone-950 scale-110 shadow-[0_0_16px_rgba(251,191,36,0.85)]'
+                        : 'bg-gradient-to-br from-amber-400 to-amber-600 text-stone-950 group-hover:scale-110 group-hover:from-amber-300 group-hover:to-amber-500 shadow-sm'
+                    }`}
+                  >
+                    <ServiceIcon name={service.iconName} className="w-4.5 h-4.5 sm:w-5.5 sm:h-5.5" />
+                  </div>
+
+                  {/* Service Title */}
+                  <span
+                    className={`relative z-10 text-[11px] sm:text-xs font-black tracking-tight leading-tight px-1 max-w-[92%] transition-colors duration-200 line-clamp-2 ${
+                      isSelected
+                        ? 'text-amber-200 drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]'
+                        : 'text-stone-100 group-hover:text-amber-300 drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]'
+                    }`}
+                  >
+                    {service.shortTitle}
+                  </span>
+
+                  {/* Category Match Badge */}
+                  {isCategoryMatch && (
+                    <span className="relative z-10 mt-1 inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[8.5px] font-extrabold uppercase tracking-wider bg-amber-400/20 text-amber-300 border border-amber-400/40">
+                      <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+                      Match
+                    </span>
+                  )}
+                </div>
+              </div>
+            </button>
+          </div>
+        ) : (
+          /* Ambient Golden Chamber for decorative caps */
+          <div
+            className={`absolute inset-0 w-full h-full backface-hidden preserve-3d transition-opacity duration-300 ${
+              isFlipped ? 'opacity-90' : 'opacity-0 pointer-events-none'
+            }`}
+            style={{
+              transform: 'rotateY(180deg)',
+              backfaceVisibility: 'hidden',
+              WebkitBackfaceVisibility: 'hidden',
+            }}
+          >
+            <div
+              className="absolute inset-0 clip-hexagon pointer-events-none"
+              style={{
+                background: 'linear-gradient(135deg, #F59E0B 0%, #D97706 55%, #92400E 100%)',
+                transform: 'translate3d(12px, 8px, -18px)',
+              }}
+            />
+            <div
+              className="absolute inset-0 clip-hexagon p-[5px] sm:p-[6px]"
+              style={{
+                background: 'linear-gradient(160deg, #FEF08A 0%, #F59E0B 45%, #B45309 100%)',
+              }}
+            >
+              <div className="relative w-full h-full clip-hexagon overflow-hidden bg-stone-900">
+                <div
+                  className="w-full h-full relative"
+                  style={{
+                    background:
+                      'radial-gradient(circle at 35% 30%, #FEF08A 0%, #FBBF24 42%, #D97706 82%, #92400E 100%)',
+                    boxShadow:
+                      'inset 0 12px 24px rgba(146, 64, 14, 0.55), inset 0 -8px 18px rgba(254, 240, 138, 0.5)',
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        )}
       </div>
-    </button>
+    </div>
   );
 };
 
 export const HoneycombGrid3D: React.FC<HoneycombGrid3DProps> = ({
-  stage,
+  stage = 'S1',
   selectedService,
-  hoveredServiceId,
-  hoveredCategorySlug,
+  selectedCategorySlug,
+  hoveredServiceId: _hoveredServiceId,
+  hoveredCategorySlug: _hoveredCategorySlug,
   onSelectService,
   onHoverService,
   mouseTilt,
 }) => {
-  const row0 = PRIORITY_SERVICES.filter((s) => s.hiveCell.row === 0);
-  const row1 = PRIORITY_SERVICES.filter((s) => s.hiveCell.row === 1);
-  const row2 = PRIORITY_SERVICES.filter((s) => s.hiveCell.row === 2);
+  const isFlipped = stage === 'S2' || stage === 'S3';
+  const isS3 = stage === 'S3';
 
-  // Calculate 3D camera zoom transform when in Stage S3 (zoomed into the selected cell)
+  // Row 0 Services (4)
+  const row0Services = React.useMemo(
+    () => PRIORITY_SERVICES.filter((s) => s.hiveCell.row === 0).sort((a, b) => a.hiveCell.col - b.hiveCell.col),
+    []
+  );
+
+  // Row 1 Services (4)
+  const row1Services = React.useMemo(
+    () => PRIORITY_SERVICES.filter((s) => s.hiveCell.row === 1).sort((a, b) => a.hiveCell.col - b.hiveCell.col),
+    []
+  );
+
+  // Row 2 Services (4)
+  const row2Services = React.useMemo(
+    () => PRIORITY_SERVICES.filter((s) => s.hiveCell.row === 2).sort((a, b) => a.hiveCell.col - b.hiveCell.col),
+    []
+  );
+
+  // Calculate 3D isometric camera transform driven by mouse movement and stage
   const getStageTransform = (): string => {
-    const tiltX = mouseTilt.y * -5;
-    const tiltY = mouseTilt.x * 6;
-
-    if (stage === 'S1') {
-      // S1: Tilted 3D isometric golden cluster on the right side (matching S1.jpg)
-      return `rotateY(${-18 + tiltY}deg) rotateX(${5 + tiltX}deg) scale(0.88)`;
-    }
+    const tiltX = mouseTilt.y * -4;
+    const tiltY = mouseTilt.x * 5;
 
     if (stage === 'S3' && selectedService) {
-      // S3: Camera dollies in closely onto the selected cell (matching S3.jpg)
-      const colOffset = (1.5 - selectedService.hiveCell.col) * 14;
-      const rowOffset = (1 - selectedService.hiveCell.row) * 16;
-      return `translate3d(${colOffset}%, ${rowOffset}%, 160px) rotateY(${tiltY * 0.4}deg) rotateX(${tiltX * 0.4}deg) scale(1.36)`;
+      const colOffset = (1.5 - selectedService.hiveCell.col) * 16;
+      const rowOffset = (1 - selectedService.hiveCell.row) * 18;
+      return `translate3d(${colOffset}%, ${rowOffset}%, 180px) rotateY(${tiltY * 0.3}deg) rotateX(${tiltX * 0.3}deg) scale(1.42)`;
     }
 
-    // S2: Full front-facing 3D architectural honeycomb overview (matching S2.jpg)
-    return `rotateY(${-4 + tiltY * 0.6}deg) rotateX(${2 + tiltX * 0.6}deg) scale(1)`;
+    if (stage === 'S2') {
+      return `rotateY(${-3 + tiltY * 0.5}deg) rotateX(${2 + tiltX * 0.5}deg) scale(1)`;
+    }
+
+    // Default S1: Tilted 3D isometric golden cluster matching Reference/S1.jpg
+    return `rotateY(${-18 + tiltY}deg) rotateX(${5 + tiltX}deg) scale(0.88)`;
   };
 
   return (
@@ -280,145 +420,77 @@ export const HoneycombGrid3D: React.FC<HoneycombGrid3DProps> = ({
       >
         {/* Top Golden Crown Cap Cell (matching top of S1.jpg & S2.jpg) */}
         <div className="flex justify-center -mb-[32px] sm:-mb-[38px] lg:-mb-[42px] relative z-0">
-          <div className="w-[124px] h-[142px] sm:w-[148px] sm:h-[168px] lg:w-[166px] lg:h-[188px] relative preserve-3d">
-            <div
-              className="absolute inset-0 clip-hexagon"
-              style={{
-                background: 'linear-gradient(135deg, #F59E0B 0%, #D97706 60%, #92400E 100%)',
-                transform: 'translate3d(10px, 6px, -14px)',
-              }}
-            />
-            <div
-              className="absolute inset-0 clip-hexagon p-[6px]"
-              style={{
-                background: 'linear-gradient(160deg, #FEF08A 0%, #F59E0B 50%, #B45309 100%)',
-              }}
-            >
-              <div
-                className="w-full h-full clip-hexagon relative"
-                style={{
-                  background:
-                    'radial-gradient(circle at 40% 35%, #FEF08A 0%, #FBBF24 55%, #D97706 100%)',
-                  boxShadow: 'inset 0 10px 22px rgba(146, 64, 14, 0.45)',
-                }}
-              >
-                <div className="absolute inset-[15%] clip-hexagon border border-amber-100/70 bg-amber-300/30" />
-              </div>
-            </div>
-          </div>
+          <HoneycombCell isFlipped={isFlipped} stage={stage} delay={0.04} />
         </div>
 
-        {/* Row 0: 4 Service Cells (Digital Strategy, SEO, Social Ads, Social Management) */}
+        {/* Row 0: 4 Honeycomb Cells */}
         <div className="flex items-center justify-center gap-1 sm:gap-1.5 -mb-[32px] sm:-mb-[38px] lg:-mb-[42px] relative z-10">
-          {row0.map((service) => (
-            <BeehiveRoomCell
+          {row0Services.map((service, colIdx) => (
+            <HoneycombCell
               key={service.id}
               service={service}
-              stage={stage}
+              row={0}
+              col={colIdx}
+              isFlipped={isFlipped}
               isSelected={selectedService?.id === service.id}
-              isHovered={hoveredServiceId === service.id || (Boolean(hoveredCategorySlug) && service.categorySlug === hoveredCategorySlug)}
+              isDimmed={isS3 && selectedService?.id !== service.id}
+              isCategoryMatch={selectedCategorySlug === service.categorySlug}
+              stage={stage}
               onSelect={onSelectService}
               onHover={onHoverService}
             />
           ))}
         </div>
 
-        {/* Row 1 (Offset Honeycomb Row): Decorative Left Cap + 4 Service Cells (GEO, Content Marketing, Digital Analytics, AI Optimization) */}
+        {/* Row 1 (Offset Honeycomb Row): Left Cell + 4 Center/Right Cells */}
         <div className="flex items-center justify-center gap-1 sm:gap-1.5 -mb-[32px] sm:-mb-[38px] lg:-mb-[42px] relative z-20 -ml-[62px] sm:-ml-[74px] lg:-ml-[83px]">
-          {/* Decorative Left Architectural Studio Wing Cell (matching S2.jpg left edge) */}
-          <div className="hidden sm:block w-[124px] h-[142px] sm:w-[148px] sm:h-[168px] lg:w-[166px] lg:h-[188px] relative opacity-90 pointer-events-none">
-            <div
-              className="absolute inset-0 clip-hexagon p-[5px]"
-              style={{
-                background: 'linear-gradient(160deg, #D6B075 0%, #8C6239 60%, #4A3219 100%)',
-              }}
-            >
-              <div
-                className="w-full h-full clip-hexagon bg-stone-800 bg-no-repeat"
-                style={{
-                  backgroundImage: stage === 'S1' ? 'none' : `url('${assetUrl('/reference/S2.jpg')}')`,
-                  backgroundSize: '860% 520%',
-                  backgroundPosition: '35.5% 40.5%',
-                  backgroundColor: stage === 'S1' ? '#F59E0B' : '#44403C',
-                }}
-              />
-            </div>
-          </div>
-
-          {row1.map((service) => (
-            <div key={service.id} className="relative">
-              <BeehiveRoomCell
-                service={service}
-                stage={stage}
-                isSelected={selectedService?.id === service.id}
-                isHovered={hoveredServiceId === service.id || (Boolean(hoveredCategorySlug) && service.categorySlug === hoveredCategorySlug)}
-                onSelect={onSelectService}
-                onHover={onHoverService}
-              />
-              {/* In S1, the small worker bee hovers in the center cell (matching S1.jpg) */}
-              {stage === 'S1' && service.slug === 'content-marketing' && (
-                <div className="absolute inset-0 flex items-center justify-center z-30 pointer-events-none">
-                  <BwiseBeeCharacter variant="worker" className="w-20 h-20 sm:w-24 sm:h-24" />
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-
-        {/* Row 2: 4 Service Cells (Web Development, Mobile App, Brand Handling, Unique Logo Designing) */}
-        <div className="flex items-center justify-center gap-1 sm:gap-1.5 -mb-[32px] sm:-mb-[38px] lg:-mb-[42px] relative z-10">
-          {row2.map((service) => (
-            <BeehiveRoomCell
+          {/* Left Decorative Cell (matching S1.jpg geometry) */}
+          <HoneycombCell
+            className="hidden sm:block opacity-90"
+            isFlipped={isFlipped}
+            stage={stage}
+            delay={0.14}
+          />
+          {row1Services.map((service, colIdx) => (
+            <HoneycombCell
               key={service.id}
               service={service}
-              stage={stage}
+              row={1}
+              col={colIdx}
+              hasWorkerBee={colIdx === 1} // S1 has small worker bee hovering inside cell
+              isFlipped={isFlipped}
               isSelected={selectedService?.id === service.id}
-              isHovered={hoveredServiceId === service.id || (Boolean(hoveredCategorySlug) && service.categorySlug === hoveredCategorySlug)}
+              isDimmed={isS3 && selectedService?.id !== service.id}
+              isCategoryMatch={selectedCategorySlug === service.categorySlug}
+              stage={stage}
               onSelect={onSelectService}
               onHover={onHoverService}
             />
           ))}
         </div>
 
-        {/* Bottom Golden Base Cell (matching bottom of S1.jpg & S2.jpg) */}
-        <div className="flex justify-center relative z-0">
-          <div
-            onClick={() => onSelectService(PRIORITY_SERVICES[11])}
-            className="w-[124px] h-[142px] sm:w-[148px] sm:h-[168px] lg:w-[166px] lg:h-[188px] relative preserve-3d cursor-pointer group"
-          >
-            <div
-              className="absolute inset-0 clip-hexagon"
-              style={{
-                background: 'linear-gradient(135deg, #F59E0B 0%, #D97706 60%, #92400E 100%)',
-                transform: 'translate3d(10px, 8px, -14px)',
-              }}
+        {/* Row 2: 4 Honeycomb Cells */}
+        <div className="flex items-center justify-center gap-1 sm:gap-1.5 -mb-[32px] sm:-mb-[38px] lg:-mb-[42px] relative z-10">
+          {row2Services.map((service, colIdx) => (
+            <HoneycombCell
+              key={service.id}
+              service={service}
+              row={2}
+              col={colIdx}
+              isFlipped={isFlipped}
+              isSelected={selectedService?.id === service.id}
+              isDimmed={isS3 && selectedService?.id !== service.id}
+              isCategoryMatch={selectedCategorySlug === service.categorySlug}
+              stage={stage}
+              onSelect={onSelectService}
+              onHover={onHoverService}
             />
-            <div
-              className="absolute inset-0 clip-hexagon p-[6px]"
-              style={{
-                background: 'linear-gradient(160deg, #FEF08A 0%, #F59E0B 50%, #B45309 100%)',
-              }}
-            >
-              <div
-                className="w-full h-full clip-hexagon flex flex-col items-center justify-center p-2 text-center relative"
-                style={{
-                  background:
-                    'radial-gradient(circle at 40% 35%, #FEF08A 0%, #FBBF24 55%, #D97706 100%)',
-                  boxShadow: 'inset 0 10px 22px rgba(146, 64, 14, 0.45)',
-                }}
-              >
-                <div className="absolute inset-[14%] clip-hexagon border border-amber-100/70 bg-amber-300/25" />
-                {stage !== 'S1' && (
-                  <div className="relative z-10 flex flex-col items-center">
-                    <LayoutGrid className="w-6 h-6 text-white drop-shadow mb-1" />
-                    <span className="text-[11px] font-bold text-white drop-shadow">
-                      UI/UX Designing
-                    </span>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
+          ))}
+        </div>
+
+        {/* Bottom Golden Base Cell */}
+        <div className="flex justify-center relative z-0">
+          <HoneycombCell isFlipped={isFlipped} stage={stage} delay={0.24} />
         </div>
 
         {/* Soft Studio Floor Shadow underneath the floating 3D Beehive */}

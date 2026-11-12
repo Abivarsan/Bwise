@@ -42,6 +42,11 @@
   transform-style: preserve-3d;
 }
 
+.backface-hidden {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
 /* Wing Flutter Keyframes for the 3D Bwise Bee */
 @keyframes wingFlutterLeft {
   0%, 100% {

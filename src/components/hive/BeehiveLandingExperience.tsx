@@ -134,12 +134,10 @@ export const BeehiveLandingExperience: React.FC = () => {
   }, []);
 
   /**
-   * Triggers the multi-stage choreography when a user selects one of the 3 Main Service Categories:
-   * S1 (Interactive Guide category click) -> S2 (12 Hive rooms reveal & Bee takes off)
-   * -> S3 (Bee flies to the category's primary hub room & camera zooms in)
-   * -> TUNNEL (3D Honeycomb Warp Fly-Through)
-   * -> S4 (Interior Studio Room with Whiteboard showing the category & sub-services)
-   * -> Navigation to the dedicated Common Service section under `/services?category=...`
+   * Triggers the transition when a user clicks one of the 3 Main Service Categories:
+   * 1. Sets the selected category
+   * 2. Moves stage to S2 (HoneycombGrid3D centers and flips all 12 services)
+   * 3. Bee flies to upper-left observing vantage point
    */
   const startCategoryFlightSequence = useCallback(
     (category: ServiceCategory) => {
@@ -148,11 +146,7 @@ export const BeehiveLandingExperience: React.FC = () => {
       }
 
       setSelectedCategory(category);
-      const hubService =
-        PRIORITY_SERVICES.find((s) => s.slug === category.hubServiceSlug) ||
-        PRIORITY_SERVICES.find((s) => s.categorySlug === category.slug) ||
-        PRIORITY_SERVICES[0];
-      setSelectedService(hubService);
+      setSelectedService(null);
 
       soundFX.playClickChime(659.25);
       soundFX.speak(`Welcome to the Bwise Hive! Let's explore our ${category.title} studios.`);
@@ -160,20 +154,20 @@ export const BeehiveLandingExperience: React.FC = () => {
       const tl = gsap.timeline();
       timelineRef.current = tl;
 
-      // Step 1: Transition to S2 (Beehive Navigation View)
+      // Transition to S2: HoneycombGrid3D centers and pentagons flip open
       tl.call(() => {
         setStage('S2');
         setBeePos((prev) => ({ ...prev, isFlying: true }));
       });
 
-      // Bee slightly lifts and prepares for flight in S2 while the rooms reveal
+      // Bee flies smoothly to upper-left observing hover
       tl.to(beeProxyRef.current, {
-        x: 13,
-        y: 46,
-        scale: 0.96,
-        tilt: 8,
-        duration: 0.7,
-        ease: 'power2.inOut',
+        x: 14,
+        y: 28,
+        scale: 0.95,
+        tilt: 6,
+        duration: 0.85,
+        ease: 'power2.out',
         onUpdate: () => {
           setBeePos({
             x: beeProxyRef.current.x,
@@ -185,75 +179,20 @@ export const BeehiveLandingExperience: React.FC = () => {
         },
       });
 
-      // Step 2: Transition to S3 (Selected Beehive Section Zoom & Curved Bee Flight)
       tl.call(() => {
-        setStage('S3');
-        soundFX.playBeeFlightSwoosh(1.35);
-      });
-
-      // Calculate where the bee hovers beside the hub cell in S3
-      const targetX = Math.max(24, Math.min(72, hubService.hiveCell.beeTargetX - 11));
-      const targetY = Math.max(24, Math.min(74, hubService.hiveCell.beeTargetY - 4));
-
-      // Midpoint arc for a natural curved flight path
-      const midX = (13 + targetX) / 2;
-      const midY = Math.min(13, targetY) - 10;
-
-      tl.to(beeProxyRef.current, {
-        x: midX,
-        y: midY,
-        scale: 0.88,
-        tilt: 16,
-        duration: 0.55,
-        ease: 'power2.in',
-        onUpdate: () => {
-          setBeePos({
-            x: beeProxyRef.current.x,
-            y: beeProxyRef.current.y,
-            scale: beeProxyRef.current.scale,
-            tilt: beeProxyRef.current.tilt,
-            isFlying: true,
-          });
-        },
-      });
-
-      tl.to(beeProxyRef.current, {
-        x: targetX,
-        y: targetY,
-        scale: 0.84,
-        tilt: -4,
-        duration: 0.75,
-        ease: 'back.out(1.3)',
-        onUpdate: () => {
-          setBeePos({
-            x: beeProxyRef.current.x,
-            y: beeProxyRef.current.y,
-            scale: beeProxyRef.current.scale,
-            tilt: beeProxyRef.current.tilt,
-            isFlying: false,
-          });
-        },
-      });
-
-      // S3 camera stabilization pause
-      tl.to({}, { duration: 1.05 });
-
-      // Step 3: Dive into the selected cell -> 3D Honeycomb Warp Tunnel
-      tl.call(() => {
-        soundFX.playTunnelWarp(1.55);
-        setStage('TUNNEL');
+        setBeePos((prev) => ({ ...prev, isFlying: false, tilt: 0 }));
       });
     },
     []
   );
 
   /**
-   * Triggers the complete multi-stage choreography when a user selects any of the 12 Priority Services:
-   * S1 (Popup click) -> S2 (Beehive reveals 12 architectural rooms & Bee takes off)
-   * -> S3 (Bee flies to the selected pentagonal/hexagonal room & camera zooms in)
-   * -> TUNNEL (3D Honeycomb Warp Fly-Through)
-   * -> S4 (Interior Beehive Conference Room with Whiteboard & Consultant Bee)
-   * -> Automatic navigation to the selected service section under `/services`
+   * Triggers the sequence when a user clicks any of the 12 Services displayed in the HoneycombGrid3D:
+   * 1. Zoom into the selected pentagon (camera in HoneycombGrid3D)
+   * 2. Bee flies along a curved arc and settles alongside the selected pentagon
+   * 3. Settle pause (0.2s)
+   * 4. Immediately trigger Honeycomb Warp Tunnel animation
+   * 5. Emerge into S4 Interior Conference Room with Whiteboard & Consultant Bee
    */
   const startServiceFlightSequence = useCallback(
     (service: PriorityService) => {
@@ -268,51 +207,28 @@ export const BeehiveLandingExperience: React.FC = () => {
       const tl = gsap.timeline();
       timelineRef.current = tl;
 
-      // Step 1: Transition to S2 (Beehive Navigation View - matching S2.jpg)
-      tl.call(() => {
-        setStage('S2');
-        setBeePos((prev) => ({ ...prev, isFlying: true }));
-      });
-
-      // Bee slightly lifts and prepares for flight in S2 while the 12 rooms reveal
-      tl.to(beeProxyRef.current, {
-        x: 13,
-        y: 46,
-        scale: 0.96,
-        tilt: 8,
-        duration: 0.7,
-        ease: 'power2.inOut',
-        onUpdate: () => {
-          setBeePos({
-            x: beeProxyRef.current.x,
-            y: beeProxyRef.current.y,
-            scale: beeProxyRef.current.scale,
-            tilt: beeProxyRef.current.tilt,
-            isFlying: true,
-          });
-        },
-      });
-
-      // Step 2: Transition to S3 (Selected Beehive Section Zoom & Curved Bee Flight - matching S3.jpg)
+      // Step 1: Transition to S3 (Selected Beehive Section Zoom & Curved Bee Flight)
       tl.call(() => {
         setStage('S3');
         soundFX.playBeeFlightSwoosh(1.35);
       });
 
       // Calculate where the bee hovers beside the selected cell in S3
-      const targetX = Math.max(24, Math.min(72, service.hiveCell.beeTargetX - 11));
-      const targetY = Math.max(24, Math.min(74, service.hiveCell.beeTargetY - 4));
+      const targetX = Math.max(22, Math.min(70, service.hiveCell.beeTargetX - 11 + (1.5 - service.hiveCell.col) * 3));
+      const targetY = Math.max(22, Math.min(72, service.hiveCell.beeTargetY - 4 + (1 - service.hiveCell.row) * 3));
 
       // Midpoint arc for a natural curved flight path
-      const midX = (13 + targetX) / 2;
-      const midY = Math.min(13, targetY) - 10;
+      const currentX = beeProxyRef.current.x;
+      const currentY = beeProxyRef.current.y;
+      const midX = (currentX + targetX) / 2;
+      const midY = Math.min(currentY, targetY) - 8;
 
       tl.to(beeProxyRef.current, {
         x: midX,
         y: midY,
         scale: 0.88,
-        tilt: 16,
-        duration: 0.55,
+        tilt: 14,
+        duration: 0.45,
         ease: 'power2.in',
         onUpdate: () => {
           setBeePos({
@@ -329,9 +245,9 @@ export const BeehiveLandingExperience: React.FC = () => {
         x: targetX,
         y: targetY,
         scale: 0.84,
-        tilt: -4,
-        duration: 0.75,
-        ease: 'back.out(1.3)',
+        tilt: -3,
+        duration: 0.55,
+        ease: 'back.out(1.2)',
         onUpdate: () => {
           setBeePos({
             x: beeProxyRef.current.x,
@@ -343,15 +259,15 @@ export const BeehiveLandingExperience: React.FC = () => {
         },
       });
 
-      // Settle hover right next to the glowing selected room cell (S3.jpg state)
+      // Settle hover beside selected cell
       tl.call(() => {
         setBeePos((prev) => ({ ...prev, tilt: 0, isFlying: false }));
       });
 
-      // Hold on S3 for 1.05s so user clearly sees the bee guiding them to the highlighted cell (S3.jpg)
-      tl.to({}, { duration: 1.05 });
+      // Crisp settle pause (0.2s) - no unnecessary delays, smooth and coordinated
+      tl.to({}, { duration: 0.2 });
 
-      // Step 3: Dive into the selected cell -> 3D Honeycomb Warp Tunnel (00:03-00:04 in video)
+      // Step 2: Dive into the selected cell -> 3D Honeycomb Warp Tunnel
       tl.call(() => {
         soundFX.playTunnelWarp(1.55);
         setStage('TUNNEL');
@@ -418,7 +334,11 @@ export const BeehiveLandingExperience: React.FC = () => {
         />
       ) : (
         /* Stages S1, S2, and S3: Main Interactive Bee & 3D Beehive Stage */
-        <div className="relative flex-1 w-full max-w-[1440px] mx-auto px-4 sm:px-8 pt-1 sm:pt-2 pb-10 flex flex-col lg:flex-row items-center justify-between">
+        <div
+          className={`relative flex-1 w-full max-w-[1440px] mx-auto px-4 sm:px-8 pt-1 sm:pt-2 pb-10 flex flex-col ${
+            stage === 'S1' ? 'lg:flex-row items-center justify-between' : 'items-center justify-center'
+          }`}
+        >
           {/* Animated 3D Bwise Guide Bee that flies dynamically from S1/S2 position to the selected S3 Hive Room */}
           <div
             className="hidden lg:block absolute z-20 pointer-events-none"
@@ -438,7 +358,7 @@ export const BeehiveLandingExperience: React.FC = () => {
             {stage === 'S3' && selectedService && !beePos.isFlying && (
               <motion.div
                 initial={{ opacity: 0, scale: 0.5, x: 40, y: 20 }}
-                animate={{ opacity: 1, scale: 1, x: 115, y: 45 }}
+                animate={{ opacity: 1, scale: 1, x: 110, y: 40 }}
                 className="absolute right-0 bottom-12 z-50 drop-shadow-[0_6px_12px_rgba(0,0,0,0.4)]"
               >
                 <svg width="44" height="44" viewBox="0 0 24 24" fill="white" stroke="#1C1917" strokeWidth="1.8">
@@ -451,26 +371,69 @@ export const BeehiveLandingExperience: React.FC = () => {
           {/* Mobile/Tablet Bee Header (visible on smaller viewports) */}
           <div className="lg:hidden flex items-center gap-3 mb-4">
             <BwiseBeeCharacter
-              className="w-28 h-28 shrink-0"
+              className="w-24 h-24 sm:w-28 sm:h-28 shrink-0"
               flightTiltDeg={beePos.tilt}
               isFlying={beePos.isFlying}
             />
             <div className="bg-white/95 rounded-2xl p-3.5 shadow-md border border-stone-200/80">
               <p className="text-xs font-bold uppercase tracking-wider text-amber-600 mb-0.5">
-                Welcome to the Bwise Hive
+                {stage === 'S1'
+                  ? 'Welcome to the Bwise Hive'
+                  : selectedCategory
+                  ? selectedCategory.title
+                  : 'All 12 Services'}
               </p>
               <h2 className="text-base font-extrabold text-stone-900">
-                What can we help you to build today?
+                {stage === 'S1' ? 'What can we help you to build today?' : 'Select a service to enter its pod'}
               </h2>
             </div>
           </div>
 
-          {/* Left / Center Interaction Column */}
+          {/* S2 Clean Centered Header above Grid */}
+          <AnimatePresence>
+            {stage === 'S2' && (
+              <motion.div
+                key="s2-header"
+                initial={{ opacity: 0, y: -16 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.4 }}
+                className="text-center mb-5 sm:mb-7 z-30"
+              >
+                <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-900 text-xs font-bold mb-2 shadow-xs">
+                  <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+                  <span>
+                    {selectedCategory ? `${selectedCategory.title} Studios` : 'All 12 Hive Studios'}
+                  </span>
+                </div>
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-stone-900 tracking-tight">
+                  Select a service to enter its dedicated hive pod
+                </h2>
+                <div className="flex items-center justify-center gap-3 mt-2">
+                  <p className="text-xs sm:text-sm text-stone-600 font-medium">
+                    {selectedCategory
+                      ? 'Matching studios highlighted • Click any cell to explore'
+                      : 'Click any service cell to explore its dedicated solution pod'}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={resetToS1}
+                    className="text-xs font-bold text-amber-700 hover:text-amber-900 underline underline-offset-2 transition cursor-pointer"
+                  >
+                    ← Change Category
+                  </button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Left / Center Interaction Column: Speech Bubble in Stage S1 */}
           <div
-            className={`relative z-30 w-full transition-all duration-500 ${stage === 'S1'
-                ? 'lg:w-[48%] xl:w-[45%] lg:ml-[25%] xl:ml-[23%] lg:mr-auto flex flex-col items-center lg:items-start justify-start min-h-[420px] lg:-translate-y-28 xl:-translate-y-32'
-                : 'lg:w-[44%] flex flex-col items-center lg:items-start justify-center min-h-[420px]'
-              }`}
+            className={`relative z-30 transition-all duration-500 ${
+              stage === 'S1'
+                ? 'w-full lg:w-[48%] xl:w-[45%] lg:ml-[25%] xl:ml-[23%] lg:mr-auto flex flex-col items-center lg:items-start justify-start min-h-[420px] lg:-translate-y-28 xl:-translate-y-32'
+                : 'hidden'
+            }`}
           >
             <AnimatePresence mode="wait">
               {stage === 'S1' && isGuideVisible && (
@@ -568,10 +531,11 @@ export const BeehiveLandingExperience: React.FC = () => {
                             setHoveredCategorySlug(null);
                             setHoveredServiceId(null);
                           }}
-                          className={`group relative flex items-center justify-between p-3.5 sm:p-4 rounded-2xl border text-left transition-all duration-300 cursor-pointer ${isHovered
+                          className={`group relative flex items-center justify-between p-3.5 sm:p-4 rounded-2xl border text-left transition-all duration-300 cursor-pointer ${
+                            isHovered
                               ? 'border-amber-500 bg-amber-50/95 shadow-[0_12px_28px_rgba(245,158,11,0.18)] -translate-y-0.5'
                               : 'border-stone-200/90 bg-stone-50/60 hover:border-amber-400 hover:bg-amber-50/50 shadow-xs'
-                            }`}
+                          }`}
                         >
                           <div className="flex items-center gap-3.5 min-w-0">
                             <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 text-white flex items-center justify-center shrink-0 shadow-sm group-hover:scale-105 transition-transform">
@@ -599,42 +563,24 @@ export const BeehiveLandingExperience: React.FC = () => {
                   </div>
                 </motion.div>
               )}
-
-              {stage === 'S2' && (
-                /* S2 Lower-Left Bold Question Typography (matching S2.jpg bottom-left text) */
-                <motion.div
-                  key="s2-caption"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 10 }}
-                  className="hidden lg:flex flex-col items-start justify-end w-full h-[460px] pl-10 pb-4 pointer-events-none"
-                >
-                  <h2 className="text-4xl xl:text-[44px] font-extrabold text-white drop-shadow-[0_4px_18px_rgba(0,0,0,0.28)] leading-[1.12] tracking-tight max-w-[340px]">
-                    What can we help you to build today?
-                  </h2>
-                  <p className="mt-3 text-sm font-medium text-stone-700 bg-white/85 backdrop-blur-sm px-3.5 py-1.5 rounded-full shadow-sm pointer-events-auto">
-                    Click any hexagonal studio room in the Beehive →
-                  </p>
-                </motion.div>
-              )}
             </AnimatePresence>
           </div>
 
-          {/* Right Column: Stage-Specific Honeycomb Display (12 Isometric Hexagonal Rooms) */}
+          {/* Honeycomb Display: Right-aligned in S1, Centered in S2 & S3 */}
           <motion.div
             initial={{ opacity: 0, x: 80 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
-            className={`relative z-20 flex items-center justify-center transition-all duration-700 ${stage === 'S1'
+            className={`relative z-20 flex items-center justify-center transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+              stage === 'S1'
                 ? 'w-full lg:w-[54%] lg:-translate-x-8 xl:-translate-x-10 lg:-translate-y-12 xl:-translate-y-14'
-                : stage === 'S3'
-                  ? 'w-full lg:w-[68%] lg:-ml-[14%]'
-                  : 'w-full lg:w-[54%]'
-              }`}
+                : 'w-full max-w-[1200px] mx-auto translate-x-0 translate-y-0'
+            }`}
           >
             <HoneycombGrid3D
               stage={stage === 'S1' || stage === 'S2' || stage === 'S3' ? stage : 'S2'}
               selectedService={selectedService}
+              selectedCategorySlug={selectedCategory?.slug}
               hoveredServiceId={hoveredServiceId}
               hoveredCategorySlug={hoveredCategorySlug}
               onSelectService={startServiceFlightSequence}
