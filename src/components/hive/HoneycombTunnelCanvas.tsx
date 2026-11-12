@@ -274,7 +274,7 @@ export const HoneycombTunnelCanvas: React.FC<HoneycombTunnelCanvasProps> = ({
   }, [durationMs, onComplete]);
 
   return (
-    <div className="fixed inset-0 z-[80] overflow-hidden flex items-center justify-center bg-amber-950">
+    <div className="fixed inset-0 z-50 overflow-hidden flex items-center justify-center bg-amber-950">
       <canvas ref={canvasRef} className="w-full h-full block" />
       <div className="absolute bottom-10 left-1/2 -translate-x-1/2 px-5 py-2.5 rounded-full bg-stone-950/75 backdrop-blur-md border border-amber-400/40 text-amber-100 text-sm font-semibold tracking-wide shadow-2xl flex items-center gap-2.5">
         <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping" />

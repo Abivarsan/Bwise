@@ -100,7 +100,6 @@ export interface PriorityService {
   tagline: string;
   category: string;
   categorySlug: MainCategorySlug;
-  serviceImage: string;
   iconName:
     | 'Lightbulb'
     | 'Search'
@@ -170,7 +169,6 @@ export const PRIORITY_SERVICES: PriorityService[] = [
     tagline: 'Enterprise-grade QA, automated end-to-end testing, and performance validation ensuring zero-defect deployments.',
     category: 'Software Solutions',
     categorySlug: 'software-solutions',
-    serviceImage: '/assets/services/application-testing.jpg',
     iconName: 'FileCheck',
     hiveCell: {
       row: 0,
@@ -297,7 +295,6 @@ export const PRIORITY_SERVICES: PriorityService[] = [
     tagline: 'Technical SEO precision and high-authority content ecosystems that capture high-intent search demand.',
     category: 'Software Solutions',
     categorySlug: 'software-solutions',
-    serviceImage: '/assets/services/seo.jpg',
     iconName: 'Search',
     hiveCell: {
       row: 0,
@@ -424,7 +421,6 @@ export const PRIORITY_SERVICES: PriorityService[] = [
     tagline: 'High-converting paid social campaigns engineered with thumb-stopping creative and precision ROAS bidding.',
     category: 'Social Media Marketing',
     categorySlug: 'social-media-marketing',
-    serviceImage: '/assets/services/social-media-advertising.jpg',
     iconName: 'Megaphone',
     hiveCell: {
       row: 0,
@@ -551,7 +547,6 @@ export const PRIORITY_SERVICES: PriorityService[] = [
     tagline: 'Authentic community building, executive thought leadership, and viral short-form storytelling.',
     category: 'Social Media Marketing',
     categorySlug: 'social-media-marketing',
-    serviceImage: '/assets/services/social-media-management.jpg',
     iconName: 'MessageSquare',
     hiveCell: {
       row: 0,
@@ -678,7 +673,6 @@ export const PRIORITY_SERVICES: PriorityService[] = [
     tagline: 'Position your brand as the primary cited answer inside ChatGPT, Gemini, Perplexity, and Google AI Overviews.',
     category: 'Software Solutions',
     categorySlug: 'software-solutions',
-    serviceImage: '/assets/services/geo.jpg',
     iconName: 'Cog',
     hiveCell: {
       row: 1,
@@ -805,7 +799,6 @@ export const PRIORITY_SERVICES: PriorityService[] = [
     tagline: 'Editorial-grade storytelling, research reports, and multi-format content engines that educate and convert.',
     category: 'Social Media Marketing',
     categorySlug: 'social-media-marketing',
-    serviceImage: '/assets/services/content-marketing.jpg',
     iconName: 'FileCheck',
     hiveCell: {
       row: 1,
@@ -932,7 +925,6 @@ export const PRIORITY_SERVICES: PriorityService[] = [
     tagline: 'End-to-end data warehousing, multi-touch attribution, and live executive BI dashboards.',
     category: 'Digital Strategy Ideas',
     categorySlug: 'digital-strategy-ideas',
-    serviceImage: '/assets/services/digital-analytics.jpg',
     iconName: 'TrendingUp',
     hiveCell: {
       row: 1,
@@ -1059,7 +1051,6 @@ export const PRIORITY_SERVICES: PriorityService[] = [
     tagline: 'Custom AI agents, RAG knowledge workflows, and intelligent automation that multiply team output.',
     category: 'Software Solutions',
     categorySlug: 'software-solutions',
-    serviceImage: '/assets/services/aio.jpg',
     iconName: 'Cpu',
     hiveCell: {
       row: 1,
@@ -1186,7 +1177,6 @@ export const PRIORITY_SERVICES: PriorityService[] = [
     tagline: 'Blazing-fast, interactive 3D and full-stack web applications engineered for conversion and scale.',
     category: 'Software Solutions',
     categorySlug: 'software-solutions',
-    serviceImage: '/assets/services/web-development.jpg',
     iconName: 'Monitor',
     hiveCell: {
       row: 2,
@@ -1313,7 +1303,6 @@ export const PRIORITY_SERVICES: PriorityService[] = [
     tagline: 'Native-grade iOS and Android applications crafted with fluid gestures, offline sync, and biometric security.',
     category: 'Software Solutions',
     categorySlug: 'software-solutions',
-    serviceImage: '/assets/services/mobile-app-development.jpg',
     iconName: 'Smartphone',
     hiveCell: {
       row: 2,
@@ -1440,7 +1429,6 @@ export const PRIORITY_SERVICES: PriorityService[] = [
     tagline: 'End-to-end brand stewardship, reputation management, visual identity systems, and market positioning.',
     category: 'Digital Strategy Ideas',
     categorySlug: 'digital-strategy-ideas',
-    serviceImage: '/assets/services/brand-management.jpg',
     iconName: 'Tag',
     hiveCell: {
       row: 2,
@@ -1567,7 +1555,6 @@ export const PRIORITY_SERVICES: PriorityService[] = [
     tagline: 'Timeless geometric marks, custom wordmarks, and animated 3D brand emblems crafted for instant recognition.',
     category: 'Digital Strategy Ideas',
     categorySlug: 'digital-strategy-ideas',
-    serviceImage: '/assets/services/unique-logo-design.jpg',
     iconName: 'PenTool',
     hiveCell: {
       row: 2,

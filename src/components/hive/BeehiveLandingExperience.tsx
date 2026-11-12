@@ -213,9 +213,9 @@ export const BeehiveLandingExperience: React.FC = () => {
         soundFX.playBeeFlightSwoosh(1.35);
       });
 
-      // Calculate where the bee hovers beside the zoomed pentagon in the foreground (Stage S3)
-      const targetX = 32 + (service.hiveCell.col - 1.5) * 6;
-      const targetY = 48 + (service.hiveCell.row - 1) * 6;
+      // Calculate where the bee hovers beside the selected cell in S3
+      const targetX = Math.max(22, Math.min(70, service.hiveCell.beeTargetX - 11 + (1.5 - service.hiveCell.col) * 3));
+      const targetY = Math.max(22, Math.min(72, service.hiveCell.beeTargetY - 4 + (1 - service.hiveCell.row) * 3));
 
       // Midpoint arc for a natural curved flight path
       const currentX = beeProxyRef.current.x;
@@ -226,7 +226,7 @@ export const BeehiveLandingExperience: React.FC = () => {
       tl.to(beeProxyRef.current, {
         x: midX,
         y: midY,
-        scale: 0.94,
+        scale: 0.88,
         tilt: 14,
         duration: 0.45,
         ease: 'power2.in',
@@ -244,7 +244,7 @@ export const BeehiveLandingExperience: React.FC = () => {
       tl.to(beeProxyRef.current, {
         x: targetX,
         y: targetY,
-        scale: 0.92,
+        scale: 0.84,
         tilt: -3,
         duration: 0.55,
         ease: 'back.out(1.2)',
@@ -279,19 +279,19 @@ export const BeehiveLandingExperience: React.FC = () => {
   // Called when the 3D Honeycomb Warp Tunnel completes -> Emerge into S4 Interior Room
   const handleTunnelComplete = useCallback(() => {
     setStage('S4');
-    if (selectedService) {
-      soundFX.speak(selectedService.s4Room.voiceNarration);
-    } else if (selectedCategory) {
+    if (selectedCategory) {
       soundFX.speak(`Welcome to our ${selectedCategory.title} studio pod. Let us explore your requirements.`);
+    } else if (selectedService) {
+      soundFX.speak(selectedService.s4Room.voiceNarration);
     }
   }, [selectedService, selectedCategory]);
 
   // Called when S4 Interior Room completes -> Navigate to the relevant service section under Services page (S5 & S6)
   const handleProceedToServicesPage = useCallback(() => {
-    if (selectedService) {
-      navigate(`/services?category=${selectedService.categorySlug}&service=${selectedService.slug}#${selectedService.slug}`);
-    } else if (selectedCategory) {
+    if (selectedCategory) {
       navigate(`/services?category=${selectedCategory.slug}#${selectedCategory.slug}`);
+    } else if (selectedService) {
+      navigate(`/services?category=${selectedService.categorySlug}&service=${selectedService.slug}#${selectedService.slug}`);
     } else {
       navigate('/services');
     }
@@ -328,20 +328,20 @@ export const BeehiveLandingExperience: React.FC = () => {
       {stage === 'S4' && selectedService ? (
         <BeehiveInteriorRoom
           service={selectedService}
-          category={null}
+          category={selectedCategory}
           onProceedToServicePage={handleProceedToServicesPage}
           onReturnToHive={resetToS1}
         />
       ) : (
         /* Stages S1, S2, and S3: Main Interactive Bee & 3D Beehive Stage */
         <div
-          className={`relative z-10 flex-1 w-full max-w-[1440px] mx-auto px-4 sm:px-8 pt-1 sm:pt-2 flex flex-col ${
-            stage === 'S1' ? 'pb-10 lg:flex-row items-center justify-between' : 'pb-1 items-center justify-center'
+          className={`relative flex-1 w-full max-w-[1440px] mx-auto px-4 sm:px-8 pt-1 sm:pt-2 pb-10 flex flex-col ${
+            stage === 'S1' ? 'lg:flex-row items-center justify-between' : 'items-center justify-center'
           }`}
         >
-          {/* Animated 3D Bwise Guide Bee kept in foreground (z-50) alongside selected cell in S3 */}
+          {/* Animated 3D Bwise Guide Bee that flies dynamically from S1/S2 position to the selected S3 Hive Room */}
           <div
-            className="hidden lg:block absolute z-50 pointer-events-none drop-shadow-[0_14px_28px_rgba(0,0,0,0.28)]"
+            className="hidden lg:block absolute z-20 pointer-events-none"
             style={{
               left: `${beePos.x}%`,
               top: `${beePos.y}%`,
@@ -369,7 +369,7 @@ export const BeehiveLandingExperience: React.FC = () => {
           </div>
 
           {/* Mobile/Tablet Bee Header (visible on smaller viewports) */}
-          <div className="lg:hidden flex items-center gap-3 mb-3">
+          <div className="lg:hidden flex items-center gap-3 mb-4">
             <BwiseBeeCharacter
               className="w-24 h-24 sm:w-28 sm:h-28 shrink-0"
               flightTiltDeg={beePos.tilt}
@@ -398,22 +398,22 @@ export const BeehiveLandingExperience: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.4 }}
-                className="text-center mb-1 sm:mb-2 z-30"
+                className="text-center mb-5 sm:mb-7 z-30"
               >
-                <div className="inline-flex items-center gap-2 px-3 py-0.5 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-900 text-[11px] font-bold mb-1 shadow-xs">
-                  <Sparkles className="w-3 h-3 text-amber-600" />
+                <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-900 text-xs font-bold mb-2 shadow-xs">
+                  <Sparkles className="w-3.5 h-3.5 text-amber-600" />
                   <span>
                     {selectedCategory ? `${selectedCategory.title} Studios` : 'All 12 Hive Studios'}
                   </span>
                 </div>
-                <h2 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-stone-900 tracking-tight">
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-stone-900 tracking-tight">
                   Select a service to enter its dedicated hive pod
                 </h2>
-                <div className="flex items-center justify-center gap-3 mt-1">
+                <div className="flex items-center justify-center gap-3 mt-2">
                   <p className="text-xs sm:text-sm text-stone-600 font-medium">
                     {selectedCategory
-                      ? 'Highlighted services match your category • Hover any image to reveal & select'
-                      : 'Hover any service image to reveal its name & click to enter its pod'}
+                      ? 'Matching studios highlighted • Click any cell to explore'
+                      : 'Click any service cell to explore its dedicated solution pod'}
                   </p>
                   <button
                     type="button"
@@ -501,29 +501,7 @@ export const BeehiveLandingExperience: React.FC = () => {
                     </span>
                     <button
                       type="button"
-                      onClick={() => {
-                        if (timelineRef.current) timelineRef.current.kill();
-                        setSelectedCategory(null);
-                        setSelectedService(null);
-                        setStage('S2');
-                        gsap.to(beeProxyRef.current, {
-                          x: 14,
-                          y: 28,
-                          scale: 0.95,
-                          tilt: 0,
-                          duration: 0.75,
-                          ease: 'power2.out',
-                          onUpdate: () => {
-                            setBeePos({
-                              x: beeProxyRef.current.x,
-                              y: beeProxyRef.current.y,
-                              scale: beeProxyRef.current.scale,
-                              tilt: beeProxyRef.current.tilt,
-                              isFlying: false,
-                            });
-                          },
-                        });
-                      }}
+                      onClick={() => setStage('S2')}
                       className="text-[11px] font-semibold text-stone-500 hover:text-amber-600 transition cursor-pointer"
                     >
                       View Full Hive →
@@ -593,7 +571,7 @@ export const BeehiveLandingExperience: React.FC = () => {
             initial={{ opacity: 0, x: 80 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
-            className={`relative z-20 isolate flex items-center justify-center transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+            className={`relative z-20 flex items-center justify-center transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
               stage === 'S1'
                 ? 'w-full lg:w-[54%] lg:-translate-x-8 xl:-translate-x-10 lg:-translate-y-12 xl:-translate-y-14'
                 : 'w-full max-w-[1200px] mx-auto translate-x-0 translate-y-0'
@@ -614,7 +592,7 @@ export const BeehiveLandingExperience: React.FC = () => {
       )}
 
       {/* Interactive Stage Control Bar & Audio Controls at Bottom of Hero */}
-      <div className="relative z-40 max-w-[1360px] w-full mx-auto px-4 sm:px-8 pb-3 sm:pb-4 flex flex-wrap items-center justify-between gap-3">
+      <div className="relative z-40 max-w-[1360px] w-full mx-auto px-4 sm:px-8 pb-5 flex flex-wrap items-center justify-between gap-3">
         {/* Stage Progress Pills (S1 -> S2 -> S3 -> S4 -> S5) */}
         <div className="flex flex-wrap items-center gap-1.5 bg-white/90 backdrop-blur-md px-3 py-2 rounded-full shadow-md border border-stone-200/80">
           <span className="text-[11px] font-bold uppercase tracking-wider text-stone-400 px-2">
@@ -639,19 +617,15 @@ export const BeehiveLandingExperience: React.FC = () => {
                     resetToS1();
                   } else if (item.id === 'S2') {
                     setStage('S2');
-                    beeProxyRef.current = { x: 14, y: 28, scale: 0.95, tilt: 0 };
-                    setBeePos({ x: 14, y: 28, scale: 0.95, tilt: 0, isFlying: false });
+                    setBeePos({ x: 13, y: 48, scale: 1, tilt: 0, isFlying: false });
                   } else if (item.id === 'S3') {
                     const svc = selectedService || PRIORITY_SERVICES[5];
                     setSelectedService(svc);
                     setStage('S3');
-                    const targetX = 32 + (svc.hiveCell.col - 1.5) * 6;
-                    const targetY = 48 + (svc.hiveCell.row - 1) * 6;
-                    beeProxyRef.current = { x: targetX, y: targetY, scale: 0.92, tilt: 0 };
                     setBeePos({
-                      x: targetX,
-                      y: targetY,
-                      scale: 0.92,
+                      x: svc.hiveCell.beeTargetX - 11,
+                      y: svc.hiveCell.beeTargetY - 4,
+                      scale: 0.85,
                       tilt: 0,
                       isFlying: false,
                     });
