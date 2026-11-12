@@ -300,7 +300,7 @@ export const BeehiveLandingExperience: React.FC = () => {
   return (
     <section
       onMouseMove={handleMouseMove}
-      className="relative w-full min-h-[calc(100vh-64px)] overflow-hidden flex flex-col justify-between select-none"
+      className="relative w-full min-h-screen overflow-hidden flex flex-col justify-between select-none"
       style={{
         background:
           stage === 'S1'
@@ -335,7 +335,7 @@ export const BeehiveLandingExperience: React.FC = () => {
       ) : (
         /* Stages S1, S2, and S3: Main Interactive Bee & 3D Beehive Stage */
         <div
-          className={`relative flex-1 w-full max-w-[1440px] mx-auto px-4 sm:px-8 pt-1 sm:pt-2 pb-10 flex flex-col ${
+          className={`relative flex-1 w-full max-w-[1440px] mx-auto px-4 sm:px-8 pt-24 sm:pt-28 pb-10 flex flex-col ${
             stage === 'S1' ? 'lg:flex-row items-center justify-between' : 'items-center justify-center'
           }`}
         >
@@ -431,7 +431,7 @@ export const BeehiveLandingExperience: React.FC = () => {
           <div
             className={`relative z-30 transition-all duration-500 ${
               stage === 'S1'
-                ? 'w-full lg:w-[48%] xl:w-[45%] lg:ml-[25%] xl:ml-[23%] lg:mr-auto flex flex-col items-center lg:items-start justify-start min-h-[420px] lg:-translate-y-28 xl:-translate-y-32'
+                ? 'w-full lg:w-[48%] xl:w-[45%] lg:ml-[25%] xl:ml-[23%] lg:mr-auto flex flex-col items-center lg:items-start justify-start min-h-[420px] lg:-translate-y-16 xl:-translate-y-20'
                 : 'hidden'
             }`}
           >
@@ -573,7 +573,7 @@ export const BeehiveLandingExperience: React.FC = () => {
             transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
             className={`relative z-20 flex items-center justify-center transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
               stage === 'S1'
-                ? 'w-full lg:w-[54%] lg:-translate-x-8 xl:-translate-x-10 lg:-translate-y-12 xl:-translate-y-14'
+                ? 'w-full lg:w-[54%] lg:-translate-x-8 xl:-translate-x-10 lg:-translate-y-6 xl:-translate-y-8'
                 : 'w-full max-w-[1200px] mx-auto translate-x-0 translate-y-0'
             }`}
           >

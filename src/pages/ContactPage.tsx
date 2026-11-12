@@ -49,7 +49,7 @@ export const ContactPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-honeycomb-pattern pt-6 sm:pt-8 pb-12 sm:pb-16 px-4 sm:px-8">
+    <div className="min-h-screen bg-honeycomb-pattern pt-24 sm:pt-28 pb-12 sm:pb-16 px-4 sm:px-8">
       <div className="max-w-[1280px] mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
           {/* Left Column: Direct Hive Contact Info & Mascot */}

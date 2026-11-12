@@ -70,7 +70,7 @@ export const AboutPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-honeycomb-pattern">
       {/* Hero Banner */}
-      <section className="max-w-[1280px] mx-auto px-4 sm:px-8 pt-6 sm:pt-8 pb-16">
+      <section className="max-w-[1280px] mx-auto px-4 sm:px-8 pt-24 sm:pt-28 pb-16">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
           <motion.div
             initial={{ opacity: 0, y: 18 }}

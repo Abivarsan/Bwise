@@ -202,7 +202,7 @@ export const PortfolioPage: React.FC = () => {
       {/* =====================================================================
           1. EDITORIAL MASTHEAD
          ===================================================================== */}
-      <section className="pt-8 sm:pt-12 pb-10 sm:pb-14 px-4 sm:px-8 border-b border-stone-200/80">
+      <section className="pt-24 sm:pt-28 pb-10 sm:pb-14 px-4 sm:px-8 border-b border-stone-200/80">
         <div className="max-w-[1240px] mx-auto">
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
             <div className="max-w-3xl">

@@ -427,7 +427,7 @@ export const ServicesPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-honeycomb-pattern relative overflow-hidden pb-20">
+    <div className="min-h-screen bg-honeycomb-pattern relative overflow-hidden pt-[76px] sm:pt-[88px] pb-20">
       {/* Decorative Honeycomb Line Art at Edges */}
       <div
         className="hidden xl:block absolute top-10 -left-20 w-72 h-96 opacity-25 pointer-events-none"
@@ -456,7 +456,7 @@ export const ServicesPage: React.FC = () => {
       {/* =====================================================================
           STICKY TOP CATEGORY SWITCHER BAR (3 Main Categories)
          ===================================================================== */}
-      <div className="bg-white/90 backdrop-blur-md border-b border-amber-200/60 sticky top-[72px] sm:top-[80px] z-30 shadow-xs">
+      <div className="bg-white/90 backdrop-blur-md border-b border-amber-200/60 sticky top-[78px] sm:top-[88px] z-30 shadow-xs">
         <div className="max-w-[1240px] mx-auto px-4 sm:px-8 py-3">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="flex items-center gap-2">
