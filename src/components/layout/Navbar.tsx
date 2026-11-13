@@ -2,15 +2,18 @@ import React, { useEffect, useId, useRef, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { BwiseLogo } from './BwiseLogo';
+import { useConsultationModal } from '../../context/ConsultationModalContext';
 
 export const Navbar: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isDarkUnderneath, setIsDarkUnderneath] = useState(false);
 
+  const { openConsultationModal } = useConsultationModal();
+
   const location = useLocation();
   const mobileMenuId = useId();
   const mobileToggleRef = useRef<HTMLButtonElement>(null);
-  const ctaButtonRef = useRef<HTMLAnchorElement>(null);
+  const ctaButtonRef = useRef<HTMLButtonElement>(null);
 
   const isServicesActive = location.pathname.startsWith('/services');
 
@@ -155,17 +158,18 @@ export const Navbar: React.FC = () => {
 
           {/* Right CTA: Primary Solid Prominent Pill matching BWise Logo Yellow with Adaptive Glow */}
           <div className="flex items-center shrink-0 pl-1">
-            <Link
+            <button
               ref={ctaButtonRef}
-              to="/contact"
-              className={`inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#FBBF24] via-[#F59E0B] to-[#F59E0B] hover:brightness-105 text-[#14111B] font-bold px-5 py-2 text-[13px] whitespace-nowrap transition-all duration-300 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400 ${
+              type="button"
+              onClick={openConsultationModal}
+              className={`inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#FBBF24] via-[#F59E0B] to-[#F59E0B] hover:brightness-105 text-[#14111B] font-bold px-5 py-2 text-[13px] whitespace-nowrap transition-all duration-300 active:scale-95 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400 ${
                 isDarkUnderneath
                   ? 'shadow-[0_0_12px_rgba(245,158,11,0.30),0_2px_8px_rgba(0,0,0,0.35)] ring-1 ring-amber-400/40'
                   : 'shadow-[0_0_24px_rgba(245,158,11,0.70),0_4px_16px_rgba(234,141,40,0.50)] ring-1 ring-amber-400/80'
               }`}
             >
               Book a Free Consultation
-            </Link>
+            </button>
           </div>
         </nav>
 
@@ -218,13 +222,16 @@ export const Navbar: React.FC = () => {
           </ul>
 
           <div className="pt-2 border-t border-white/10">
-            <Link
-              to="/contact"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block w-full text-center py-2.5 rounded-full bg-gradient-to-r from-[#FBBF24] via-[#F59E0B] to-[#F59E0B] hover:brightness-105 text-[#14111B] text-xs font-bold shadow-[0_0_16px_rgba(245,158,11,0.40)] transition-all"
+            <button
+              type="button"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                openConsultationModal();
+              }}
+              className="block w-full text-center py-2.5 rounded-full bg-gradient-to-r from-[#FBBF24] via-[#F59E0B] to-[#F59E0B] hover:brightness-105 text-[#14111B] text-xs font-bold shadow-[0_0_16px_rgba(245,158,11,0.40)] transition-all cursor-pointer"
             >
               Book a Free Consultation
-            </Link>
+            </button>
           </div>
         </div>
       )}

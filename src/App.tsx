@@ -4,6 +4,7 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { Navbar } from './components/layout/Navbar';
 import { Footer } from './components/layout/Footer';
 import { FloatingChatWidget } from './components/layout/FloatingChatWidget';
+import { ConsultationModalProvider } from './context/ConsultationModalContext';
 import { HomePage } from './pages/HomePage';
 import { AboutPage } from './pages/AboutPage';
 import { ServicesPage } from './pages/ServicesPage';
@@ -48,14 +49,16 @@ const AnimatedRoutes: React.FC = () => {
 export function App() {
   return (
     <BrowserRouter basename={import.meta.env.BASE_URL}>
-      <div className="min-h-screen flex flex-col bg-[#FAF8F5] text-[#1A1612]">
-        <Navbar />
-        <main className="flex-1">
-          <AnimatedRoutes />
-        </main>
-        <Footer />
-        <FloatingChatWidget />
-      </div>
+      <ConsultationModalProvider>
+        <div className="min-h-screen flex flex-col bg-[#FAF8F5] text-[#1A1612]">
+          <Navbar />
+          <main className="flex-1">
+            <AnimatedRoutes />
+          </main>
+          <Footer />
+          <FloatingChatWidget />
+        </div>
+      </ConsultationModalProvider>
     </BrowserRouter>
   );
 }

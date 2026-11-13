@@ -16,6 +16,7 @@ import {
   Users,
 } from 'lucide-react';
 import { BwiseBeeCharacter } from '../components/hive/BwiseBeeCharacter';
+import { HiveCornerDecorations } from '../components/layout/HiveCornerDecorations';
 import { PRIORITY_SERVICES } from '../data/servicesData';
 
 export const AboutPage: React.FC = () => {
@@ -68,9 +69,12 @@ export const AboutPage: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-honeycomb-pattern">
+    <div className="min-h-screen bg-honeycomb-pattern relative overflow-hidden">
+      {/* Decorative Honeycomb/Pentagon Line Art at Top-Left & Top-Right Edges */}
+      <HiveCornerDecorations />
+
       {/* Hero Banner */}
-      <section className="max-w-[1280px] mx-auto px-4 sm:px-8 pt-24 sm:pt-28 pb-16">
+      <section className="relative z-10 max-w-[1280px] mx-auto px-4 sm:px-8 pt-24 sm:pt-28 pb-16">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
           <motion.div
             initial={{ opacity: 0, y: 18 }}

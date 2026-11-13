@@ -2,10 +2,10 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import gsap from 'gsap';
-import { Sparkles, Compass, Volume2, VolumeX, Play, RotateCcw, Cpu, Megaphone, Lightbulb, ArrowRight, CheckCircle2 } from 'lucide-react';
-import { PRIORITY_SERVICES, PriorityService, MAIN_SERVICE_CATEGORIES, ServiceCategory, getServicesByCategory } from '../../data/servicesData';
+import { Sparkles, Cpu, Megaphone, Lightbulb, ArrowRight } from 'lucide-react';
+import { PriorityService, MAIN_SERVICE_CATEGORIES, ServiceCategory, getServicesByCategory } from '../../data/servicesData';
 import { BwiseBeeCharacter } from './BwiseBeeCharacter';
-import { HoneycombGrid3D, ServiceIcon } from './HoneycombGrid3D';
+import { HoneycombGrid3D } from './HoneycombGrid3D';
 import { HoneycombTunnelCanvas } from './HoneycombTunnelCanvas';
 import { BeehiveInteriorRoom } from './BeehiveInteriorRoom';
 import { NaturalSkiesSkybox } from './NaturalSkiesSkybox';
@@ -27,10 +27,8 @@ export const BeehiveLandingExperience: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<ServiceCategory | null>(null);
   const [hoveredServiceId, setHoveredServiceId] = useState<number | null>(null);
   const [hoveredCategorySlug, setHoveredCategorySlug] = useState<string | null>(null);
-  const [isMuted, setIsMuted] = useState<boolean>(soundFX.isMuted);
   const [mouseTilt, setMouseTilt] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [isGuideVisible, setIsGuideVisible] = useState<boolean>(false);
-  const [hasEntered, setHasEntered] = useState<boolean>(false);
 
   // Bee position state (% of stage container) animated smoothly by GSAP
   // Starts off-screen to the left on first visit for the entrance flight
@@ -53,11 +51,6 @@ export const BeehiveLandingExperience: React.FC = () => {
     setMouseTilt({ x: nx, y: ny });
   };
 
-  const handleToggleMute = () => {
-    const muted = soundFX.toggleMute();
-    setIsMuted(muted);
-  };
-
   // Coordinated landing page entrance choreography matching Reference/S1.jpg:
   // 1. Bee flies smoothly in from the left
   // 2. 3D HoneycombGrid enters from the right
@@ -65,9 +58,6 @@ export const BeehiveLandingExperience: React.FC = () => {
   useEffect(() => {
     const entranceTl = gsap.timeline({
       delay: 0.15,
-      onComplete: () => {
-        setHasEntered(true);
-      },
     });
     timelineRef.current = entranceTl;
 
@@ -306,8 +296,8 @@ export const BeehiveLandingExperience: React.FC = () => {
           stage === 'S1'
             ? 'transparent'
             : stage === 'S2'
-              ? 'linear-gradient(90deg, #E2E2E4 0%, #E5E5E7 39.5%, #F2F2F3 39.6%, #F5F5F6 100%)'
-              : 'radial-gradient(circle at 50% 45%, #FFFFFF 0%, #F7F5F0 58%, #EFECE6 100%)',
+              ? 'linear-gradient(135deg, #FFFDF9 0%, #FAF4E6 48%, #F5E8D0 100%)'
+              : 'radial-gradient(circle at 50% 45%, #FFFFFF 0%, #FAF4E6 58%, #F5E8D0 100%)',
       }}
     >
       {/* Background Natural Skies Skybox in Stage S1 (Idea 5) */}
@@ -590,103 +580,6 @@ export const BeehiveLandingExperience: React.FC = () => {
           </motion.div>
         </div>
       )}
-
-      {/* Interactive Stage Control Bar & Audio Controls at Bottom of Hero */}
-      <div className="relative z-40 max-w-[1360px] w-full mx-auto px-4 sm:px-8 pb-5 flex flex-wrap items-center justify-between gap-3">
-        {/* Stage Progress Pills (S1 -> S2 -> S3 -> S4 -> S5) */}
-        <div className="flex flex-wrap items-center gap-1.5 bg-white/90 backdrop-blur-md px-3 py-2 rounded-full shadow-md border border-stone-200/80">
-          <span className="text-[11px] font-bold uppercase tracking-wider text-stone-400 px-2">
-            Hive Flow:
-          </span>
-          {(
-            [
-              { id: 'S1', label: 'S1: Ask Bee' },
-              { id: 'S2', label: 'S2: 12 Hive Rooms' },
-              { id: 'S3', label: 'S3: Room Zoom' },
-              { id: 'S4', label: 'S4: Inside Studio' },
-            ] as const
-          ).map((item) => {
-            const isActive = stage === item.id || (stage === 'TUNNEL' && item.id === 'S3');
-            return (
-              <button
-                key={item.id}
-                type="button"
-                onClick={() => {
-                  if (timelineRef.current) timelineRef.current.kill();
-                  if (item.id === 'S1') {
-                    resetToS1();
-                  } else if (item.id === 'S2') {
-                    setStage('S2');
-                    setBeePos({ x: 13, y: 48, scale: 1, tilt: 0, isFlying: false });
-                  } else if (item.id === 'S3') {
-                    const svc = selectedService || PRIORITY_SERVICES[5];
-                    setSelectedService(svc);
-                    setStage('S3');
-                    setBeePos({
-                      x: svc.hiveCell.beeTargetX - 11,
-                      y: svc.hiveCell.beeTargetY - 4,
-                      scale: 0.85,
-                      tilt: 0,
-                      isFlying: false,
-                    });
-                  } else if (item.id === 'S4') {
-                    if (!selectedService) setSelectedService(PRIORITY_SERVICES[8]);
-                    setStage('S4');
-                  }
-                }}
-                className={`px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer ${isActive
-                    ? 'bg-amber-500 text-white shadow-sm'
-                    : 'text-stone-600 hover:bg-amber-50 hover:text-amber-700'
-                  }`}
-              >
-                {item.label}
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Right Quick Controls: Replay Demo, Audio Narration Toggle */}
-        <div className="flex items-center gap-2">
-          {stage !== 'S1' && (
-            <button
-              type="button"
-              onClick={resetToS1}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-white/90 hover:bg-white text-stone-700 text-xs font-bold shadow-sm border border-stone-200/80 transition cursor-pointer"
-            >
-              <RotateCcw className="w-3.5 h-3.5 text-amber-600" />
-              Reset to S1
-            </button>
-          )}
-
-          <button
-            type="button"
-            onClick={() => startServiceFlightSequence(selectedService || PRIORITY_SERVICES[8])}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-amber-500/15 hover:bg-amber-500/25 text-amber-900 text-xs font-bold border border-amber-400/40 transition cursor-pointer"
-          >
-            <Play className="w-3.5 h-3.5 fill-amber-600 text-amber-600" />
-            Demo Flight ({selectedService ? selectedService.shortTitle : 'Web Dev'})
-          </button>
-
-          <button
-            type="button"
-            onClick={handleToggleMute}
-            aria-label={isMuted ? 'Unmute Hive Audio' : 'Mute Hive Audio'}
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-full bg-white/90 hover:bg-white text-stone-700 text-xs font-semibold shadow-sm border border-stone-200/80 transition cursor-pointer"
-          >
-            {isMuted ? (
-              <>
-                <VolumeX className="w-4 h-4 text-stone-400" />
-                <span className="hidden sm:inline">Muted</span>
-              </>
-            ) : (
-              <>
-                <Volume2 className="w-4 h-4 text-amber-600" />
-                <span className="hidden sm:inline">Voice On</span>
-              </>
-            )}
-          </button>
-        </div>
-      </div>
     </section>
   );
 };

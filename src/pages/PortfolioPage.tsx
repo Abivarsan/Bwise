@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, ArrowUpRight, CheckCircle2, SlidersHorizontal } from 'lucide-react';
+import { HiveCornerDecorations } from '../components/layout/HiveCornerDecorations';
 
 type DisciplineFilter = 'all' | 'software-cloud' | 'mobile-ai' | 'brand-experience' | 'growth-search';
 
@@ -198,11 +199,14 @@ export const PortfolioPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF8F5] text-stone-900">
+    <div className="min-h-screen bg-honeycomb-pattern text-stone-900 relative overflow-hidden">
+      {/* Decorative Honeycomb/Pentagon Line Art at Top-Left & Top-Right Edges */}
+      <HiveCornerDecorations />
+
       {/* =====================================================================
           1. EDITORIAL MASTHEAD
          ===================================================================== */}
-      <section className="pt-24 sm:pt-28 pb-10 sm:pb-14 px-4 sm:px-8 border-b border-stone-200/80">
+      <section className="relative z-10 pt-24 sm:pt-28 pb-10 sm:pb-14 px-4 sm:px-8 border-b border-amber-200/80">
         <div className="max-w-[1240px] mx-auto">
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
             <div className="max-w-3xl">
@@ -223,16 +227,16 @@ export const PortfolioPage: React.FC = () => {
       </section>
 
       {/* =====================================================================
-          2. FLAGSHIP CASE STUDY — FULL-BLEED OBSIDIAN SHOWCASE (INDEX 01)
+          2. FLAGSHIP CASE STUDY — WARM HONEYCOMB SHOWCASE (INDEX 01)
          ===================================================================== */}
-      <section data-theme="dark" className="bg-[#14111B] text-white py-12 sm:py-20 px-4 sm:px-8 border-b border-white/10">
+      <section className="relative z-10 bg-gradient-to-br from-white via-amber-50/55 to-amber-100/45 text-stone-900 py-12 sm:py-20 px-4 sm:px-8 border-b border-amber-200/80">
         <div className="max-w-[1240px] mx-auto">
           {/* Top Metadata Strip */}
-          <div className="flex flex-wrap items-center justify-between gap-4 pb-6 mb-8 border-b border-white/15 text-xs uppercase tracking-[0.18em] text-stone-400">
+          <div className="flex flex-wrap items-center justify-between gap-4 pb-6 mb-8 border-b border-amber-200/80 text-xs uppercase tracking-[0.18em] text-stone-600">
             <div className="flex items-center gap-3">
-              <span className="text-amber-400 font-extrabold">Flagship Dossier — 01</span>
+              <span className="text-amber-700 font-extrabold">Flagship Dossier — 01</span>
               <span>/</span>
-              <span className="text-stone-200 font-semibold">AetherPay Global Treasury</span>
+              <span className="text-stone-900 font-bold">AetherPay Global Treasury</span>
             </div>
             <div>FinTech & Multi-Currency Banking • London / Singapore • 2025</div>
           </div>
@@ -241,7 +245,7 @@ export const PortfolioPage: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
             {/* Realistic Visual Showcase (LCP Hero Image) */}
             <div className="lg:col-span-7">
-              <figure className="relative overflow-hidden rounded-2xl border border-white/15 bg-stone-900 shadow-[0_28px_70px_rgba(0,0,0,0.55)]">
+              <figure className="relative overflow-hidden rounded-2xl border-2 border-amber-200/90 bg-white shadow-[0_24px_60px_rgba(245,158,11,0.14)]">
                 <img
                   src={assetUrl('assets/pages/portfolio/aetherpay-fintech.jpg')}
                   alt="AetherPay real-time cross-border treasury and liquidity terminal running in a multi-screen financial workspace"
@@ -250,9 +254,9 @@ export const PortfolioPage: React.FC = () => {
                   height={1000}
                   className="w-full h-[300px] sm:h-[440px] lg:h-[500px] object-cover object-center transition-transform duration-700 hover:scale-[1.02]"
                 />
-                <figcaption className="flex flex-wrap items-center justify-between gap-2 px-5 py-3.5 bg-[#1B1725]/95 border-t border-white/10 text-xs text-stone-300">
+                <figcaption className="flex flex-wrap items-center justify-between gap-2 px-5 py-3.5 bg-[#FFF8E7] border-t border-amber-200/80 text-xs text-stone-700">
                   <span>Live multi-currency FX & treasury cockpit deployed across 28 institutional desks</span>
-                  <span className="text-amber-400 font-semibold">PCI-DSS Level 1 • SOC2 Type II</span>
+                  <span className="text-amber-800 font-bold">PCI-DSS Level 1 • SOC2 Type II</span>
                 </figcaption>
               </figure>
             </div>
@@ -265,7 +269,7 @@ export const PortfolioPage: React.FC = () => {
                     (tag) => (
                       <span
                         key={tag}
-                        className="px-3 py-1 rounded-full text-[11px] font-semibold bg-white/[0.07] text-stone-200 border border-white/10"
+                        className="px-3 py-1 rounded-full text-[11px] font-bold bg-amber-100/80 text-amber-900 border border-amber-300/70"
                       >
                         {tag}
                       </span>
@@ -273,33 +277,33 @@ export const PortfolioPage: React.FC = () => {
                   )}
                 </div>
 
-                <h2 className="text-2xl sm:text-3xl lg:text-[34px] font-extrabold text-white leading-[1.15] mb-4">
+                <h2 className="text-2xl sm:text-3xl lg:text-[34px] font-extrabold text-stone-950 leading-[1.15] mb-4">
                   Autonomous Cross-Border Treasury & Instant FX Settlement Engine
                 </h2>
 
-                <p className="text-stone-300 text-sm sm:text-base leading-relaxed mb-5">
+                <p className="text-stone-700 text-sm sm:text-base leading-relaxed mb-5">
                   Corporate CFOs across Europe and APAC were waiting up to 72 hours for multi-currency correspondent bank settlements while losing basis points to opaque FX spreads.
                 </p>
 
-                <p className="text-stone-400 text-sm leading-relaxed mb-6">
+                <p className="text-stone-600 text-sm leading-relaxed mb-6">
                   BWise embedded a 9-person engineering and product pod for 8 months—architecting an event-sourced double-entry ledger, an algorithmic liquidity router connected to 14 Tier-1 clearing rails, and a biometric executive approval app on iOS and Android.
                 </p>
 
-                <div className="space-y-2.5 pt-4 border-t border-white/10">
-                  <p className="text-[11px] font-bold uppercase tracking-widest text-amber-400">
+                <div className="space-y-2.5 pt-4 border-t border-amber-200/80">
+                  <p className="text-[11px] font-bold uppercase tracking-widest text-amber-800">
                     Key Production Deliverables
                   </p>
-                  <ul className="space-y-2 text-xs sm:text-sm text-stone-300">
+                  <ul className="space-y-2 text-xs sm:text-sm text-stone-700">
                     <li className="flex items-start gap-2.5">
-                      <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                      <CheckCircle2 className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
                       <span>Deterministic double-entry ledger capable of 12,000+ concurrent transactions/sec</span>
                     </li>
                     <li className="flex items-start gap-2.5">
-                      <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                      <CheckCircle2 className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
                       <span>Real-time automated reconciliation with SAP S/4HANA, NetSuite, and SWIFT ISO 20022</span>
                     </li>
                     <li className="flex items-start gap-2.5">
-                      <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                      <CheckCircle2 className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
                       <span>Hardware-key biometric sign-off workflow for multi-million-dollar treasury sweeps</span>
                     </li>
                   </ul>
@@ -309,14 +313,14 @@ export const PortfolioPage: React.FC = () => {
               <div className="pt-2 flex flex-wrap items-center gap-4">
                 <Link
                   to="/contact?project=aetherpay-similar"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-amber-400 hover:bg-amber-300 text-stone-950 font-bold text-sm transition-all"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold text-sm shadow-md shadow-amber-500/20 transition-all"
                 >
                   <span>Request Architecture Walkthrough</span>
                   <ArrowRight className="w-4 h-4" />
                 </Link>
                 <Link
                   to="/services?category=software-solutions"
-                  className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-stone-300 hover:text-amber-300 transition-colors"
+                  className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-stone-800 hover:text-amber-700 transition-colors"
                 >
                   <span>Explore Software Studios</span>
                   <ArrowUpRight className="w-4 h-4" />
@@ -326,21 +330,21 @@ export const PortfolioPage: React.FC = () => {
           </div>
 
           {/* Verified Production Telemetry Ledger */}
-          <div className="mt-10 sm:mt-14 pt-8 border-t border-white/15 grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8">
+          <div className="mt-10 sm:mt-14 pt-8 border-t border-amber-200/80 grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8">
             <div>
-              <p className="text-3xl sm:text-4xl font-extrabold text-amber-400 tracking-tight">$2.4B+</p>
-              <p className="text-sm font-bold text-white mt-1">Annualized Settlement Volume</p>
-              <p className="text-xs text-stone-400 mt-0.5">Processed across 38 currencies with zero ledger drift</p>
+              <p className="text-3xl sm:text-4xl font-extrabold text-amber-700 tracking-tight">$2.4B+</p>
+              <p className="text-sm font-bold text-stone-900 mt-1">Annualized Settlement Volume</p>
+              <p className="text-xs text-stone-600 mt-0.5">Processed across 38 currencies with zero ledger drift</p>
             </div>
-            <div className="sm:border-l sm:border-white/15 sm:pl-8">
-              <p className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">42ms</p>
-              <p className="text-sm font-bold text-white mt-1">Global p99 Ledger Commit</p>
-              <p className="text-xs text-stone-400 mt-0.5">Multi-region active-active deployment across EU & APAC</p>
+            <div className="sm:border-l sm:border-amber-200/80 sm:pl-8">
+              <p className="text-3xl sm:text-4xl font-extrabold text-stone-950 tracking-tight">42ms</p>
+              <p className="text-sm font-bold text-stone-900 mt-1">Global p99 Ledger Commit</p>
+              <p className="text-xs text-stone-600 mt-0.5">Multi-region active-active deployment across EU & APAC</p>
             </div>
-            <div className="sm:border-l sm:border-white/15 sm:pl-8">
-              <p className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">+184%</p>
-              <p className="text-sm font-bold text-white mt-1">Enterprise Onboarding Velocity</p>
-              <p className="text-xs text-stone-400 mt-0.5">Automated KYB/AML verification cut from 11 days to 4 hours</p>
+            <div className="sm:border-l sm:border-amber-200/80 sm:pl-8">
+              <p className="text-3xl sm:text-4xl font-extrabold text-stone-950 tracking-tight">+184%</p>
+              <p className="text-sm font-bold text-stone-900 mt-1">Enterprise Onboarding Velocity</p>
+              <p className="text-xs text-stone-600 mt-0.5">Automated KYB/AML verification cut from 11 days to 4 hours</p>
             </div>
           </div>
         </div>
@@ -415,7 +419,7 @@ export const PortfolioPage: React.FC = () => {
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
                       {/* Large Realistic Photograph */}
                       <div className={`lg:col-span-7 ${isReversed ? 'lg:order-2' : 'lg:order-1'}`}>
-                        <figure className="overflow-hidden rounded-2xl border border-stone-200 bg-stone-900 shadow-lg">
+                        <figure className="overflow-hidden rounded-2xl border border-amber-200/80 bg-white shadow-[0_18px_45px_rgba(245,158,11,0.10)]">
                           <img
                             src={study.image}
                             alt={study.imageAlt}
@@ -424,9 +428,9 @@ export const PortfolioPage: React.FC = () => {
                             height={900}
                             className="w-full h-[280px] sm:h-[400px] lg:h-[450px] object-cover object-center transition-transform duration-700 hover:scale-[1.02]"
                           />
-                          <figcaption className="px-4 sm:px-5 py-3 bg-stone-900 text-stone-300 text-xs flex items-center justify-between gap-4">
+                          <figcaption className="px-4 sm:px-5 py-3 bg-[#FFF8E7] border-t border-amber-200/70 text-stone-700 text-xs flex items-center justify-between gap-4">
                             <span>{study.imageCaption}</span>
-                            <span className="text-amber-400 font-mono shrink-0">{study.year}</span>
+                            <span className="text-amber-700 font-mono font-bold shrink-0">{study.year}</span>
                           </figcaption>
                         </figure>
                       </div>
@@ -474,14 +478,14 @@ export const PortfolioPage: React.FC = () => {
                           </button>
 
                           {isOpen && (
-                            <div className="mt-3 p-4 rounded-xl bg-stone-900 text-stone-200 space-y-2 text-xs">
-                              <p className="text-[10px] font-bold uppercase tracking-widest text-amber-400">
+                            <div className="mt-3 p-4 rounded-xl bg-amber-50/85 border border-amber-200/80 text-stone-800 space-y-2 text-xs">
+                              <p className="text-[10px] font-bold uppercase tracking-widest text-amber-800">
                                 Production Architecture Highlights
                               </p>
                               <ul className="space-y-1.5">
                                 {study.architectureNotes.map((note) => (
                                   <li key={note} className="flex items-start gap-2">
-                                    <span className="text-amber-400 mt-0.5">•</span>
+                                    <span className="text-amber-600 font-bold mt-0.5">•</span>
                                     <span>{note}</span>
                                   </li>
                                 ))}
@@ -542,28 +546,28 @@ export const PortfolioPage: React.FC = () => {
       {/* =====================================================================
           4. DOCUMENTARY PROCESS REALITY & CONVERSION SECTION
          ===================================================================== */}
-      <section data-theme="dark" className="py-16 sm:py-24 px-4 sm:px-8 bg-[#161310] text-white">
+      <section className="relative z-10 py-16 sm:py-24 px-4 sm:px-8 bg-gradient-to-b from-[#F5E8D0] to-[#EFE0C2] border-t border-amber-300/60 text-stone-900">
         <div className="max-w-[1240px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
           <div className="lg:col-span-6 space-y-6">
-            <span className="text-xs font-extrabold uppercase tracking-[0.2em] text-amber-400">
+            <span className="text-xs font-extrabold uppercase tracking-[0.2em] text-amber-800">
               How Our Work Ships
             </span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold leading-tight">
+            <h2 className="text-3xl sm:text-4xl font-extrabold leading-tight text-stone-950">
               Zero agency theater. Direct collaboration with the builders writing your code and shaping your brand.
             </h2>
-            <p className="text-stone-300 text-sm sm:text-base leading-relaxed">
+            <p className="text-stone-700 text-sm sm:text-base leading-relaxed">
               Every project in our portfolio was delivered by a dedicated pod combining systems architects, product designers, and growth strategists in one shared Slack and repository with your team.
             </p>
-            <div className="grid grid-cols-2 gap-6 pt-2 border-t border-white/15">
+            <div className="grid grid-cols-2 gap-6 pt-2 border-t border-amber-300/70">
               <div>
-                <p className="text-2xl font-extrabold text-amber-400">Weekly</p>
-                <p className="text-xs text-stone-300 mt-1">
+                <p className="text-2xl font-extrabold text-amber-700">Weekly</p>
+                <p className="text-xs text-stone-700 mt-1">
                   Production staging deployments from Week 2 onward—never months of dark-room mystery.
                 </p>
               </div>
               <div>
-                <p className="text-2xl font-extrabold text-amber-400">100% IP</p>
-                <p className="text-xs text-stone-300 mt-1">
+                <p className="text-2xl font-extrabold text-amber-700">100% IP</p>
+                <p className="text-xs text-stone-700 mt-1">
                   Full source-code, design token, and infrastructure ownership transferred cleanly to your organization.
                 </p>
               </div>
@@ -571,14 +575,14 @@ export const PortfolioPage: React.FC = () => {
             <div className="pt-4 flex flex-wrap gap-4">
               <Link
                 to="/contact"
-                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-white hover:bg-stone-100 text-stone-950 font-bold text-sm transition-all"
+                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-stone-900 hover:bg-stone-800 text-white font-bold text-sm shadow-md transition-all"
               >
                 <span>Start a Project Brief</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
               <Link
                 to="/industries"
-                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full border border-white/20 hover:bg-white/10 text-white font-semibold text-sm transition-all"
+                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-white/85 hover:bg-white border border-amber-300/80 text-stone-900 font-semibold text-sm shadow-xs transition-all"
               >
                 <span>Explore Industries We Serve</span>
               </Link>
@@ -586,7 +590,7 @@ export const PortfolioPage: React.FC = () => {
           </div>
 
           <div className="lg:col-span-6">
-            <figure className="overflow-hidden rounded-2xl border border-white/15 shadow-2xl">
+            <figure className="overflow-hidden rounded-2xl border-2 border-amber-300/80 bg-white shadow-[0_20px_50px_rgba(245,158,11,0.16)]">
               <img
                 src={assetUrl('assets/pages/portfolio/studio-craft-process.jpg')}
                 alt="BWise engineers and product designers mapping system architecture during a live sprint review"
@@ -595,9 +599,9 @@ export const PortfolioPage: React.FC = () => {
                 height={933}
                 className="w-full h-[300px] sm:h-[380px] object-cover"
               />
-              <figcaption className="px-5 py-3.5 bg-black/50 text-xs text-stone-300 flex items-center justify-between">
+              <figcaption className="px-5 py-3.5 bg-[#FFF8E7] border-t border-amber-200/80 text-xs text-stone-700 flex items-center justify-between">
                 <span>Architecture & product critique session — BWise Engineering & Brand Pod</span>
-                <span className="text-amber-400 font-semibold">12 Specialized Studios</span>
+                <span className="text-amber-800 font-bold">12 Specialized Studios</span>
               </figcaption>
             </figure>
           </div>

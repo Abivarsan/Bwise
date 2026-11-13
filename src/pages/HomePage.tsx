@@ -5,6 +5,7 @@ import { BeehiveLandingExperience } from '../components/hive/BeehiveLandingExper
 import { PRIORITY_SERVICES } from '../data/servicesData';
 import { ServiceIcon } from '../components/hive/HoneycombGrid3D';
 import { BwiseBeeCharacter } from '../components/hive/BwiseBeeCharacter';
+import { HiveCornerDecorations } from '../components/layout/HiveCornerDecorations';
 import { assetUrl } from '../utils/assets';
 
 export const HomePage: React.FC = () => {
@@ -18,7 +19,7 @@ export const HomePage: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#FAF8F5]">
+    <div className="min-h-screen bg-honeycomb-pattern relative overflow-hidden">
       {/* =====================================================================
           HERO: S1 -> S2 -> S3 -> 3D TUNNEL -> S4 INTERACTIVE BEE & BEEHIVE
          ===================================================================== */}
@@ -27,16 +28,16 @@ export const HomePage: React.FC = () => {
       {/* =====================================================================
           AGENCY IMPACT METRICS STRIP
          ===================================================================== */}
-      <section data-theme="dark" className="bg-[#161310] text-white py-12 border-y border-amber-500/20">
+      <section className="bg-gradient-to-r from-[#F9E4B7]/65 via-[#FFF8E7] to-[#F5E8D0]/75 text-stone-900 py-12 border-y border-amber-300/60">
         <div className="max-w-[1360px] mx-auto px-4 sm:px-8">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
             {agencyStats.map((stat, idx) => (
-              <div key={idx} className="text-center lg:text-left border-l-2 border-amber-500/40 pl-5">
-                <p className="text-3xl sm:text-4xl font-extrabold text-amber-400 tracking-tight">
+              <div key={idx} className="text-center lg:text-left border-l-2 border-amber-500/60 pl-5">
+                <p className="text-3xl sm:text-4xl font-extrabold text-amber-700 tracking-tight">
                   {stat.value}
                 </p>
-                <p className="text-sm sm:text-base font-bold text-white mt-1">{stat.label}</p>
-                <p className="text-xs text-stone-400 mt-0.5">{stat.detail}</p>
+                <p className="text-sm sm:text-base font-bold text-stone-900 mt-1">{stat.label}</p>
+                <p className="text-xs text-stone-600 mt-0.5">{stat.detail}</p>
               </div>
             ))}
           </div>
@@ -46,8 +47,10 @@ export const HomePage: React.FC = () => {
       {/* =====================================================================
           THE 12 PRIORITY SERVICES DIRECTORY OVERVIEW
          ===================================================================== */}
-      <section className="max-w-[1360px] mx-auto px-4 sm:px-8 py-20">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+      <section className="relative overflow-hidden py-20">
+        <HiveCornerDecorations />
+        <div className="relative z-10 max-w-[1360px] mx-auto px-4 sm:px-8">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
           <div>
             <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-bold uppercase tracking-wider">
               <Sparkles className="w-3.5 h-3.5" />
@@ -102,13 +105,14 @@ export const HomePage: React.FC = () => {
               </div>
             </div>
           ))}
+          </div>
         </div>
       </section>
 
       {/* =====================================================================
           WHY THE BEEHIVE MODEL WORKS (DESIGN + ENGINEERING SYNERGY)
          ===================================================================== */}
-      <section className="bg-white py-20 border-y border-stone-200/70">
+      <section className="bg-white/90 backdrop-blur-xs py-20 border-y border-amber-200/70">
         <div className="max-w-[1360px] mx-auto px-4 sm:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             <div className="lg:col-span-6 space-y-6">
@@ -147,7 +151,7 @@ export const HomePage: React.FC = () => {
                 ].map((item, i) => {
                   const Icon = item.icon;
                   return (
-                    <div key={i} className="p-4 rounded-2xl bg-[#FAF8F5] border border-stone-200/70">
+                    <div key={i} className="p-4 rounded-2xl bg-[#FAF8F5] border border-amber-200/70">
                       <div className="w-9 h-9 rounded-xl bg-amber-500 text-white flex items-center justify-center mb-2.5">
                         <Icon className="w-4 h-4" />
                       </div>
@@ -161,24 +165,24 @@ export const HomePage: React.FC = () => {
 
             {/* Right Visual Showcase: Inside the Hive Conference Studio */}
             <div className="lg:col-span-6">
-              <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-amber-300/50 bg-stone-900">
+              <div className="relative rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(245,158,11,0.14)] border-2 border-amber-300/70 bg-white">
                 <img
                   src={assetUrl('/reference/S4.jpg')}
                   alt="Inside the Bwise Beehive Strategy Studio"
                   className="w-full h-auto object-cover"
                 />
-                <div className="p-6 bg-gradient-to-t from-stone-950 via-stone-950/90 to-transparent text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div className="p-6 bg-gradient-to-r from-[#FFF8E7] via-amber-50/95 to-[#F9E4B7]/75 border-t border-amber-200/80 text-stone-900 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                   <div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-amber-400">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-amber-700">
                       Collaborative Hive Studio
                     </span>
-                    <h4 className="text-base font-extrabold">
+                    <h4 className="text-base font-extrabold text-stone-900">
                       Interactive Requirements &amp; Wireframe Briefing
                     </h4>
                   </div>
                   <Link
                     to="/services"
-                    className="px-5 py-2.5 rounded-full bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold shrink-0 transition"
+                    className="px-5 py-2.5 rounded-full bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold shrink-0 transition shadow-xs"
                   >
                     Enter Services Studio →
                   </Link>
