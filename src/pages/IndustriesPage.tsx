@@ -1,666 +1,469 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowRight, ArrowUpRight, CheckCircle2, ShieldCheck } from 'lucide-react';
+import {
+  ArrowRight,
+  ArrowUpRight,
+  Building2,
+  CheckCircle2,
+  CreditCard,
+  HeartPulse,
+  Layers,
+  Lock,
+  Plane,
+  ShieldCheck,
+  ShoppingBag,
+  Sparkles,
+} from 'lucide-react';
 import { HiveCornerDecorations } from '../components/layout/HiveCornerDecorations';
+import { useConsultationModal } from '../context/ConsultationModalContext';
+import { assetUrl } from '../utils/assets';
 
-interface IndustrySector {
+interface IndustryDossier {
   id: string;
-  code: string;
+  number: string;
   name: string;
   shortName: string;
-  headline: string;
-  lead: string;
+  tagline: string;
+  icon: React.ComponentType<{ className?: string }>;
   image: string;
   imageAlt: string;
-  imageCaption: string;
-  complianceStandards: string[];
-  operationalRealities: { title: string; detail: string }[];
-  bwiseStudios: { name: string; slug: string; categorySlug: string }[];
-  benchmark: {
-    stat: string;
-    label: string;
-    context: string;
-  };
+  complianceBadges: string[];
+  lead: string;
+  capabilities: { title: string; outcome: string }[];
+  benchmarks: { metric: string; label: string }[];
+  recommendedServices: { label: string; slug: string; categorySlug: string }[];
 }
 
-const assetUrl = (relativePath: string) =>
-  `${import.meta.env.BASE_URL}${relativePath.replace(/^\//, '')}`;
-
-const INDUSTRIES: IndustrySector[] = [
+const INDUSTRIES: IndustryDossier[] = [
   {
-    id: 'fintech-banking',
-    code: 'SECTOR 01',
-    name: 'FinTech & Institutional Banking',
+    id: 'fintech',
+    number: '01',
+    name: 'FinTech, Banking & Institutional Wealth',
     shortName: 'FinTech & Banking',
-    headline: 'High-velocity ledgers, multi-currency treasury platforms, and biometric wealth experiences.',
-    lead: 'Financial institutions cannot afford eventual consistency or fragile frontends. We engineer deterministic payment cores, automated KYB/AML onboarding engines, and executive mobile banking apps built for regulatory scrutiny.',
-    image: assetUrl('assets/pages/industries/fintech-banking.jpg'),
-    imageAlt: 'Modern financial district architecture representing institutional banking and fintech infrastructure',
-    imageCaption: 'Institutional treasury, payment orchestration, and compliant digital banking architectures.',
-    complianceStandards: ['PCI-DSS Level 1', 'SOC2 Type II', 'ISO 20022', 'PSD2 / Open Banking'],
-    operationalRealities: [
-      {
-        title: 'Deterministic Double-Entry Core Ledgers',
-        detail: 'Event-sourced ledger architectures with zero rounding drift across 35+ fiat and digital settlement rails.',
-      },
-      {
-        title: 'Frictionless KYB/AML & Risk Scoring',
-        detail: 'Automated document verification and real-time transaction sanction screening that cuts onboarding from weeks to hours.',
-      },
-      {
-        title: 'Biometric Mobile & Web Cockpits',
-        detail: 'Hardware-attested passkey and biometric sign-off flows designed for CFOs, traders, and retail account holders.',
-      },
+    tagline: 'Low-latency trading interfaces, multi-currency ledgers & SOC2-compliant acquisition.',
+    icon: CreditCard,
+    image: '/assets/pages/industries/fintech-banking.jpg',
+    imageAlt: 'Institutional financial analyst reviewing real-time FX liquidity dashboards',
+    complianceBadges: ['SOC2 Type II', 'PCI-DSS Level 1', 'ISO 27001'],
+    lead: 'We build sub-second WebSocket treasury desks, biometric mobile banking apps, and compliance-reviewed SEO/GEO engines that lower institutional CAC.',
+    capabilities: [
+      { title: 'Real-Time FX & Ledger UI', outcome: 'Sub-50ms order book & settlement rendering' },
+      { title: 'Biometric Mobile Approvals', outcome: 'Hardware-backed passkey & multi-sig flows' },
+      { title: 'Compliant Search Authority', outcome: 'FINRA/FCA-aligned technical SEO & GEO' },
     ],
-    bwiseStudios: [
-      { name: 'Software Development', slug: 'software-development', categorySlug: 'software-solutions' },
-      { name: 'Cybersecurity', slug: 'cybersecurity', categorySlug: 'software-solutions' },
-      { name: 'Mobile Applications', slug: 'mobile-applications', categorySlug: 'software-solutions' },
+    benchmarks: [
+      { metric: '-44%', label: 'Qualified Institutional CAC' },
+      { metric: '99.99%', label: 'Core Ledger Uptime' },
     ],
-    benchmark: {
-      stat: '$2.4B+',
-      label: 'Annualized cross-border volume engineered on BWise ledger systems',
-      context: '42ms global p99 settlement commit across European & APAC clearing corridors',
-    },
+    recommendedServices: [
+      { label: 'Web Development', slug: 'web-development', categorySlug: 'software-solutions' },
+      { label: 'Mobile App Development', slug: 'mobile-app-development', categorySlug: 'software-solutions' },
+      { label: 'Digital Analytics', slug: 'digital-analytics', categorySlug: 'digital-strategy-ideas' },
+    ],
   },
   {
-    id: 'healthcare-medtech',
-    code: 'SECTOR 02',
-    name: 'Healthcare, MedTech & Clinical Systems',
-    shortName: 'Healthcare & MedTech',
-    headline: 'Bedside clinician workspaces, interoperable FHIR data pipelines, and audited diagnostic AI.',
-    lead: 'In clinical environments, software latency and cluttered interfaces directly contribute to physician burnout. We build zero-latency hospital workspaces, patient telemetry portals, and HIPAA-compliant AI triage tools.',
-    image: assetUrl('assets/pages/industries/healthcare-medtech.jpg'),
-    imageAlt: 'Clinicians and medical researchers operating advanced digital diagnostic equipment in a modern hospital lab',
-    imageCaption: 'Point-of-care clinical software, HL7/FHIR interoperability, and diagnostic AI workflows.',
-    complianceStandards: ['HIPAA / HITECH', 'HL7 FHIR R4', 'FDA SaMD Class II Ready', 'GDPR Health Data'],
-    operationalRealities: [
-      {
-        title: 'EHR & Diagnostic Interoperability',
-        detail: 'Streaming HL7 FHIR R4 pipelines unifying Epic, Cerner, PACS imaging, and bedside IoT vitals into a single clinician view.',
-      },
-      {
-        title: 'Citation-Backed Clinical AI Summarization',
-        detail: 'Private-VPC language models that synthesize patient histories with mandatory inline links to the underlying lab or note.',
-      },
-      {
-        title: 'Accessible Patient & Telehealth Portals',
-        detail: 'WCAG AAA compliant scheduling, remote monitoring, and post-operative recovery companions on iOS, Android, and Web.',
-      },
+    id: 'healthcare',
+    number: '02',
+    name: 'HealthTech, Clinical AI & Diagnostics',
+    shortName: 'HealthTech & AI',
+    tagline: 'HIPAA-compliant clinician workstations, patient portals & medical search authority.',
+    icon: HeartPulse,
+    image: '/assets/pages/industries/healthcare-medtech.jpg',
+    imageAlt: 'Physician reviewing diagnostic imaging and patient telemetry on clinical tablet',
+    complianceBadges: ['HIPAA Compliant', 'HL7 / FHIR R4', 'WCAG 2.2 AA'],
+    lead: 'We design zero-footprint browser imaging viewers, frictionless telehealth intake flows, and physician-reviewed medical schema that earns AI citations.',
+    capabilities: [
+      { title: 'Clinical Triage Workstations', outcome: '52% faster radiologist & physician case review' },
+      { title: 'FHIR / EHR Interoperability', outcome: 'Zero-PHI-leakage Epic & Cerner integrations' },
+      { title: 'Medical GEO & E-E-A-T', outcome: 'Verified citations across AI health answers' },
     ],
-    bwiseStudios: [
-      { name: 'AI & Automation', slug: 'ai-automation', categorySlug: 'software-solutions' },
-      { name: 'UI/UX & Product Design', slug: 'ui-ux-design', categorySlug: 'software-solutions' },
-      { name: 'Data & Analytics', slug: 'data-analytics', categorySlug: 'digital-strategy-ideas' },
+    benchmarks: [
+      { metric: '-52%', label: 'Clinician Triage Time' },
+      { metric: '+310%', label: 'Organic Patient Intake' },
     ],
-    benchmark: {
-      stat: '61%',
-      label: 'Reduction in clinician shift-handoff documentation time',
-      context: 'Verified across 42 acute-care hospital departments and 1,400+ medical staff',
-    },
+    recommendedServices: [
+      { label: 'AI Optimization', slug: 'artificial-intelligence-optimization', categorySlug: 'software-solutions' },
+      { label: 'Application Testing', slug: 'application-testing', categorySlug: 'software-solutions' },
+      { label: 'Search Engine Optimisation', slug: 'search-engine-optimisation', categorySlug: 'software-solutions' },
+    ],
   },
   {
-    id: 'luxury-ecommerce',
-    code: 'SECTOR 03',
-    name: 'Luxury Retail & Global E-Commerce',
-    shortName: 'Luxury & E-Commerce',
-    headline: 'Sub-second headless storefronts, sensory brand worlds, and compounding organic search authority.',
-    lead: 'Modern retail winners pair editorial desirability with ruthless technical speed. Our creative directors, frontend architects, and SEO strategists build global D2C flagships that convert without discounting.',
-    image: assetUrl('assets/pages/industries/luxury-ecommerce.jpg'),
-    imageAlt: 'Contemporary luxury flagship retail interior with warm architectural lighting and curated merchandise',
-    imageCaption: 'Omnichannel luxury retail, edge-cached headless commerce, and international organic acquisition.',
-    complianceStandards: ['Global Multi-Currency Tax/Duties', 'Core Web Vitals < 0.8s LCP', 'Omnichannel POS Sync'],
-    operationalRealities: [
-      {
-        title: 'Edge-Rendered Headless Storefronts',
-        detail: 'Instant page transitions, localized pricing across 20+ currencies, and bespoke product configurators that never stall.',
-      },
-      {
-        title: 'Editorial Art Direction & Motion Systems',
-        detail: 'Tactile photography direction, 3D packaging showcases, and brand identity systems crafted for high-margin positioning.',
-      },
-      {
-        title: 'Programmatic & Editorial Search Dominance',
-        detail: 'Technical schema architecture and high-intent buyer guides that reduce reliance on volatile paid-social ad auctions.',
-      },
+    id: 'luxury-commerce',
+    number: '03',
+    name: 'Luxury Retail & Direct-to-Consumer',
+    shortName: 'Luxury & D2C',
+    tagline: 'Sub-second headless flagships, editorial art direction & high-ROAS paid social.',
+    icon: ShoppingBag,
+    image: '/assets/pages/industries/luxury-ecommerce.jpg',
+    imageAlt: 'Creative director inspecting luxury packaging and digital flagship lookbook',
+    complianceBadges: ['Shopify Plus / Hydrogen', 'Global Multi-Currency', 'Edge CDN'],
+    lead: 'We pair tactile editorial storytelling with sub-second edge commerce and algorithmic paid social studios that protect luxury brand equity.',
+    capabilities: [
+      { title: 'Sub-Second Edge Storefronts', outcome: '0.6s LCP across 30+ international markets' },
+      { title: 'AI Clienteling & Guided Rituals', outcome: '+68% higher average order value (AOV)' },
+      { title: 'Full-Funnel Paid Social Studio', outcome: '4.6x blended ROAS on Meta & TikTok' },
     ],
-    bwiseStudios: [
-      { name: 'Branding & Creative Design', slug: 'branding-creative-design', categorySlug: 'social-media-marketing' },
-      { name: 'Web Applications', slug: 'web-applications', categorySlug: 'software-solutions' },
-      { name: 'SEO Optimization', slug: 'seo-optimization', categorySlug: 'digital-strategy-ideas' },
+    benchmarks: [
+      { metric: '3.4x', label: 'Mobile Checkout Conversion' },
+      { metric: '+68%', label: 'Average Order Value Lift' },
     ],
-    benchmark: {
-      stat: '+218%',
-      label: 'Non-brand organic search revenue growth within 9 months',
-      context: 'Paired with a 4.8% D2C checkout conversion rate across 18 international markets',
-    },
+    recommendedServices: [
+      { label: 'Brand Management', slug: 'brand-management', categorySlug: 'digital-strategy-ideas' },
+      { label: 'Social Media Advertising', slug: 'social-media-advertising', categorySlug: 'social-media-marketing' },
+      { label: 'Unique Logo Design', slug: 'unique-logo-design', categorySlug: 'digital-strategy-ideas' },
+    ],
   },
   {
     id: 'enterprise-saas',
-    code: 'SECTOR 04',
-    name: 'B2B SaaS & Enterprise Cloud',
-    shortName: 'SaaS & Cloud',
-    headline: 'Multi-tenant cloud platforms, embedded AI workflows, and developer-grade design systems.',
-    lead: 'We help seed-to-Series-D software companies and enterprise technology leaders ship category-defining products, modernize monolithic architectures, and build self-serve growth loops.',
-    image: assetUrl('assets/pages/industries/enterprise-saas.jpg'),
-    imageAlt: 'High-density enterprise server and cloud infrastructure operations center',
-    imageCaption: 'Multi-tenant SaaS architecture, design systems, and product-led growth engineering.',
-    complianceStandards: ['SOC2 / ISO 27001', 'Multi-Tenant RBAC & SSO', 'Zero-Downtime CI/CD', 'OpenTelemetry'],
-    operationalRealities: [
-      {
-        title: 'Tokenized Multi-Product Design Systems',
-        detail: 'Accessible, keyboard-first component libraries in Figma and React/TypeScript that unify complex enterprise suites.',
-      },
-      {
-        title: 'Elastic Cloud & Kubernetes Infrastructure',
-        detail: 'Multi-region AWS/GCP infrastructure-as-code with automated tenant isolation, usage metering, and cost governance.',
-      },
-      {
-        title: 'Product-Led Acquisition & Funnel Telemetry',
-        detail: 'Interactive product tours, documentation hubs, and organic developer marketing that accelerate enterprise pipeline.',
-      },
+    number: '04',
+    name: 'Enterprise B2B SaaS & Cloud Infrastructure',
+    shortName: 'Enterprise SaaS',
+    tagline: 'Product-led growth engines, interactive sandboxes & generative AI citations.',
+    icon: Layers,
+    image: '/assets/pages/industries/enterprise-saas.jpg',
+    imageAlt: 'Engineering and product leadership collaborating in glass-walled studio',
+    complianceBadges: ['SOC2 Ready', 'OpenAPI / GraphQL', 'Multi-Region Edge'],
+    lead: 'We help B2B SaaS leaders dominate ChatGPT/Perplexity software comparisons, launch interactive browser sandboxes, and tie every touchpoint to pipeline.',
+    capabilities: [
+      { title: 'Generative Engine Optimization', outcome: '#1 citation share in AI software queries' },
+      { title: 'Interactive Product Sandboxes', outcome: 'Self-serve enterprise evaluation before sales' },
+      { title: 'Multi-Touch Revenue BI', outcome: 'Closed-loop CRM & warehouse attribution' },
     ],
-    bwiseStudios: [
-      { name: 'Cloud & DevOps', slug: 'cloud-devops', categorySlug: 'software-solutions' },
-      { name: 'UI/UX & Product Design', slug: 'ui-ux-design', categorySlug: 'software-solutions' },
-      { name: 'Digital Strategy & Consulting', slug: 'digital-strategy-consulting', categorySlug: 'digital-strategy-ideas' },
+    benchmarks: [
+      { metric: '+290%', label: 'AI Search Citation Share' },
+      { metric: '3.8x', label: 'Enterprise Demo Pipeline' },
     ],
-    benchmark: {
-      stat: '99.995%',
-      label: 'Multi-region production availability across managed cloud workloads',
-      context: 'With 3.4x faster feature release velocity after design-system and CI/CD modernization',
-    },
+    recommendedServices: [
+      { label: 'Generative Engine Optimisation', slug: 'generative-engine-optimisation', categorySlug: 'software-solutions' },
+      { label: 'Content Marketing', slug: 'content-marketing', categorySlug: 'social-media-marketing' },
+      { label: 'Digital Analytics', slug: 'digital-analytics', categorySlug: 'digital-strategy-ideas' },
+    ],
   },
   {
-    id: 'proptech-realestate',
-    code: 'SECTOR 05',
-    name: 'PropTech, Real Estate & Smart Spaces',
-    shortName: 'PropTech & Real Estate',
-    headline: 'Spatial property selectors, IoT building telemetry, and investor portfolio portals.',
-    lead: 'From commercial developments and smart industrial facilities to luxury residential portfolios, we connect physical assets with interactive digital leasing, IoT energy management, and investor reporting.',
-    image: assetUrl('assets/pages/industries/proptech-realestate.jpg'),
-    imageAlt: 'Modern architectural residence with floor-to-ceiling glass and integrated smart building design',
-    imageCaption: 'Interactive architectural showcases, smart-building IoT telemetry, and tenant ecosystems.',
-    complianceStandards: ['BMS / BACnet IoT Integration', 'Spatial 3D WebGL', 'Automated Lease & KYC Workflows'],
-    operationalRealities: [
-      {
-        title: 'Interactive Spatial Floorplans & Digital Twins',
-        detail: 'Browser-native 3D floorplan explorers with real-time unit availability, natural light simulation, and instant reservation.',
-      },
-      {
-        title: 'Smart-Building Energy & HVAC Telemetry',
-        detail: 'Unified dashboards ingesting thousands of environmental and occupancy sensors to cut commercial energy waste.',
-      },
-      {
-        title: 'Investor & Tenant Lifecycle Portals',
-        detail: 'End-to-end digital lease execution, maintenance dispatch, and real-time asset yield reporting.',
-      },
+    id: 'proptech',
+    number: '05',
+    name: 'PropTech, Commercial Real Estate & Smart Cities',
+    shortName: 'PropTech & CRE',
+    tagline: 'Interactive 3D property digital twins, investor portals & hyper-local search.',
+    icon: Building2,
+    image: '/assets/pages/industries/proptech-realestate.jpg',
+    imageAlt: 'Architectural scale model and digital twin viewport in real estate development studio',
+    complianceBadges: ['WebGL / Mapbox 3D', 'Yardi / MRI Sync', 'Automated QA'],
+    lead: 'We replace static PDFs with interactive 3D stacking plans, real-time BMS telemetry portals, and programmatic local search across hundreds of properties.',
+    capabilities: [
+      { title: 'WebGL 3D Stacking Plans', outcome: '60fps interactive floorplate & sun-path tours' },
+      { title: 'LP Investor Data Rooms', outcome: 'Automated distribution & K-1 document vaults' },
+      { title: 'Hyper-Local Geo-Grid SEO', outcome: 'Top-3 map pack rankings across every market' },
     ],
-    bwiseStudios: [
-      { name: 'Web Applications', slug: 'web-applications', categorySlug: 'software-solutions' },
-      { name: 'Data & Analytics', slug: 'data-analytics', categorySlug: 'digital-strategy-ideas' },
-      { name: 'Content & Video Production', slug: 'content-video-production', categorySlug: 'social-media-marketing' },
+    benchmarks: [
+      { metric: '+175%', label: 'Direct Leasing Inquiries' },
+      { metric: '-38%', label: 'Pre-Leasing Cycle Time' },
     ],
-    benchmark: {
-      stat: '2.9x',
-      label: 'Increase in qualified off-plan residential & commercial lease inquiries',
-      context: 'Driven by interactive spatial unit selectors and targeted performance campaigns',
-    },
+    recommendedServices: [
+      { label: 'Web Development', slug: 'web-development', categorySlug: 'software-solutions' },
+      { label: 'Search Engine Optimisation', slug: 'search-engine-optimisation', categorySlug: 'software-solutions' },
+      { label: 'Brand Management', slug: 'brand-management', categorySlug: 'digital-strategy-ideas' },
+    ],
   },
   {
     id: 'hospitality-aviation',
-    code: 'SECTOR 06',
-    name: 'Hospitality, Aviation & Modern Travel',
-    shortName: 'Hospitality & Travel',
-    headline: 'Direct reservation engines, private charter dispatch, and seamless mobile guest companions.',
-    lead: 'We help boutique hotel groups, aviation operators, and destination brands reclaim direct guest relationships from third-party aggregators through high-converting booking flows and effortless mobile service.',
-    image: assetUrl('assets/pages/industries/hospitality-aviation.jpg'),
-    imageAlt: 'Architectural luxury hotel courtyard and waterfront sanctuary at twilight',
-    imageCaption: 'Direct PMS booking integration, mobile guest key & concierge apps, and destination brand storytelling.',
-    complianceStandards: ['Opera / Mews PMS Sync', 'Global Payment Orchestration', 'Mobile Digital Key & Passbook'],
-    operationalRealities: [
-      {
-        title: 'Commission-Free Direct Booking Engines',
-        detail: 'Real-time room, villa, and charter availability synced directly with property management systems in under 200ms.',
-      },
-      {
-        title: 'Pre-Arrival Itinerary & Concierge Apps',
-        detail: 'Native iOS/Android guest companions for contactless check-in, digital room keys, dining reservations, and bespoke excursions.',
-      },
-      {
-        title: 'Cinematic Destination Film & Social Demand',
-        detail: 'Editorial video production and full-funnel search/social acquisition targeting high-lifetime-value travelers.',
-      },
+    number: '06',
+    name: 'Hospitality, Private Aviation & Bespoke Travel',
+    shortName: 'Hospitality & Aviation',
+    tagline: 'Direct-booking engines, charter configurators & high-net-worth loyalty apps.',
+    icon: Plane,
+    image: '/assets/pages/industries/hospitality-aviation.jpg',
+    imageAlt: 'Bespoke architectural resort lobby and private aviation concierge experience',
+    complianceBadges: ['PMS / GDS Native', 'Multi-Lingual Edge', 'VIP Mobile Pass'],
+    lead: 'We build commission-free direct booking engines, empty-leg jet charter configurators, and Digital Key companion apps for ultra-luxury hospitality.',
+    capabilities: [
+      { title: 'Direct Villa & Charter Booking', outcome: '3-step multi-currency itinerary checkout' },
+      { title: 'VIP Companion Mobile App', outcome: 'Offline itineraries, Digital Key & WhatsApp concierge' },
+      { title: 'UHNW Social & Editorial', outcome: 'High-intent private client acquisition' },
     ],
-    bwiseStudios: [
-      { name: 'Mobile Applications', slug: 'mobile-applications', categorySlug: 'software-solutions' },
-      { name: 'Digital Marketing', slug: 'digital-marketing', categorySlug: 'social-media-marketing' },
-      { name: 'Content & Video Production', slug: 'content-video-production', categorySlug: 'social-media-marketing' },
+    benchmarks: [
+      { metric: '+215%', label: 'Direct Booking Share' },
+      { metric: '-38%', label: 'OTA Commission Fees' },
     ],
-    benchmark: {
-      stat: '74%',
-      label: 'Direct reservation share achieved for multi-property hospitality partners',
-      context: 'Saving millions in annual OTA commissions while lifting ancillary guest spend by 64%',
-    },
+    recommendedServices: [
+      { label: 'Mobile App Development', slug: 'mobile-app-development', categorySlug: 'software-solutions' },
+      { label: 'Social Media Management', slug: 'social-media-management', categorySlug: 'social-media-marketing' },
+      { label: 'Unique Logo Design', slug: 'unique-logo-design', categorySlug: 'digital-strategy-ideas' },
+    ],
   },
 ];
 
 export const IndustriesPage: React.FC = () => {
-  const [selectedId, setSelectedId] = useState<string>(INDUSTRIES[0].id);
-  const activeSector = INDUSTRIES.find((item) => item.id === selectedId) ?? INDUSTRIES[0];
+  const [activeId, setActiveId] = useState<string>(INDUSTRIES[0].id);
+  const { openConsultationModal } = useConsultationModal();
+  const activeSector = INDUSTRIES.find((ind) => ind.id === activeId) || INDUSTRIES[0];
 
   return (
-    <div className="min-h-screen bg-honeycomb-pattern text-stone-900 relative overflow-hidden">
-      {/* Decorative Honeycomb/Pentagon Line Art at Top-Left & Top-Right Edges */}
+    <div className="min-h-screen bg-honeycomb-pattern relative overflow-hidden text-stone-900 pt-24 sm:pt-28 pb-20">
       <HiveCornerDecorations />
 
       {/* =====================================================================
-          1. EDITORIAL HERO + REALISTIC 3-PANEL SECTOR TRIPTYCH
+          1. CONCISE HERO + 6-SECTOR VISUAL SELECTOR PILLS
          ===================================================================== */}
-      <section className="relative z-10 pt-24 sm:pt-28 pb-14 sm:pb-20 px-4 sm:px-8 border-b border-amber-200/80">
-        <div className="max-w-[1240px] mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-end mb-10 sm:mb-14">
-            <div className="lg:col-span-7">
-              <div className="inline-flex items-center gap-2.5 text-xs font-extrabold uppercase tracking-[0.2em] text-amber-700 mb-4">
-                <span className="w-2 h-2 rounded-full bg-amber-500" />
-                <span>Industry Verticals & Domain Depth</span>
-              </div>
-              <h1 className="text-4xl sm:text-5xl lg:text-[54px] font-extrabold tracking-tight text-stone-950 leading-[1.06]">
-                Domain fluency where{' '}
-                <span className="text-stone-500 font-normal">regulation, scale, and craft intersect.</span>
-              </h1>
-            </div>
-            <div className="lg:col-span-5">
-              <p className="text-sm sm:text-base text-stone-600 leading-relaxed">
-                Every industry carries its own non-negotiables—whether that is deterministic double-entry accounting in FinTech, HL7 FHIR clinical safety in Healthcare, or sub-second global edge speed in Luxury Retail. Our studios bring battle-tested architectural patterns to six core verticals.
-              </p>
-            </div>
+      <section className="max-w-[1320px] mx-auto px-4 sm:px-8 pb-8">
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+          <div>
+            <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-bold uppercase tracking-wider">
+              <Sparkles className="w-3.5 h-3.5" />
+              6 Core Verticals
+            </span>
+            <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-stone-950 mt-2.5">
+              Domain-Fluent Engineering &amp; Growth.
+            </h1>
           </div>
-
-          {/* Realistic Photographic Triptych */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-5">
-            {/* Primary LCP Panel */}
-            <figure className="md:col-span-6 relative overflow-hidden rounded-2xl border border-stone-200 bg-stone-900 group">
-              <img
-                src={INDUSTRIES[0].image}
-                alt={INDUSTRIES[0].imageAlt}
-                fetchPriority="high"
-                width={1500}
-                height={1000}
-                className="w-full h-[260px] sm:h-[340px] object-cover transition-transform duration-700 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-              <figcaption className="absolute bottom-0 inset-x-0 p-5 text-white flex items-end justify-between">
-                <div>
-                  <span className="text-[10px] font-mono uppercase tracking-widest text-amber-400 block">
-                    Regulated Infrastructure
-                  </span>
-                  <p className="text-base sm:text-lg font-extrabold">FinTech & Institutional Banking</p>
-                </div>
-                <span className="text-xs font-semibold text-stone-300">PCI-DSS • ISO 20022</span>
-              </figcaption>
-            </figure>
-
-            {/* Secondary Panel */}
-            <figure className="md:col-span-3 relative overflow-hidden rounded-2xl border border-stone-200 bg-stone-900 group">
-              <img
-                src={INDUSTRIES[1].image}
-                alt={INDUSTRIES[1].imageAlt}
-                width={1500}
-                height={1000}
-                className="w-full h-[220px] sm:h-[340px] object-cover transition-transform duration-700 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-              <figcaption className="absolute bottom-0 inset-x-0 p-5 text-white">
-                <span className="text-[10px] font-mono uppercase tracking-widest text-amber-400 block">
-                  Clinical Precision
-                </span>
-                <p className="text-base font-extrabold">Healthcare & MedTech</p>
-              </figcaption>
-            </figure>
-
-            {/* Tertiary Panel */}
-            <figure className="md:col-span-3 relative overflow-hidden rounded-2xl border border-stone-200 bg-stone-900 group">
-              <img
-                src={INDUSTRIES[2].image}
-                alt={INDUSTRIES[2].imageAlt}
-                width={1500}
-                height={1000}
-                className="w-full h-[220px] sm:h-[340px] object-cover transition-transform duration-700 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-              <figcaption className="absolute bottom-0 inset-x-0 p-5 text-white">
-                <span className="text-[10px] font-mono uppercase tracking-widest text-amber-400 block">
-                  Global Flagships
-                </span>
-                <p className="text-base font-extrabold">Luxury & E-Commerce</p>
-              </figcaption>
-            </figure>
-          </div>
+          <p className="text-sm sm:text-base text-stone-600 max-w-md">
+            Compliance-ready architectures, custom product interfaces, and search authority tailored to high-trust industries.
+          </p>
         </div>
-      </section>
 
-      {/* =====================================================================
-          2. INTERACTIVE SECTOR DOSSIER EXPLORER (WARM HONEYCOMB STAGE)
-         ===================================================================== */}
-      <section className="relative z-10 bg-gradient-to-br from-white via-amber-50/50 to-amber-100/40 text-stone-900 py-14 sm:py-24 px-4 sm:px-8 border-b border-amber-200/80">
-        <div className="max-w-[1240px] mx-auto">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-8 mb-10 border-b border-amber-200/80">
-            <div>
-              <span className="text-xs font-extrabold uppercase tracking-[0.2em] text-amber-700 block mb-2">
-                Interactive Sector Dossier
-              </span>
-              <h2 className="text-2xl sm:text-4xl font-extrabold text-stone-950">
-                Select an industry to inspect our technical & creative playbook
-              </h2>
-            </div>
-            <p className="text-xs sm:text-sm text-stone-600 max-w-sm">
-              Each vertical combines specialized engineering architecture, regulatory compliance, and domain-specific growth execution.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-            {/* Left Column: 6-Vertical Selector List */}
-            <div className="lg:col-span-4 space-y-2" role="tablist" aria-label="Industry verticals">
-              {INDUSTRIES.map((sector) => {
-                const isSelected = sector.id === activeSector.id;
-                return (
-                  <button
-                    key={sector.id}
-                    type="button"
-                    role="tab"
-                    aria-selected={isSelected}
-                    onClick={() => setSelectedId(sector.id)}
-                    className={`w-full text-left p-4 sm:p-5 rounded-2xl border transition-all cursor-pointer flex items-center justify-between gap-3 ${
-                      isSelected
-                        ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-white border-amber-600 shadow-[0_14px_30px_rgba(245,158,11,0.22)]'
-                        : 'bg-white text-stone-800 border-amber-200/80 hover:bg-amber-50/70 hover:border-amber-300'
+        {/* Interactive 6-Vertical Selector Bar */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 mt-8">
+          {INDUSTRIES.map((sector) => {
+            const Icon = sector.icon;
+            const isSelected = sector.id === activeId;
+            return (
+              <button
+                key={sector.id}
+                type="button"
+                onClick={() => setActiveId(sector.id)}
+                className={`p-3.5 rounded-2xl border text-left transition-all duration-300 cursor-pointer flex flex-col justify-between ${
+                  isSelected
+                    ? 'bg-gradient-to-br from-amber-500 to-amber-600 text-white border-amber-500 shadow-lg shadow-amber-500/25 -translate-y-0.5'
+                    : 'bg-white/95 hover:bg-amber-50/70 text-stone-800 border-amber-200/80 hover:border-amber-400'
+                }`}
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <span
+                    className={`text-[10px] font-extrabold ${
+                      isSelected ? 'text-amber-100' : 'text-amber-700'
                     }`}
                   >
-                    <div>
-                      <span
-                        className={`text-[10px] font-mono font-bold uppercase tracking-widest block mb-1 ${
-                          isSelected ? 'text-amber-100' : 'text-amber-700'
-                        }`}
-                      >
-                        {sector.code}
-                      </span>
-                      <span className="text-sm sm:text-base font-extrabold block leading-snug">
-                        {sector.name}
-                      </span>
-                    </div>
-                    <ArrowRight
-                      className={`w-4 h-4 shrink-0 transition-transform ${
-                        isSelected ? 'text-white translate-x-0.5' : 'text-stone-400'
-                      }`}
-                    />
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Right Column: Live Sector Showcase Panel */}
-            <div className="lg:col-span-8">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeSector.id}
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.3 }}
-                  className="rounded-3xl border-2 border-amber-200/85 bg-white overflow-hidden shadow-[0_24px_60px_rgba(245,158,11,0.12)]"
-                >
-                  {/* Large Realistic Sector Photograph */}
-                  <figure className="relative">
-                    <img
-                      src={activeSector.image}
-                      alt={activeSector.imageAlt}
-                      loading="lazy"
-                      width={1500}
-                      height={900}
-                      className="w-full h-[240px] sm:h-[340px] object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-                    <div className="absolute bottom-4 left-5 right-5 flex flex-wrap items-center justify-between gap-2">
-                      <span className="px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider bg-amber-400 text-stone-950 shadow-xs">
-                        {activeSector.code} • {activeSector.shortName}
-                      </span>
-                      <div className="flex flex-wrap gap-1.5">
-                        {activeSector.complianceStandards.map((std) => (
-                          <span
-                            key={std}
-                            className="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-white/90 backdrop-blur-md text-stone-900 border border-amber-200/80"
-                          >
-                            {std}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </figure>
-
-                  {/* Dossier Body */}
-                  <div className="p-6 sm:p-8 lg:p-10 space-y-8">
-                    <div>
-                      <h3 className="text-2xl sm:text-3xl font-extrabold text-stone-950 leading-tight mb-3">
-                        {activeSector.headline}
-                      </h3>
-                      <p className="text-stone-600 text-sm sm:text-base leading-relaxed">
-                        {activeSector.lead}
-                      </p>
-                    </div>
-
-                    {/* 3 Operational Challenges Solved */}
-                    <div className="space-y-4 pt-4 border-t border-amber-200/80">
-                      <p className="text-xs font-extrabold uppercase tracking-widest text-amber-800">
-                        What We Engineer & Solve in {activeSector.shortName}
-                      </p>
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                        {activeSector.operationalRealities.map((item) => (
-                          <div key={item.title} className="space-y-1.5">
-                            <h4 className="text-sm font-bold text-stone-900 flex items-start gap-2">
-                              <CheckCircle2 className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-                              <span>{item.title}</span>
-                            </h4>
-                            <p className="text-xs text-stone-600 leading-relaxed pl-6">{item.detail}</p>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Sector Benchmark + Deployed Studios */}
-                    <div className="p-5 rounded-2xl bg-gradient-to-r from-[#FFF8E7] via-amber-50/90 to-[#F9E4B7]/65 border border-amber-200/90 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-                      <div>
-                        <p className="text-[11px] font-bold uppercase tracking-widest text-amber-800">
-                          Verified Sector Benchmark
-                        </p>
-                        <div className="flex items-baseline gap-3 mt-1">
-                          <span className="text-3xl font-extrabold text-amber-700">{activeSector.benchmark.stat}</span>
-                          <span className="text-xs sm:text-sm font-bold text-stone-900">
-                            {activeSector.benchmark.label}
-                          </span>
-                        </div>
-                        <p className="text-xs text-stone-600 mt-1">{activeSector.benchmark.context}</p>
-                      </div>
-
-                      <Link
-                        to={`/contact?industry=${activeSector.id}`}
-                        className="shrink-0 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full bg-stone-900 hover:bg-stone-800 text-white font-bold text-xs sm:text-sm shadow-xs transition-all"
-                      >
-                        <span>Discuss {activeSector.shortName}</span>
-                        <ArrowRight className="w-4 h-4" />
-                      </Link>
-                    </div>
-
-                    {/* Studios Links */}
-                    <div className="flex flex-wrap items-center justify-between gap-4 pt-2 border-t border-amber-200/80">
-                      <div className="flex flex-wrap items-center gap-3">
-                        <span className="text-xs font-semibold text-stone-500">Primary BWise Studios:</span>
-                        {activeSector.bwiseStudios.map((st) => (
-                          <Link
-                            key={st.slug}
-                            to={`/services?category=${st.categorySlug}&service=${st.slug}#${st.slug}`}
-                            className="inline-flex items-center gap-1 text-xs font-bold text-amber-700 hover:text-amber-900 transition-colors"
-                          >
-                            <span>{st.name}</span>
-                            <ArrowUpRight className="w-3.5 h-3.5" />
-                          </Link>
-                        ))}
-                      </div>
-                      <Link
-                        to="/portfolio"
-                        className="text-xs font-bold text-stone-800 hover:text-amber-700 underline underline-offset-4"
-                      >
-                        View Related Case Studies →
-                      </Link>
-                    </div>
-                  </div>
-                </motion.div>
-              </AnimatePresence>
-            </div>
-          </div>
+                    #{sector.number}
+                  </span>
+                  <Icon className={`w-4 h-4 ${isSelected ? 'text-white' : 'text-amber-600'}`} />
+                </div>
+                <p className="text-xs font-extrabold leading-snug">{sector.shortName}</p>
+              </button>
+            );
+          })}
         </div>
       </section>
 
       {/* =====================================================================
-          3. ALL 6 VERTICALS — EDITORIAL PHOTOGRAPHIC FIELD GUIDE
+          2. INTERACTIVE VISUAL SECTOR DOSSIER
          ===================================================================== */}
-      <section className="py-16 sm:py-24 px-4 sm:px-8">
-        <div className="max-w-[1240px] mx-auto">
-          <div className="max-w-2xl mb-12 sm:mb-16">
-            <span className="text-xs font-extrabold uppercase tracking-[0.2em] text-amber-700 block mb-2">
-              Sector-by-Sector Reference
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-stone-950 leading-tight">
-              Built for the real-world environments where your customers and teams operate.
-            </h2>
-          </div>
+      <section className="max-w-[1320px] mx-auto px-4 sm:px-8 pb-12">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeSector.id}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.35 }}
+            className="rounded-[32px] bg-white/95 border-2 border-amber-300/80 shadow-[0_24px_65px_rgba(245,158,11,0.14)] overflow-hidden"
+          >
+            <div className="grid grid-cols-1 lg:grid-cols-12">
+              {/* Left: Realistic Photography + Floating Benchmark Badges */}
+              <div className="lg:col-span-6 relative min-h-[320px] sm:min-h-[420px] bg-stone-950 overflow-hidden group">
+                <img
+                  src={assetUrl(activeSector.image)}
+                  alt={activeSector.imageAlt}
+                  fetchPriority="high"
+                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-stone-950/90 via-stone-950/25 to-transparent" />
 
-          <div className="space-y-16 sm:space-y-24">
-            {INDUSTRIES.slice(3).map((sector, idx) => {
-              const isReversed = idx % 2 === 1;
-              return (
-                <div
-                  key={sector.id}
-                  className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center pt-12 border-t border-stone-300/80"
-                >
-                  <div className={`lg:col-span-7 ${isReversed ? 'lg:order-2' : 'lg:order-1'}`}>
-                    <figure className="overflow-hidden rounded-2xl border border-amber-200/80 bg-white shadow-[0_18px_45px_rgba(245,158,11,0.10)]">
-                      <img
-                        src={sector.image}
-                        alt={sector.imageAlt}
-                        loading="lazy"
-                        width={1500}
-                        height={950}
-                        className="w-full h-[260px] sm:h-[380px] object-cover transition-transform duration-700 hover:scale-[1.02]"
-                      />
-                      <figcaption className="px-5 py-3 bg-[#FFF8E7] border-t border-amber-200/70 text-stone-700 text-xs flex items-center justify-between gap-4">
-                        <span>{sector.imageCaption}</span>
-                        <span className="text-amber-700 font-mono font-bold shrink-0">{sector.code}</span>
-                      </figcaption>
-                    </figure>
+                {/* Top Compliance Badges */}
+                <div className="absolute top-5 left-5 right-5 flex flex-wrap items-center gap-2">
+                  {activeSector.complianceBadges.map((badge) => (
+                    <span
+                      key={badge}
+                      className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-white/90 backdrop-blur-md text-stone-900 text-[11px] font-extrabold shadow-xs"
+                    >
+                      <ShieldCheck className="w-3.5 h-3.5 text-amber-600" />
+                      {badge}
+                    </span>
+                  ))}
+                </div>
+
+                {/* Bottom Benchmark Counters */}
+                <div className="absolute bottom-5 left-5 right-5 grid grid-cols-2 gap-3">
+                  {activeSector.benchmarks.map((b) => (
+                    <div
+                      key={b.label}
+                      className="rounded-2xl bg-white/95 backdrop-blur-md p-4 border border-amber-200 shadow-lg"
+                    >
+                      <p className="text-2xl sm:text-3xl font-extrabold text-amber-700 leading-none">
+                        {b.metric}
+                      </p>
+                      <p className="text-[11px] font-bold text-stone-600 mt-1">{b.label}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Right: Concise Overview, 3 Visual Capability Cards & Studio Links */}
+              <div className="lg:col-span-6 p-6 sm:p-10 flex flex-col justify-between bg-gradient-to-br from-white via-[#FFFDF8] to-[#FFF8E7]/75">
+                <div className="space-y-5">
+                  <div className="flex items-center gap-2">
+                    <span className="px-3 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-extrabold uppercase tracking-wider">
+                      Vertical #{activeSector.number}
+                    </span>
                   </div>
 
-                  <div className={`lg:col-span-5 ${isReversed ? 'lg:order-1' : 'lg:order-2'} space-y-5`}>
-                    <span className="text-xs font-mono font-bold uppercase tracking-widest text-amber-700">
-                      {sector.code} • {sector.name}
-                    </span>
-                    <h3 className="text-2xl sm:text-3xl font-extrabold text-stone-950 leading-tight">
-                      {sector.headline}
-                    </h3>
-                    <p className="text-stone-600 text-sm sm:text-base leading-relaxed">{sector.lead}</p>
+                  <div>
+                    <h2 className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight">
+                      {activeSector.name}
+                    </h2>
+                    <p className="text-sm text-stone-600 mt-2 leading-relaxed">
+                      {activeSector.lead}
+                    </p>
+                  </div>
 
-                    <ul className="space-y-2.5 pt-2">
-                      {sector.operationalRealities.map((op) => (
-                        <li key={op.title} className="text-xs sm:text-sm text-stone-700 flex items-start gap-2.5">
-                          <span className="w-1.5 h-1.5 rounded-full bg-amber-500 mt-2 shrink-0" />
-                          <span>
-                            <strong className="text-stone-950">{op.title}:</strong> {op.detail}
-                          </span>
-                        </li>
+                  {/* 3 Concise Capability Cards */}
+                  <div className="space-y-2.5">
+                    {activeSector.capabilities.map((cap) => (
+                      <div
+                        key={cap.title}
+                        className="p-3.5 rounded-2xl bg-white border border-amber-200/80 hover:border-amber-400 transition flex items-start gap-3 shadow-2xs"
+                      >
+                        <CheckCircle2 className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                        <div>
+                          <h3 className="text-xs sm:text-sm font-extrabold text-stone-900">
+                            {cap.title}
+                          </h3>
+                          <p className="text-xs text-stone-600 mt-0.5">{cap.outcome}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Recommended Studios */}
+                  <div>
+                    <p className="text-[11px] font-extrabold uppercase tracking-wider text-stone-500 mb-2">
+                      Connected Beehive Studios for {activeSector.shortName}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {activeSector.recommendedServices.map((svc) => (
+                        <Link
+                          key={svc.slug}
+                          to={`/services?category=${svc.categorySlug}&service=${svc.slug}#${svc.slug}`}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#FFF8E7] hover:bg-amber-500 text-stone-800 hover:text-white text-xs font-bold border border-amber-200/80 transition"
+                        >
+                          <span>{svc.label}</span>
+                          <ArrowUpRight className="w-3.5 h-3.5" />
+                        </Link>
                       ))}
-                    </ul>
-
-                    <div className="pt-3 flex flex-wrap items-center gap-4">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setSelectedId(sector.id);
-                          window.scrollTo({ top: 520, behavior: 'smooth' });
-                        }}
-                        className="text-xs font-extrabold uppercase tracking-wider text-stone-950 hover:text-amber-700 underline underline-offset-4 cursor-pointer"
-                      >
-                        Open Full {sector.shortName} Dossier ↑
-                      </button>
-                      <Link
-                        to={`/contact?industry=${sector.id}`}
-                        className="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-amber-700 hover:text-amber-900"
-                      >
-                        <span>Consult with Domain Lead</span>
-                        <ArrowRight className="w-3.5 h-3.5" />
-                      </Link>
                     </div>
                   </div>
                 </div>
-              );
-            })}
-          </div>
+
+                <div className="pt-6 mt-6 border-t border-amber-200/70 flex flex-wrap items-center justify-between gap-3">
+                  <button
+                    type="button"
+                    onClick={openConsultationModal}
+                    className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-[#FBBF24] via-[#F59E0B] to-[#F59E0B] hover:from-[#FCD34D] hover:to-[#D97706] text-[#14111B] text-xs sm:text-sm font-extrabold shadow-md transition hover:scale-105 cursor-pointer"
+                  >
+                    <span>Book {activeSector.shortName} Pod</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+                  <Link
+                    to="/portfolio"
+                    className="text-xs font-extrabold text-amber-700 hover:text-amber-800 inline-flex items-center gap-1"
+                  >
+                    View Sector Case Studies <ArrowUpRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </AnimatePresence>
+      </section>
+
+      {/* =====================================================================
+          3. ALL 6 SECTORS QUICK VISUAL GRID
+         ===================================================================== */}
+      <section className="max-w-[1320px] mx-auto px-4 sm:px-8 pb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {INDUSTRIES.map((sector) => {
+            const isCurrent = sector.id === activeId;
+            return (
+              <div
+                key={sector.id}
+                onClick={() => {
+                  setActiveId(sector.id);
+                  window.scrollTo({ top: 140, behavior: 'smooth' });
+                }}
+                className={`group rounded-3xl overflow-hidden border cursor-pointer transition-all duration-300 ${
+                  isCurrent
+                    ? 'bg-white border-amber-500 ring-2 ring-amber-400/25 shadow-lg'
+                    : 'bg-white/90 border-amber-200/80 hover:border-amber-400 hover:-translate-y-1 shadow-xs'
+                }`}
+              >
+                <div className="relative h-44 overflow-hidden bg-stone-900">
+                  <img
+                    src={assetUrl(sector.image)}
+                    alt={sector.imageAlt}
+                    loading="lazy"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-stone-950/85 via-stone-950/20 to-transparent" />
+                  <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
+                    <span className="px-2.5 py-0.5 rounded-full bg-white/90 text-stone-900 text-[10px] font-extrabold">
+                      #{sector.number} · {sector.shortName}
+                    </span>
+                    <span className="px-2.5 py-0.5 rounded-full bg-amber-400 text-stone-950 text-[10px] font-extrabold">
+                      {sector.benchmarks[0].metric}
+                    </span>
+                  </div>
+                  <div className="absolute bottom-3 left-3 right-3 text-white">
+                    <h3 className="text-sm font-extrabold leading-snug">{sector.name}</h3>
+                  </div>
+                </div>
+                <div className="p-4 flex items-center justify-between">
+                  <span className="text-xs text-stone-600 truncate pr-2">{sector.tagline}</span>
+                  <ArrowUpRight className="w-4 h-4 text-amber-600 shrink-0 group-hover:translate-x-0.5 transition-transform" />
+                </div>
+              </div>
+            );
+          })}
         </div>
       </section>
 
       {/* =====================================================================
-          4. CROSS-INDUSTRY ENGINEERING & COMPLIANCE STANDARDS LEDGER
+          4. COMPACT SECURITY & COMPLIANCE TRUST BAR
          ===================================================================== */}
-      <section className="relative z-10 py-16 sm:py-20 px-4 sm:px-8 bg-gradient-to-b from-[#F5E8D0] to-[#EFE0C2] border-t border-amber-300/60 text-stone-900">
-        <div className="max-w-[1240px] mx-auto">
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8 pb-12 border-b border-amber-300/70">
-            <div className="max-w-2xl">
-              <div className="inline-flex items-center gap-2 text-xs font-extrabold uppercase tracking-[0.2em] text-amber-800 mb-3">
-                <ShieldCheck className="w-4 h-4 text-amber-700" />
-                <span>Enterprise Governance & Reliability</span>
-              </div>
-              <h2 className="text-2xl sm:text-4xl font-extrabold leading-tight text-stone-950">
-                Non-negotiable engineering standards across every vertical we touch.
-              </h2>
+      <section className="max-w-[1320px] mx-auto px-4 sm:px-8">
+        <div className="rounded-[28px] bg-gradient-to-r from-[#F9E2AE]/85 via-[#FFF8E7]/95 to-[#F9E4B7]/85 border-2 border-amber-300/80 p-6 sm:p-8 shadow-md flex flex-col lg:flex-row items-center justify-between gap-6">
+          <div className="flex items-center gap-3.5">
+            <div className="w-12 h-12 rounded-2xl bg-amber-500 text-white flex items-center justify-center shrink-0 shadow-xs">
+              <Lock className="w-6 h-6" />
             </div>
-            <Link
-              to="/contact"
-              className="shrink-0 inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-stone-900 hover:bg-stone-800 text-white font-bold text-sm shadow-md transition-all"
-            >
-              <span>Schedule a Technical Discovery Call</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
+            <div>
+              <h3 className="text-base sm:text-lg font-extrabold text-stone-900">
+                Enterprise-Ready Governance &amp; Security by Default
+              </h3>
+              <p className="text-xs text-stone-600 mt-0.5">
+                100% IP assignment on day one · Automated CI/CD security gates · 99.99% production SLA
+              </p>
+            </div>
           </div>
 
-          <div className="pt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div>
-              <p className="text-xs font-mono font-bold uppercase tracking-widest text-amber-800">01 / Security Posture</p>
-              <p className="text-lg font-extrabold text-stone-950 mt-2">Zero-Trust by Default</p>
-              <p className="text-xs text-stone-700 mt-1.5 leading-relaxed">
-                End-to-end envelope encryption, hardware-attested IAM, automated dependency auditing, and SOC2/HIPAA-aligned deployment pipelines.
-              </p>
-            </div>
-            <div>
-              <p className="text-xs font-mono font-bold uppercase tracking-widest text-amber-800">02 / High Availability</p>
-              <p className="text-lg font-extrabold text-stone-950 mt-2">99.99% Multi-Region SLA</p>
-              <p className="text-xs text-stone-700 mt-1.5 leading-relaxed">
-                Active-active cloud topology, automated failover drills, and real-time OpenTelemetry observability across every critical service.
-              </p>
-            </div>
-            <div>
-              <p className="text-xs font-mono font-bold uppercase tracking-widest text-amber-800">03 / Performance</p>
-              <p className="text-lg font-extrabold text-stone-950 mt-2">Sub-Second User Experience</p>
-              <p className="text-xs text-stone-700 mt-1.5 leading-relaxed">
-                Strict Core Web Vitals budgets, edge caching, and native 60fps mobile rendering verified on real-world cellular networks.
-              </p>
-            </div>
-            <div>
-              <p className="text-xs font-mono font-bold uppercase tracking-widest text-amber-800">04 / Continuity</p>
-              <p className="text-lg font-extrabold text-stone-950 mt-2">Clean Handover & Enablement</p>
-              <p className="text-xs text-stone-700 mt-1.5 leading-relaxed">
-                Comprehensive architectural decision records (ADRs), runbooks, and side-by-side enablement for your internal engineering and marketing teams.
-              </p>
-            </div>
+          <div className="flex flex-wrap items-center gap-2">
+            {['SOC2 Type II', 'HIPAA / FHIR', 'PCI-DSS L1', 'WCAG 2.2 AA', 'ISO 27001'].map((tag) => (
+              <span
+                key={tag}
+                className="px-3 py-1.5 rounded-full bg-white text-stone-800 text-xs font-extrabold border border-amber-300/80 shadow-2xs"
+              >
+                {tag}
+              </span>
+            ))}
           </div>
         </div>
       </section>

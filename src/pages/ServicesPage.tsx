@@ -1,27 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
-  Check,
-  ChevronRight,
-  Star,
   ArrowRight,
   Sparkles,
-  Layers,
   CheckCircle2,
-  ExternalLink,
   Cpu,
   Megaphone,
   Lightbulb,
-  Compass,
-  ShieldCheck,
   Zap,
-  RotateCcw,
+  Activity,
 } from 'lucide-react';
 import {
   PriorityService,
   MAIN_SERVICE_CATEGORIES,
-  ServiceCategory,
   MainCategorySlug,
   getMainCategoryBySlug,
   getServicesByCategory,
@@ -29,344 +21,189 @@ import {
 } from '../data/servicesData';
 import { ServiceIcon } from '../components/hive/HoneycombGrid3D';
 import { BwiseBeeCharacter } from '../components/hive/BwiseBeeCharacter';
-import { BwiseLogo } from '../components/layout/BwiseLogo';
 import { HiveCornerDecorations } from '../components/layout/HiveCornerDecorations';
+import { useConsultationModal } from '../context/ConsultationModalContext';
+import { assetUrl } from '../utils/assets';
 
-/**
- * Single Dedicated Sub-Service Subsection Card
- * Displays:
- * 1. Overview & Dual Mockups (Monitor + Smartphone)
- * 2. Problems We Solve (3 cards) & Modern Tech and Tools
- * 3. Expandable Delivery Process (6 stages) & Client Case Studies
- */
+const SERVICE_VISUAL_MAP: Record<string, string> = {
+  'web-development': '/assets/pages/industries/enterprise-saas.jpg',
+  'mobile-app-development': '/assets/pages/portfolio/aetherpay-fintech.jpg',
+  'application-testing': '/assets/pages/careers/engineering-pairing.jpg',
+  'search-engine-optimisation': '/assets/pages/industries/proptech-realestate.jpg',
+  'artificial-intelligence-optimization': '/assets/pages/portfolio/nexus-industrial-iot.jpg',
+  'generative-engine-optimisation': '/assets/pages/careers/architecture-whiteboard.jpg',
+  'social-media-advertising': '/assets/pages/industries/luxury-ecommerce.jpg',
+  'social-media-management': '/assets/pages/portfolio/solstice-hospitality.jpg',
+  'content-marketing': '/assets/pages/portfolio/kora-botanicals.jpg',
+  'brand-management': '/assets/pages/careers/design-critique.jpg',
+  'unique-logo-design': '/assets/pages/portfolio/studio-craft-process.jpg',
+  'digital-analytics': '/assets/pages/industries/fintech-banking.jpg',
+};
+
+const condenseSentence = (text: string): string => {
+  const firstPeriod = text.indexOf('. ');
+  return firstPeriod !== -1 ? text.slice(0, firstPeriod + 1) : text;
+};
+
 const SubServiceSubsection: React.FC<{
   service: PriorityService;
   index: number;
   isFocused?: boolean;
-}> = ({ service, index, isFocused = false }) => {
+  onBookStudio: () => void;
+}> = ({ service, index, isFocused = false, onBookStudio }) => {
   const { detail } = service;
-  const [showDeepDive, setShowDeepDive] = useState<boolean>(isFocused || index === 0);
+  const [activeModuleIdx, setActiveModuleIdx] = useState(0);
+  const photoPath = SERVICE_VISUAL_MAP[service.slug] || '/assets/pages/careers/hive-studio-hero.jpg';
+  const isEven = index % 2 === 0;
 
   return (
     <motion.section
       id={service.slug}
-      initial={{ opacity: 0, y: 28 }}
+      initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-60px' }}
-      transition={{ duration: 0.5, delay: index * 0.08 }}
-      className={`scroll-mt-36 rounded-[32px] p-6 sm:p-10 mb-12 border transition-all duration-300 ${
+      transition={{ duration: 0.45, delay: Math.min(index * 0.06, 0.25) }}
+      className={`group scroll-mt-36 rounded-[32px] p-6 sm:p-9 mb-10 border transition-all duration-300 ${
         isFocused
-          ? 'bg-white shadow-[0_24px_70px_rgba(245,158,11,0.16)] border-amber-400 ring-2 ring-amber-400/20'
-          : 'bg-white/95 backdrop-blur-sm shadow-[0_16px_45px_rgba(26,22,18,0.06)] border-stone-200/80 hover:border-amber-300'
+          ? 'bg-white shadow-[0_24px_70px_rgba(245,158,11,0.18)] border-amber-400 ring-2 ring-amber-400/25'
+          : 'bg-white/95 backdrop-blur-xs shadow-[0_14px_40px_rgba(26,22,18,0.05)] border-amber-200/80 hover:border-amber-400 hover:shadow-[0_20px_50px_rgba(245,158,11,0.12)]'
       }`}
     >
-      {/* =====================================================================
-          SUB-SERVICE HEADER & STUDIO BADGES
-         ===================================================================== */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-stone-200/70">
-        <div className="flex items-start sm:items-center gap-3.5">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 text-white flex items-center justify-center shrink-0 shadow-md">
-            <ServiceIcon name={service.iconName} className="w-6 h-6" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="text-[11px] font-extrabold uppercase tracking-wider text-amber-700 bg-amber-100/90 px-2.5 py-0.5 rounded-full">
-                Studio #{String(index + 1).padStart(2, '0')}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        {/* Visual Showcase Column (Alternates Left/Right on Desktop for Visual Rhythm) */}
+        <div className={`lg:col-span-6 ${isEven ? 'lg:order-2' : 'lg:order-1'}`}>
+          <div className="relative rounded-[26px] overflow-hidden bg-stone-900 border-2 border-amber-300/70 shadow-[0_18px_45px_rgba(26,22,18,0.14)] aspect-[16/11]">
+            <img
+              src={assetUrl(photoPath)}
+              alt={service.title}
+              loading="lazy"
+              className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-stone-950/90 via-stone-950/25 to-stone-950/10" />
+
+            {/* Top Floating Studio Badges */}
+            <div className="absolute top-4 left-4 right-4 flex items-center justify-between gap-2">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 backdrop-blur-md text-stone-900 text-[11px] font-extrabold shadow-xs">
+                <Activity className="w-3.5 h-3.5 text-amber-600" />
+                {service.hiveCell.roomInteriorLabel}
               </span>
-              <span className="text-xs text-stone-500 font-semibold">• {service.category}</span>
+              <span className="px-3 py-1 rounded-full bg-amber-400 text-stone-950 text-[11px] font-extrabold shadow-md">
+                {detail.mobileMockupStat}
+              </span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight mt-0.5">
+
+            {/* Bottom Interactive Telemetry Overlay */}
+            <div className="absolute bottom-4 left-4 right-4 rounded-2xl bg-white/95 backdrop-blur-md p-4 border border-amber-200/90 shadow-lg">
+              <div className="flex items-center justify-between gap-3 mb-2.5">
+                <div>
+                  <p className="text-[10px] font-extrabold uppercase tracking-wider text-amber-700">
+                    Verified Studio Benchmark
+                  </p>
+                  <p className="text-sm sm:text-base font-extrabold text-stone-900">
+                    {service.s4Room.kpiHighlight}
+                  </p>
+                </div>
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+                  <ServiceIcon name={service.iconName} className="w-5 h-5" />
+                </div>
+              </div>
+
+              {/* Interactive Module Selector Pills */}
+              <div className="grid grid-cols-3 gap-1.5 pt-2 border-t border-amber-100">
+                {service.s4Room.whiteboardModules.map((mod, mIdx) => {
+                  const isSelected = activeModuleIdx === mIdx;
+                  return (
+                    <button
+                      key={mIdx}
+                      type="button"
+                      onClick={() => setActiveModuleIdx(mIdx)}
+                      className={`px-2 py-1.5 rounded-lg text-[10px] font-bold truncate transition-all cursor-pointer ${
+                        isSelected
+                          ? 'bg-amber-500 text-white shadow-2xs'
+                          : 'bg-[#FFF8E7] text-stone-700 hover:bg-amber-100'
+                      }`}
+                    >
+                      {mod}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Concise Content & Interactive Capabilities Column */}
+        <div className={`lg:col-span-6 space-y-5 ${isEven ? 'lg:order-1' : 'lg:order-2'}`}>
+          <div className="flex items-center gap-2.5">
+            <span className="text-[11px] font-extrabold uppercase tracking-wider text-amber-800 bg-amber-100/90 px-3 py-1 rounded-full">
+              Studio #{String(index + 1).padStart(2, '0')}
+            </span>
+            <span className="text-xs font-bold text-stone-500">{service.category}</span>
+          </div>
+
+          <div>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight">
               {service.title}
             </h2>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-3 self-start md:self-auto">
-          <div className="flex items-center gap-1 bg-amber-50 px-3 py-1.5 rounded-full border border-amber-200/70">
-            <div className="flex items-center gap-0.5 text-amber-500">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-500" />
-              ))}
-            </div>
-            <span className="text-xs font-bold text-amber-900 ml-1">4.9/5.0</span>
-          </div>
-
-          <Link
-            to={`/contact?service=${service.slug}`}
-            className="inline-flex items-center gap-1.5 px-5 py-2 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white text-xs font-bold shadow-sm transition hover:scale-105"
-          >
-            <span>Book Studio</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </Link>
-        </div>
-      </div>
-
-      {/* =====================================================================
-          PRIMARY SHOWCASE: OVERVIEW (LEFT) + INTERACTIVE DUAL MOCKUPS (RIGHT)
-         ===================================================================== */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center pt-8">
-        {/* Left Column: Description, Tagline & Direct Bullet Highlights */}
-        <div className="lg:col-span-6 space-y-4">
-          <p className="text-base sm:text-lg font-bold text-amber-700 leading-snug">
-            {service.tagline}
-          </p>
-          <p className="text-sm sm:text-[15px] text-stone-600 leading-relaxed">
-            {detail.overviewDescription}
-          </p>
-
-          <div className="bg-amber-50/70 rounded-2xl p-4 border border-amber-200/60 flex items-center justify-between gap-4">
-            <div>
-              <p className="text-[11px] font-extrabold uppercase tracking-wider text-amber-800">
-                Verified Benchmark KPI
-              </p>
-              <p className="text-base sm:text-lg font-extrabold text-stone-900 mt-0.5">
-                {service.s4Room.kpiHighlight}
-              </p>
-            </div>
-            <span className="px-3 py-1 rounded-full bg-white text-amber-800 text-xs font-bold border border-amber-200 shadow-2xs">
-              {service.hiveCell.roomInteriorLabel}
-            </span>
-          </div>
-
-          {/* Quick Problem Pills */}
-          <div className="space-y-2 pt-1">
-            <p className="text-xs font-extrabold text-stone-800 uppercase tracking-wider">
-              Core Capabilities:
+            <p className="text-sm sm:text-base font-bold text-amber-700 mt-1.5 leading-snug">
+              {service.tagline}
             </p>
-            <div className="grid grid-cols-1 gap-2">
-              {detail.problemsSolved.map((prob, i) => (
-                <div key={i} className="flex items-start gap-2.5 text-xs text-stone-700">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                  <span>
-                    <strong className="text-stone-900 font-bold">{prob.title}:</strong>{' '}
-                    {prob.description}
-                  </span>
-                </div>
+            <p className="text-sm text-stone-600 mt-2 leading-relaxed">
+              {condenseSentence(detail.overviewDescription)}
+            </p>
+          </div>
+
+          {/* 3 Scannable Outcome Pills */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+            {detail.problemsSolved.map((prob, i) => (
+              <div
+                key={i}
+                className="p-3.5 rounded-2xl bg-[#FFFDF8] border border-amber-200/80 hover:border-amber-400 hover:-translate-y-0.5 transition-all"
+              >
+                <CheckCircle2 className="w-4 h-4 text-amber-600 mb-1.5" />
+                <h3 className="text-xs font-extrabold text-stone-900 leading-snug">
+                  {prob.title}
+                </h3>
+                <p className="text-[11px] text-stone-600 mt-1 line-clamp-2 leading-relaxed">
+                  {condenseSentence(prob.description)}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          {/* Tech Stack & Action Bar */}
+          <div className="pt-3 border-t border-stone-200/70 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex flex-wrap items-center gap-1.5">
+              <Zap className="w-3.5 h-3.5 text-amber-500 shrink-0 mr-0.5" />
+              {detail.techStack.slice(0, 5).map((tech, i) => (
+                <span
+                  key={i}
+                  className="px-2.5 py-0.5 rounded-lg bg-[#FFF8E7] text-stone-800 text-[11px] font-semibold border border-amber-200/70"
+                >
+                  {tech}
+                </span>
               ))}
             </div>
-          </div>
-        </div>
 
-        {/* Right Column: Honey-Gold Showcase Backdrop with Desktop Monitor + Smartphone Mockup */}
-        <div className="lg:col-span-6 relative flex items-center justify-center">
-          <div className="relative w-full max-w-[540px] rounded-[30px] bg-gradient-to-br from-[#EFE0C4] via-[#E8CE9D] to-[#DFB874] p-5 sm:p-7 shadow-[0_20px_50px_rgba(180,120,40,0.14)] border border-amber-200/70">
-            {/* Desktop Monitor Mockup */}
-            <div className="relative mx-auto w-full max-w-[420px]">
-              <div className="rounded-2xl bg-[#18181B] p-2 sm:p-2.5 shadow-[0_20px_45px_rgba(0,0,0,0.32)] border border-stone-700">
-                <div className="rounded-xl bg-[#FAF8F5] overflow-hidden aspect-[16/10] p-3 sm:p-4 flex flex-col justify-between relative">
-                  {/* Mini Navbar inside Screen */}
-                  <div className="flex items-center justify-between border-b border-stone-200/80 pb-1.5">
-                    <BwiseLogo className="h-3.5" />
-                    <span className="px-2 py-0.5 rounded-full bg-amber-500 text-white text-[8px] font-bold">
-                      {service.shortTitle}
-                    </span>
-                  </div>
-
-                  {/* Screen Body */}
-                  <div className="grid grid-cols-12 gap-2.5 items-center my-auto py-1.5">
-                    <div className="col-span-7 space-y-1">
-                      <span className="inline-block px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 text-[8px] font-bold uppercase">
-                        {service.category}
-                      </span>
-                      <h4 className="text-[11px] sm:text-xs font-extrabold text-stone-900 leading-tight">
-                        {detail.desktopMockupHeadline}
-                      </h4>
-                      <p className="text-[8px] sm:text-[9px] text-stone-500 leading-snug line-clamp-2">
-                        {detail.desktopMockupSubtext}
-                      </p>
-                    </div>
-
-                    <div className="col-span-5 rounded-lg bg-gradient-to-br from-stone-900 to-stone-800 p-2 flex flex-col items-center justify-center text-center shadow-md border border-amber-400/30">
-                      <div className="w-8 h-8 rounded-full bg-amber-400/20 flex items-center justify-center text-amber-400 mb-1">
-                        <ServiceIcon name={service.iconName} className="w-4 h-4" />
-                      </div>
-                      <span className="text-[8px] font-bold text-amber-300 leading-tight">
-                        {service.s4Room.kpiHighlight}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Modules Strip */}
-                  <div className="grid grid-cols-3 gap-1 pt-1.5 border-t border-stone-200/70">
-                    {service.s4Room.whiteboardModules.map((mod, idx) => (
-                      <div key={idx} className="bg-white rounded px-1.5 py-0.5 border border-stone-200/60 truncate">
-                        <p className="text-[7px] font-bold text-stone-700 truncate">{mod}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* Monitor Stand */}
-              <div className="mx-auto w-16 h-3.5 bg-gradient-to-b from-stone-400 to-stone-300" />
-              <div className="mx-auto w-24 h-1.5 rounded-full bg-stone-400 shadow" />
-
-              {/* Overlapping Smartphone Mockup */}
-              <div className="absolute -bottom-2 -left-2 sm:-left-4 w-[84px] sm:w-[100px] rounded-[18px] bg-[#18181B] p-1.5 shadow-[0_14px_30px_rgba(0,0,0,0.38)] border border-stone-700">
-                <div className="w-6 h-1 bg-stone-700 rounded-full mx-auto mb-1" />
-                <div className="rounded-[12px] bg-white p-1.5 space-y-1 aspect-[9/16] flex flex-col justify-between">
-                  <div className="flex items-center justify-between">
-                    <BwiseLogo variant="emblem" className="h-2.5" />
-                    <span className="text-[6px] font-bold text-stone-400">BWISE</span>
-                  </div>
-                  <div className="p-1 rounded bg-amber-50 border border-amber-200/60 text-center my-auto">
-                    <ServiceIcon name={service.iconName} className="w-3.5 h-3.5 text-amber-600 mx-auto mb-0.5" />
-                    <p className="text-[7px] font-extrabold text-stone-900 leading-tight">
-                      {detail.mobileMockupStat}
-                    </p>
-                  </div>
-                  <div className="w-full py-0.5 rounded-full bg-amber-500 text-white text-[6px] font-bold text-center">
-                    Active
-                  </div>
-                </div>
-              </div>
+            <div className="flex items-center gap-2.5 shrink-0">
+              <Link
+                to="/portfolio"
+                className="px-3.5 py-2 rounded-full bg-stone-100 hover:bg-amber-100/80 text-stone-800 text-xs font-bold transition"
+              >
+                Case Studies
+              </Link>
+              <button
+                type="button"
+                onClick={onBookStudio}
+                className="inline-flex items-center gap-1.5 px-5 py-2 rounded-full bg-gradient-to-r from-[#FBBF24] via-[#F59E0B] to-[#F59E0B] hover:from-[#FCD34D] hover:to-[#D97706] text-[#14111B] text-xs font-extrabold shadow-sm transition hover:scale-105 cursor-pointer"
+              >
+                <span>Book Studio</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
             </div>
           </div>
         </div>
       </div>
-
-      {/* =====================================================================
-          TECH STACK & TOOLS STRIP
-         ===================================================================== */}
-      <div className="mt-8 pt-6 border-t border-stone-200/70 flex flex-wrap items-center justify-between gap-4">
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="text-xs font-extrabold text-stone-700 uppercase tracking-wider flex items-center gap-1 mr-1">
-            <Zap className="w-3.5 h-3.5 text-amber-500" />
-            Tech &amp; Tools:
-          </span>
-          {detail.techStack.map((tech, i) => (
-            <span
-              key={i}
-              className="px-2.5 py-1 rounded-lg bg-stone-100 hover:bg-amber-100/70 text-stone-800 text-xs font-semibold border border-stone-200/80 transition-colors"
-            >
-              {tech}
-            </span>
-          ))}
-        </div>
-
-        <button
-          type="button"
-          onClick={() => setShowDeepDive(!showDeepDive)}
-          className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-700 hover:text-amber-800 cursor-pointer bg-amber-50 hover:bg-amber-100 px-3.5 py-1.5 rounded-full border border-amber-200/80 transition"
-        >
-          <span>{showDeepDive ? 'Collapse Delivery Details' : 'View Process & Case Studies'}</span>
-          <ChevronRight
-            className={`w-4 h-4 transition-transform duration-200 ${showDeepDive ? 'rotate-90' : ''}`}
-          />
-        </button>
-      </div>
-
-      {/* =====================================================================
-          DEEP DIVE: 6-STEP PROCESS DELIVERY & CLIENT CASE STUDIES
-         ===================================================================== */}
-      <AnimatePresence>
-        {showDeepDive && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.35, ease: 'easeInOut' }}
-            className="overflow-hidden"
-          >
-            <div className="pt-8 mt-6 border-t border-stone-200/70 space-y-8">
-              {/* Process Delivery 6 Steps */}
-              <div>
-                <div className="flex items-center justify-between mb-4">
-                  <div>
-                    <h3 className="text-lg font-extrabold text-stone-900 tracking-tight">
-                      6-Stage Hive Execution Protocol
-                    </h3>
-                    <p className="text-xs text-stone-500">
-                      Standardized sprint architecture for {service.title}
-                    </p>
-                  </div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-amber-700 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200/60">
-                    Sprint Delivery
-                  </span>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
-                  {detail.processDelivery.map((step, idx) => (
-                    <div
-                      key={idx}
-                      className="rounded-2xl p-4 bg-[#FAF8F5] border border-stone-200/80 hover:border-amber-400 transition shadow-2xs flex items-start gap-3"
-                    >
-                      <span className="w-8 h-8 rounded-xl bg-amber-500 text-white font-extrabold text-xs flex items-center justify-center shrink-0 shadow-sm">
-                        {step.stepNumber}
-                      </span>
-                      <div className="min-w-0">
-                        <h4 className="text-xs font-bold text-stone-900">{step.title}</h4>
-                        <p className="text-[11px] text-stone-600 mt-1 leading-relaxed">
-                          {step.description}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Client Case Studies Grid */}
-              <div>
-                <div className="flex items-center justify-between mb-4">
-                  <div>
-                    <h3 className="text-lg font-extrabold text-stone-900 tracking-tight">
-                      Featured {service.shortTitle} Case Studies
-                    </h3>
-                    <p className="text-xs text-stone-500">
-                      Demonstrated client ROI and pipeline transformation
-                    </p>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
-                  {detail.previousProjects.map((proj, pIdx) => {
-                    const isDark = proj.theme === 'dark' || proj.theme === 'slate';
-                    return (
-                      <div
-                        key={pIdx}
-                        className={`rounded-2xl p-4 border transition-all duration-300 flex flex-col justify-between min-h-[160px] ${
-                          isDark
-                            ? 'bg-[#181824] text-white border-stone-800'
-                            : proj.theme === 'amber'
-                            ? 'bg-amber-50/90 text-stone-900 border-amber-200'
-                            : 'bg-white text-stone-900 border-stone-200/80'
-                        }`}
-                      >
-                        <div>
-                          <div className="flex items-center justify-between mb-2">
-                            <span
-                              className={`text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded ${
-                                isDark ? 'bg-white/10 text-amber-300' : 'bg-amber-100 text-amber-800'
-                              }`}
-                            >
-                              {proj.category}
-                            </span>
-                            <ExternalLink className="w-3.5 h-3.5 opacity-60" />
-                          </div>
-                          <h4 className="text-xs font-extrabold leading-snug">{proj.title}</h4>
-                          <p
-                            className={`text-[10px] mt-1 line-clamp-2 ${
-                              isDark ? 'text-stone-300' : 'text-stone-600'
-                            }`}
-                          >
-                            {proj.description}
-                          </p>
-                        </div>
-                        <div className="pt-2 border-t border-current/10 flex items-center justify-between mt-3">
-                          <span className="text-[11px] font-extrabold text-amber-500">
-                            {proj.metrics}
-                          </span>
-                          <span className="text-[9px] font-bold text-stone-400">Verified</span>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </motion.section>
   );
 };
@@ -375,13 +212,12 @@ export const ServicesPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const location = useLocation();
   const navigate = useNavigate();
+  const { openConsultationModal } = useConsultationModal();
 
-  // Determine active category from `?category=<slug>` or map from `?service=<slug>`
   const queryCategory = searchParams.get('category');
   const queryService = searchParams.get('service');
   const hashSlug = location.hash ? location.hash.replace('#', '') : null;
 
-  // Resolve active category
   let initialCategorySlug: MainCategorySlug = 'software-solutions';
   if (queryCategory && MAIN_SERVICE_CATEGORIES.some((c) => c.slug === queryCategory)) {
     initialCategorySlug = queryCategory as MainCategorySlug;
@@ -394,7 +230,6 @@ export const ServicesPage: React.FC = () => {
   const activeCategory = getMainCategoryBySlug(activeCategorySlug);
   const subServices = getServicesByCategory(activeCategorySlug);
 
-  // Sync state with URL params
   useEffect(() => {
     const cat = searchParams.get('category');
     const svc = searchParams.get('service');
@@ -408,7 +243,6 @@ export const ServicesPage: React.FC = () => {
     }
   }, [searchParams, location.hash]);
 
-  // Handle smooth scroll when landing on a specific sub-service
   useEffect(() => {
     const target = queryService || (location.hash ? location.hash.replace('#', '') : null);
     if (target) {
@@ -429,7 +263,6 @@ export const ServicesPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-honeycomb-pattern relative overflow-hidden pt-[76px] sm:pt-[88px] pb-20">
-      {/* Decorative Honeycomb/Pentagon Line Art at Top-Left & Top-Right Edges */}
       <HiveCornerDecorations />
 
       {/* =====================================================================
@@ -441,15 +274,10 @@ export const ServicesPage: React.FC = () => {
             <div className="flex items-center gap-2">
               <span className="text-[11px] font-extrabold uppercase tracking-wider text-amber-700 shrink-0 flex items-center gap-1.5 bg-amber-100/80 px-2.5 py-1 rounded-full">
                 <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-                Bwise Studios Directory
-              </span>
-              <span className="text-xs text-stone-400 hidden sm:inline">|</span>
-              <span className="text-xs font-semibold text-stone-500 hidden sm:inline">
-                Select a Common Service Section:
+                12 Connected Studios
               </span>
             </div>
 
-            {/* 3 Main Category Switcher Pills */}
             <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1 sm:pb-0">
               {MAIN_SERVICE_CATEGORIES.map((cat) => {
                 const isCurrent = cat.slug === activeCategorySlug;
@@ -484,95 +312,72 @@ export const ServicesPage: React.FC = () => {
       </div>
 
       {/* =====================================================================
-          COMMON SERVICE SECTION HERO BANNER
+          CONCISE STUDIO DIVISION HERO BANNER
          ===================================================================== */}
-      <div id={activeCategory.slug} className="max-w-[1240px] mx-auto px-4 sm:px-8 pt-10 sm:pt-14 pb-8 scroll-mt-28">
+      <div id={activeCategory.slug} className="max-w-[1240px] mx-auto px-4 sm:px-8 pt-8 sm:pt-12 pb-8 scroll-mt-28">
         <motion.div
           key={activeCategory.slug}
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="rounded-[36px] bg-gradient-to-br from-white via-amber-50/50 to-amber-100/40 p-6 sm:p-10 border border-amber-200/80 shadow-[0_20px_55px_rgba(245,158,11,0.1)] relative overflow-hidden"
+          transition={{ duration: 0.35 }}
+          className="rounded-[32px] bg-gradient-to-br from-white via-amber-50/50 to-amber-100/40 p-6 sm:p-9 border border-amber-200/80 shadow-[0_18px_50px_rgba(245,158,11,0.1)] relative overflow-hidden"
         >
-          {/* Subtle Ambient Golden Glow */}
-          <div className="absolute -top-16 -right-16 w-80 h-80 rounded-full bg-amber-300/25 blur-3xl pointer-events-none" />
-
-          <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
-            <div className="space-y-3 max-w-2xl">
+          <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+            <div className="space-y-2.5 max-w-2xl">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="px-3.5 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-bold tracking-wide">
-                  Common Service Section
-                </span>
-                <span className="px-3.5 py-1 rounded-full bg-white text-stone-800 text-xs font-bold border border-amber-300/60 shadow-2xs">
+                <span className="px-3 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-bold">
                   {activeCategory.badge}
                 </span>
               </div>
 
-              <h1 className="text-3xl sm:text-5xl font-extrabold text-stone-900 tracking-tight leading-tight">
+              <h1 className="text-3xl sm:text-4xl font-extrabold text-stone-900 tracking-tight">
                 {activeCategory.title}
               </h1>
 
-              <p className="text-base sm:text-lg font-bold text-amber-800 leading-snug">
+              <p className="text-sm sm:text-base font-semibold text-stone-600 leading-relaxed">
                 {activeCategory.tagline}
-              </p>
-
-              <p className="text-sm sm:text-[15px] text-stone-600 leading-relaxed">
-                {activeCategory.description}
               </p>
             </div>
 
-            {/* Floating Bee Mascot Graphic */}
-            <div className="hidden lg:flex flex-col items-center justify-center shrink-0">
-              <div className="relative">
-                <BwiseBeeCharacter className="w-44 h-44 drop-shadow-xl" />
-                <div className="mt-2 text-center">
-                  <span className="inline-block px-3 py-1 rounded-full bg-stone-900 text-amber-300 text-[11px] font-extrabold shadow-md">
-                    {subServices.length} Specialized Studios
-                  </span>
-                </div>
-              </div>
+            <div className="hidden lg:flex items-center justify-center shrink-0">
+              <BwiseBeeCharacter className="w-32 h-32 drop-shadow-lg" />
             </div>
           </div>
 
-          {/* Quick Anchor Jump Pills to Specific Sub-Services */}
-          <div className="mt-8 pt-6 border-t border-amber-200/70">
-            <p className="text-xs font-extrabold uppercase tracking-wider text-stone-500 mb-3">
-              Explore Sub-Services in {activeCategory.title}:
-            </p>
-            <div className="flex flex-wrap items-center gap-2">
-              {subServices.map((sub, sIdx) => (
-                <a
-                  key={sub.id}
-                  href={`#${sub.slug}`}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    const el = document.getElementById(sub.slug);
-                    if (el) {
-                      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                      navigate(`/services?category=${activeCategory.slug}#${sub.slug}`, { replace: true });
-                    }
-                  }}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white hover:bg-amber-500 hover:text-white text-stone-700 text-xs font-bold border border-amber-200/80 shadow-2xs transition-all hover:scale-105"
-                >
-                  <ServiceIcon name={sub.iconName} className="w-3.5 h-3.5" />
-                  <span>
-                    {sIdx + 1}. {sub.title}
-                  </span>
-                </a>
-              ))}
-            </div>
+          {/* Interactive Sub-Service Jump Pills */}
+          <div className="mt-6 pt-5 border-t border-amber-200/70 flex flex-wrap items-center gap-2">
+            {subServices.map((sub, sIdx) => (
+              <a
+                key={sub.id}
+                href={`#${sub.slug}`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  const el = document.getElementById(sub.slug);
+                  if (el) {
+                    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    navigate(`/services?category=${activeCategory.slug}#${sub.slug}`, { replace: true });
+                  }
+                }}
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white hover:bg-amber-500 hover:text-white text-stone-700 text-xs font-bold border border-amber-200/80 shadow-2xs transition-all hover:scale-105"
+              >
+                <ServiceIcon name={sub.iconName} className="w-3.5 h-3.5" />
+                <span>
+                  {sIdx + 1}. {sub.title}
+                </span>
+              </a>
+            ))}
           </div>
         </motion.div>
       </div>
 
       {/* =====================================================================
-          ALL SUB-SERVICES AS DEDICATED SUBSECTIONS
+          VISUAL-FIRST SUB-SERVICE STUDIOS
          ===================================================================== */}
       <div className="max-w-[1240px] mx-auto px-4 sm:px-8">
         {subServices.map((service, index) => {
           const isTargeted = Boolean(
             queryService === service.slug ||
-            (location.hash && location.hash.replace('#', '') === service.slug)
+              (location.hash && location.hash.replace('#', '') === service.slug)
           );
           return (
             <SubServiceSubsection
@@ -580,43 +385,35 @@ export const ServicesPage: React.FC = () => {
               service={service}
               index={index}
               isFocused={isTargeted}
+              onBookStudio={openConsultationModal}
             />
           );
         })}
       </div>
 
       {/* =====================================================================
-          BOTTOM CALL TO ACTION BANNER (Matching S6.jpg)
+          CONCISE BOTTOM CTA BANNER
          ===================================================================== */}
-      <div className="max-w-[1240px] mx-auto px-4 sm:px-8 mt-12">
-        <div className="relative rounded-[36px] bg-gradient-to-r from-[#F9E2AE]/90 via-[#FFF8E7]/95 to-[#F9E4B7]/90 p-8 sm:p-14 text-stone-900 shadow-[0_20px_55px_rgba(245,158,11,0.16)] border-2 border-amber-300/80 overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8">
-          <div className="space-y-3 max-w-xl">
-            <span className="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-amber-800 bg-white/85 px-3 py-1 rounded-full border border-amber-300/70">
+      <div className="max-w-[1240px] mx-auto px-4 sm:px-8 mt-8">
+        <div className="relative rounded-[32px] bg-gradient-to-r from-[#F9E2AE]/90 via-[#FFF8E7]/95 to-[#F9E4B7]/90 p-7 sm:p-10 text-stone-900 shadow-[0_18px_50px_rgba(245,158,11,0.16)] border-2 border-amber-300/80 flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="space-y-1.5">
+            <span className="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-amber-800">
               <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-              Accelerate with Bwise
+              Ready to Launch?
             </span>
-            <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-stone-900">
-              Ready to work with our {activeCategory.title} pod?
+            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-stone-900">
+              Deploy a dedicated {activeCategory.title} pod in under 10 days.
             </h2>
-            <p className="text-sm sm:text-base text-stone-700 leading-relaxed">
-              Schedule an architectural discovery session with our senior engineers and growth strategists.
-            </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3.5 shrink-0">
+          <div className="flex flex-wrap items-center gap-3 shrink-0">
             <button
               type="button"
-              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-              className="px-6 py-3 rounded-full bg-white hover:bg-amber-50 text-stone-800 text-xs sm:text-sm font-bold border border-amber-300/80 shadow-xs transition cursor-pointer"
+              onClick={openConsultationModal}
+              className="px-7 py-3.5 rounded-full bg-stone-900 hover:bg-stone-800 text-white text-xs sm:text-sm font-bold shadow-md transition hover:scale-105 cursor-pointer"
             >
-              Back to Top
+              Book a Free Consultation →
             </button>
-            <Link
-              to="/contact"
-              className="px-8 py-3.5 rounded-full bg-stone-900 hover:bg-stone-800 text-white text-xs sm:text-sm font-bold shadow-md transition hover:scale-105"
-            >
-              Start Your Project →
-            </Link>
           </div>
         </div>
       </div>

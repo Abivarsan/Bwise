@@ -1,610 +1,422 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowRight, ArrowUpRight, CheckCircle2, SlidersHorizontal } from 'lucide-react';
+import { ArrowUpRight, CheckCircle2, Sparkles, Layers } from 'lucide-react';
 import { HiveCornerDecorations } from '../components/layout/HiveCornerDecorations';
-
-type DisciplineFilter = 'all' | 'software-cloud' | 'mobile-ai' | 'brand-experience' | 'growth-search';
+import { useConsultationModal } from '../context/ConsultationModalContext';
+import { assetUrl } from '../utils/assets';
 
 interface CaseStudy {
   id: string;
-  index: string;
+  number: string;
   client: string;
   sector: string;
+  categoryFilter: 'fintech' | 'healthtech' | 'commerce' | 'enterprise';
   year: string;
-  title: string;
-  subtitle: string;
+  timeline: string;
   image: string;
   imageAlt: string;
-  imageCaption: string;
-  disciplines: DisciplineFilter[];
-  disciplineLabels: string[];
-  studioLinks: { label: string; to: string }[];
-  challenge: string;
-  solution: string;
-  architectureNotes: string[];
-  metrics: { value: string; label: string; detail: string }[];
-  quote?: {
-    text: string;
-    author: string;
-    role: string;
-  };
+  headline: string;
+  summary: string;
+  heroMetric: { value: string; label: string };
+  metrics: { value: string; label: string }[];
+  deliverables: string[];
+  flagship?: boolean;
 }
-
-const assetUrl = (relativePath: string) =>
-  `${import.meta.env.BASE_URL}${relativePath.replace(/^\//, '')}`;
 
 const CASE_STUDIES: CaseStudy[] = [
   {
-    id: 'vellum-health',
-    index: '02',
-    client: 'Vellum Health Systems',
-    sector: 'Healthcare & Clinical AI • Zurich / Boston',
+    id: 'aetherpay',
+    number: '01',
+    client: 'AetherPay Global',
+    sector: 'FinTech & Cross-Border Treasury',
+    categoryFilter: 'fintech',
     year: '2025',
-    title: 'Real-Time Diagnostic Triage & Bedside Clinician Workspace',
-    subtitle:
-      'Replacing fragmented legacy hospital terminals with a unified, HIPAA-compliant clinical intelligence suite used across 42 acute-care departments.',
-    image: assetUrl('assets/pages/portfolio/vellum-medtech.jpg'),
-    imageAlt: 'Clinician reviewing diagnostic imaging and patient telemetry on a modern tablet workstation',
-    imageCaption: 'Bedside tablet & workstation interface deployed across 42 clinical units with sub-second HL7/FHIR sync.',
-    disciplines: ['mobile-ai', 'software-cloud'],
-    disciplineLabels: ['Applied AI & LLM', 'Custom Software', 'iOS / iPadOS Clinical App'],
-    studioLinks: [
-      { label: 'AI & Automation', to: '/services?category=software-solutions&service=ai-automation#ai-automation' },
-      { label: 'Software Development', to: '/services?category=software-solutions&service=software-development#software-development' },
-    ],
-    challenge:
-      'Attending physicians were losing 54 minutes per shift switching between three incompatible radiology, lab, and electronic health record (EHR) portals during critical patient handoffs.',
-    solution:
-      'BWise engineered a zero-latency iPadOS and web clinician workspace backed by a streaming FHIR event bus and an audited clinical summarization model that cites every lab value back to its source record.',
-    architectureNotes: [
-      'Bi-directional HL7 FHIR R4 streaming pipeline with end-to-end envelope encryption',
-      'On-premise / private-VPC retrieval-augmented clinical synthesis with zero hallucination guardrails',
-      'Offline-resilient iPadOS ward rounding mode with instant biometric clinician handoff',
-    ],
+    timeline: '16 Weeks',
+    image: '/assets/pages/portfolio/aetherpay-fintech.jpg',
+    imageAlt: 'AetherPay institutional treasury terminal across desktop and mobile',
+    headline: 'Re-architecting institutional FX settlement across 42 currencies.',
+    summary:
+      'Replaced six legacy banking portals with a single keyboard-first WebSocket trading desk and biometric mobile approval app.',
+    heroMetric: { value: '$4.8B+', label: 'Annualized Settlement Volume' },
     metrics: [
-      { value: '61%', label: 'Faster Shift Handoff', detail: 'Measured across 1,400+ attending physicians & nurses' },
-      { value: '99.99%', label: 'Clinical Uptime', detail: 'Zero unplanned downtime across 14 months in production' },
-      { value: '< 180ms', label: 'Imaging & Lab Query', detail: 'Down from 4.2s on the legacy hospital portal' },
+      { value: '+184%', label: 'Activation Velocity' },
+      { value: '1.1s', label: 'FX Quote Latency' },
+      { value: '99.99%', label: 'Core Ledger Uptime' },
     ],
-    quote: {
-      text: 'BWise didn’t hand us a slide deck of wireframes—their engineers shadowed our night-shift ICU teams and shipped a clinical system our doctors actually trust.',
-      author: 'Dr. Lukas Vance, MD',
-      role: 'Chief Medical Information Officer, Vellum Health',
-    },
+    deliverables: ['React + TypeScript', 'Swift & Kotlin', 'WebSockets', 'SOC2 Type II'],
+    flagship: true,
+  },
+  {
+    id: 'vellum-health',
+    number: '02',
+    client: 'Vellum Diagnostics',
+    sector: 'HealthTech & Clinical AI',
+    categoryFilter: 'healthtech',
+    year: '2025',
+    timeline: '14 Weeks',
+    image: '/assets/pages/portfolio/vellum-medtech.jpg',
+    imageAlt: 'Clinician reviewing Vellum Diagnostics AI radiology triage workstation',
+    headline: 'Cutting diagnostic triage time in half for 1,900+ radiologists.',
+    summary:
+      'Zero-footprint DICOM browser viewer paired with HIPAA-compliant generative search across 14,000 clinical oncology pages.',
+    heroMetric: { value: '-52%', label: 'Median Case Review Time' },
+    metrics: [
+      { value: '+310%', label: 'Organic & AI Citations' },
+      { value: '1,900+', label: 'Daily Active Clinicians' },
+      { value: '100%', label: 'HIPAA Audit Pass' },
+    ],
+    deliverables: ['Next.js & WebGL', 'Clinical AI Triage', 'Technical SEO & GEO'],
   },
   {
     id: 'kora-botanicals',
-    index: '03',
-    client: 'Kora Atelier & Botanicals',
-    sector: 'Luxury Skincare & Global D2C • Paris / Tokyo / New York',
-    year: '2025',
-    title: 'Tactile Editorial Flagship, Multi-Currency Headless Commerce & Organic Search Authority',
-    subtitle:
-      'Transforming a heritage apothecary into a borderless digital flagship with bespoke sensory storytelling and compounding organic acquisition.',
-    image: assetUrl('assets/pages/portfolio/kora-botanicals.jpg'),
-    imageAlt: 'Editorial luxury skincare and botanical formulations photographed on natural stone',
-    imageCaption: 'Art direction, packaging photography system, and headless multi-region storefront across 18 markets.',
-    disciplines: ['brand-experience', 'growth-search', 'software-cloud'],
-    disciplineLabels: ['Brand Identity & Direction', 'Headless E-Commerce', 'International SEO'],
-    studioLinks: [
-      { label: 'Branding & Creative Design', to: '/services?category=social-media-marketing&service=branding-creative-design#branding-creative-design' },
-      { label: 'Web Applications', to: '/services?category=software-solutions&service=web-applications#web-applications' },
-      { label: 'SEO Optimization', to: '/services?category=digital-strategy-ideas&service=seo-optimization#seo-optimization' },
-    ],
-    challenge:
-      'High paid-social customer acquisition costs were eroding margins while a slow, template-bound storefront failed to convey the physical craftsmanship of Kora’s formulations.',
-    solution:
-      'Our creative and engineering studios collaborated under one roof—shooting a tactile visual language, re-architecting the storefront on an edge-cached headless stack, and building a multilingual formulation encyclopedia that now ranks #1 for 340+ high-intent skincare queries.',
-    architectureNotes: [
-      'Edge-rendered storefront across 18 locales with localized duties, tax, and dynamic currency routing',
-      'Interactive Regimen Diagnostic Engine matching skin biomarkers to bespoke formulation bundles',
-      'Programmatic schema & editorial formulation atlas driving 3.1x non-brand organic revenue',
-    ],
+    number: '03',
+    client: 'Kōra Atelier Paris',
+    sector: 'Luxury Direct-to-Consumer',
+    categoryFilter: 'commerce',
+    year: '2024',
+    timeline: '12 Weeks',
+    image: '/assets/pages/portfolio/kora-botanicals.jpg',
+    imageAlt: 'Kora Atelier botanical skincare flagship e-commerce experience',
+    headline: 'A tactile headless flagship that tripled mobile checkout conversion.',
+    summary:
+      'Bespoke monogram typography, sub-second edge storefront, and interactive AI skin-ritual diagnostic across 14 markets.',
+    heroMetric: { value: '3.4x', label: 'Mobile Checkout Conversion' },
     metrics: [
-      { value: '+218%', label: 'Organic Search Revenue', detail: 'Within 9 months of technical SEO & editorial rollout' },
-      { value: '4.8%', label: 'D2C Checkout Conversion', detail: 'Up from 1.9% prior to the headless rebuild' },
-      { value: '0.6s', label: 'Global Median LCP', detail: 'Measured via real-user Core Web Vitals telemetry' },
+      { value: '+68%', label: 'Average Order Value' },
+      { value: '0.6s', label: 'Global Edge Load' },
+      { value: '4.6x', label: 'Paid Social ROAS' },
     ],
+    deliverables: ['Shopify Hydrogen', 'Brand Identity', 'Paid Social Studio'],
   },
   {
-    id: 'nexus-industrial-iot',
-    index: '04',
-    client: 'Nexus Grid & Dynamics',
-    sector: 'Clean Energy & Industrial Automation • Frankfurt / Nordic Grid',
+    id: 'nexus-grid',
+    number: '04',
+    client: 'Nexus Grid Systems',
+    sector: 'Industrial IoT & Clean Energy',
+    categoryFilter: 'enterprise',
     year: '2024',
-    title: 'Autonomous Substation Telemetry & Predictive Maintenance Command Center',
-    subtitle:
-      'Ingesting 1.8 million sensor readings per second to predict transformer faults weeks before physical failure.',
-    image: assetUrl('assets/pages/portfolio/nexus-industrial-iot.jpg'),
-    imageAlt: 'Engineer inspecting industrial automation hardware and live telemetry diagnostics in a modern facility',
-    imageCaption: 'Field-ready diagnostics & real-time time-series control plane operating across 310 regional substations.',
-    disciplines: ['software-cloud', 'mobile-ai'],
-    disciplineLabels: ['Cloud & Edge Infrastructure', 'Predictive ML Telemetry', 'Field Engineering Suite'],
-    studioLinks: [
-      { label: 'Cloud & DevOps', to: '/services?category=software-solutions&service=cloud-devops#cloud-devops' },
-      { label: 'Data & Analytics', to: '/services?category=digital-strategy-ideas&service=data-analytics#data-analytics' },
-    ],
-    challenge:
-      'Field engineers relied on manual weekly inspections and delayed CSV exports, leaving critical grid infrastructure vulnerable to costly thermal overload cascades.',
-    solution:
-      'BWise built an edge-to-cloud Rust and TypeScript telemetry pipeline paired with an acoustic and thermal anomaly detection model and a ruggedized field dispatch application.',
-    architectureNotes: [
-      'High-throughput MQTT & WebSocket ingestion handling 1.8M+ time-series points/sec',
-      'Automated anomaly isolation that generates pre-populated work orders for field crews',
-      'Zero-Trust hardware attestation and air-gapped fallback controls for critical substations',
-    ],
+    timeline: '18 Weeks',
+    image: '/assets/pages/portfolio/nexus-industrial-iot.jpg',
+    imageAlt: 'Field engineer inspecting solar microgrid telemetry on ruggedized tablet',
+    headline: 'Real-time predictive maintenance for 8,400 distributed microgrids.',
+    summary:
+      'Offline-first field tablet app and 60fps WebGL digital twin streaming 1.2M sensor events per minute.',
+    heroMetric: { value: '-41%', label: 'Unplanned Grid Downtime' },
     metrics: [
-      { value: '38%', label: 'Reduction in Grid Outages', detail: 'Verified across first full winter peak-load cycle' },
-      { value: '€14.2M', label: 'Avoided Equipment Loss', detail: 'Through early thermal & vibration fault detection' },
-      { value: '1.8M/s', label: 'Sensor Events Processed', detail: 'Sub-second stream processing with zero packet drop' },
+      { value: '$19.4M', label: 'Annual O&M Savings' },
+      { value: '60fps', label: 'WebGL Digital Twin' },
+      { value: '8,400', label: 'Connected Sites' },
     ],
+    deliverables: ['React Native', 'WebGL Telemetry', 'Predictive AI Alerts'],
   },
   {
-    id: 'solstice-hospitality',
-    index: '05',
-    client: 'Solstice Sanctuary Group',
-    sector: 'Architectural Resorts & Private Aviation • Mediterranean / Alps',
+    id: 'solstice-resorts',
+    number: '05',
+    client: 'Solstice Private Havens',
+    sector: 'Ultra-Luxury Hospitality',
+    categoryFilter: 'commerce',
     year: '2024',
-    title: 'Direct Guest Reservation Engine, Digital Concierge & Editorial Visual World',
-    subtitle:
-      'Shifting 74% of bookings away from third-party OTAs into a high-margin direct reservation and bespoke itinerary platform.',
-    image: assetUrl('assets/pages/portfolio/solstice-hospitality.jpg'),
-    imageAlt: 'Sunlit architectural resort pool and contemporary Mediterranean hospitality sanctuary at dusk',
-    imageCaption: 'Immersive architectural photography, direct reservation engine, and native guest companion app.',
-    disciplines: ['brand-experience', 'software-cloud', 'growth-search'],
-    disciplineLabels: ['Visual Storytelling', 'Custom Booking Engine', 'Performance Growth'],
-    studioLinks: [
-      { label: 'UI/UX & Product Design', to: '/services?category=software-solutions&service=ui-ux-design#ui-ux-design' },
-      { label: 'Digital Marketing', to: '/services?category=social-media-marketing&service=digital-marketing#digital-marketing' },
-    ],
-    challenge:
-      'Third-party booking platforms were capturing 18–22% commission per stay while stripping away the architectural serenity and personalized itinerary curation that defined Solstice properties.',
-    solution:
-      'We reimagined the entire guest journey—from editorial property films and interactive villa floorplans to a real-time multi-property PMS booking engine and pre-arrival mobile concierge.',
-    architectureNotes: [
-      'Direct two-way synchronization with Opera Cloud PMS and private charter scheduling APIs',
-      'Interactive spatial villa selector with real-time sun-path and view previews',
-      'Full-funnel search and high-net-worth paid acquisition attribution engine',
-    ],
+    timeline: '10 Weeks',
+    image: '/assets/pages/portfolio/solstice-hospitality.jpg',
+    imageAlt: 'Solstice architectural resort overlooking ocean horizon at dusk',
+    headline: 'Shifting $62M in villa bookings from third-party OTAs to direct.',
+    summary:
+      'Cinematic villa-composer booking flow with multi-currency private aviation add-ons and AI search concierge.',
+    heroMetric: { value: '+215%', label: 'Direct Villa Bookings' },
     metrics: [
-      { value: '74%', label: 'Direct Booking Share', detail: 'Up from 31%, saving $3.8M annually in OTA commissions' },
-      { value: '+64%', label: 'Ancillary Experience Spend', detail: 'Pre-arrival dining, wellness & transfer curation' },
-      { value: '4.94★', label: 'Guest Digital Satisfaction', detail: 'Across 18,000+ completed mobile concierge stays' },
+      { value: '$14,200', label: 'Average Direct Booking' },
+      { value: '-38%', label: 'OTA Commission Bleed' },
+      { value: '94%', label: 'Repeat Guest Rate' },
     ],
+    deliverables: ['Custom Booking Engine', 'GEO Concierge', 'Editorial Video'],
   },
 ];
 
-const FILTER_OPTIONS: { id: DisciplineFilter; label: string }[] = [
-  { id: 'all', label: 'All Selected Work' },
-  { id: 'software-cloud', label: 'Software & Cloud' },
-  { id: 'mobile-ai', label: 'Mobile & Applied AI' },
-  { id: 'brand-experience', label: 'Brand & Experience' },
-  { id: 'growth-search', label: 'Growth & Search' },
-];
+const FILTERS = [
+  { id: 'all', label: 'All Case Studies' },
+  { id: 'fintech', label: 'FinTech & Banking' },
+  { id: 'healthtech', label: 'HealthTech & AI' },
+  { id: 'commerce', label: 'Luxury & Commerce' },
+  { id: 'enterprise', label: 'Industrial & IoT' },
+] as const;
 
 export const PortfolioPage: React.FC = () => {
-  const [activeFilter, setActiveFilter] = useState<DisciplineFilter>('all');
-  const [expandedArchitecture, setExpandedArchitecture] = useState<Record<string, boolean>>({
-    'vellum-health': true,
-  });
+  const [activeFilter, setActiveFilter] = useState<(typeof FILTERS)[number]['id']>('all');
+  const [selectedStudy, setSelectedStudy] = useState<CaseStudy>(CASE_STUDIES[0]);
+  const { openConsultationModal } = useConsultationModal();
 
   const filteredStudies =
     activeFilter === 'all'
       ? CASE_STUDIES
-      : CASE_STUDIES.filter((study) => study.disciplines.includes(activeFilter));
-
-  const toggleArchitecture = (id: string) => {
-    setExpandedArchitecture((prev) => ({ ...prev, [id]: !prev[id] }));
-  };
+      : CASE_STUDIES.filter((c) => c.categoryFilter === activeFilter);
 
   return (
-    <div className="min-h-screen bg-honeycomb-pattern text-stone-900 relative overflow-hidden">
-      {/* Decorative Honeycomb/Pentagon Line Art at Top-Left & Top-Right Edges */}
+    <div className="min-h-screen bg-honeycomb-pattern relative overflow-hidden text-stone-900 pt-24 sm:pt-28 pb-20">
       <HiveCornerDecorations />
 
       {/* =====================================================================
-          1. EDITORIAL MASTHEAD
+          1. CONCISE VISUAL HEADER & FILTER PILLS
          ===================================================================== */}
-      <section className="relative z-10 pt-24 sm:pt-28 pb-10 sm:pb-14 px-4 sm:px-8 border-b border-amber-200/80">
-        <div className="max-w-[1240px] mx-auto">
-          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
-            <div className="max-w-3xl">
-              <div className="inline-flex items-center gap-2.5 text-xs font-extrabold uppercase tracking-[0.2em] text-amber-700 mb-4">
-                <span className="w-2 h-2 rounded-full bg-amber-500" />
-                <span>Selected Production Work • 2023 — 2026</span>
-              </div>
-              <h1 className="text-4xl sm:text-5xl lg:text-[56px] font-extrabold tracking-tight text-stone-950 leading-[1.06]">
-                Engineered for reality.{' '}
-                <span className="text-stone-500 font-normal">Measured in production outcomes.</span>
-              </h1>
-            </div>
-            <p className="text-sm sm:text-base text-stone-600 max-w-md leading-relaxed lg:pb-1">
-              We don’t ship speculative concepts. Every system below was architected, designed, and deployed by cross-functional BWise pods working directly alongside our partners.
-            </p>
+      <section className="max-w-[1320px] mx-auto px-4 sm:px-8 pb-8">
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+          <div>
+            <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-bold uppercase tracking-wider">
+              <Sparkles className="w-3.5 h-3.5" />
+              Verified Production Shipments
+            </span>
+            <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-stone-950 mt-2.5">
+              Systems Built to Perform in the Wild.
+            </h1>
+          </div>
+
+          {/* Interactive Category Filter Pills */}
+          <div className="flex flex-wrap items-center gap-2">
+            {FILTERS.map((filter) => {
+              const isCurrent = activeFilter === filter.id;
+              return (
+                <button
+                  key={filter.id}
+                  type="button"
+                  onClick={() => setActiveFilter(filter.id)}
+                  className={`px-4 py-2 rounded-full text-xs font-bold transition-all cursor-pointer ${
+                    isCurrent
+                      ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-md shadow-amber-500/25 scale-[1.02]'
+                      : 'bg-white/90 hover:bg-amber-50 text-stone-700 border border-amber-200/80'
+                  }`}
+                >
+                  {filter.label}
+                </button>
+              );
+            })}
           </div>
         </div>
       </section>
 
       {/* =====================================================================
-          2. FLAGSHIP CASE STUDY — WARM HONEYCOMB SHOWCASE (INDEX 01)
+          2. INTERACTIVE SPOTLIGHT VIEWER (LARGE REALISTIC PHOTOGRAPHY + KPIs)
          ===================================================================== */}
-      <section className="relative z-10 bg-gradient-to-br from-white via-amber-50/55 to-amber-100/45 text-stone-900 py-12 sm:py-20 px-4 sm:px-8 border-b border-amber-200/80">
-        <div className="max-w-[1240px] mx-auto">
-          {/* Top Metadata Strip */}
-          <div className="flex flex-wrap items-center justify-between gap-4 pb-6 mb-8 border-b border-amber-200/80 text-xs uppercase tracking-[0.18em] text-stone-600">
-            <div className="flex items-center gap-3">
-              <span className="text-amber-700 font-extrabold">Flagship Dossier — 01</span>
-              <span>/</span>
-              <span className="text-stone-900 font-bold">AetherPay Global Treasury</span>
-            </div>
-            <div>FinTech & Multi-Currency Banking • London / Singapore • 2025</div>
-          </div>
-
-          {/* Large-Format Realistic Photography + Split Editorial Narrative */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-            {/* Realistic Visual Showcase (LCP Hero Image) */}
-            <div className="lg:col-span-7">
-              <figure className="relative overflow-hidden rounded-2xl border-2 border-amber-200/90 bg-white shadow-[0_24px_60px_rgba(245,158,11,0.14)]">
+      <section className="max-w-[1320px] mx-auto px-4 sm:px-8 pb-12">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={selectedStudy.id}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.35 }}
+            className="rounded-[32px] bg-white/95 border-2 border-amber-300/80 shadow-[0_24px_65px_rgba(245,158,11,0.14)] overflow-hidden"
+          >
+            <div className="grid grid-cols-1 lg:grid-cols-12">
+              {/* Left: High-Resolution Realistic Photography */}
+              <div className="lg:col-span-7 relative min-h-[320px] sm:min-h-[440px] bg-stone-950 overflow-hidden group">
                 <img
-                  src={assetUrl('assets/pages/portfolio/aetherpay-fintech.jpg')}
-                  alt="AetherPay real-time cross-border treasury and liquidity terminal running in a multi-screen financial workspace"
+                  src={assetUrl(selectedStudy.image)}
+                  alt={selectedStudy.imageAlt}
                   fetchPriority="high"
-                  width={1600}
-                  height={1000}
-                  className="w-full h-[300px] sm:h-[440px] lg:h-[500px] object-cover object-center transition-transform duration-700 hover:scale-[1.02]"
+                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
                 />
-                <figcaption className="flex flex-wrap items-center justify-between gap-2 px-5 py-3.5 bg-[#FFF8E7] border-t border-amber-200/80 text-xs text-stone-700">
-                  <span>Live multi-currency FX & treasury cockpit deployed across 28 institutional desks</span>
-                  <span className="text-amber-800 font-bold">PCI-DSS Level 1 • SOC2 Type II</span>
-                </figcaption>
-              </figure>
-            </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-stone-950/90 via-stone-950/20 to-transparent" />
 
-            {/* Flagship Story & Architecture */}
-            <div className="lg:col-span-5 flex flex-col justify-between space-y-6">
-              <div>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {['Core Ledger Engineering', 'Mobile Treasury App', 'UI/UX Systems', 'Zero-Trust Security'].map(
-                    (tag) => (
-                      <span
-                        key={tag}
-                        className="px-3 py-1 rounded-full text-[11px] font-bold bg-amber-100/80 text-amber-900 border border-amber-300/70"
+                {/* Top Floating Badges */}
+                <div className="absolute top-5 left-5 right-5 flex items-center justify-between gap-2">
+                  <span className="px-3.5 py-1.5 rounded-full bg-white/90 backdrop-blur-md text-stone-900 text-xs font-extrabold shadow-sm">
+                    Case #{selectedStudy.number} · {selectedStudy.sector}
+                  </span>
+                  <span className="px-3.5 py-1.5 rounded-full bg-amber-400 text-stone-950 text-xs font-extrabold shadow-md">
+                    Shipped in {selectedStudy.timeline}
+                  </span>
+                </div>
+
+                {/* Bottom Floating Hero Metric */}
+                <div className="absolute bottom-5 left-5 right-5 flex flex-wrap items-end justify-between gap-4 text-white">
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-widest text-amber-300">
+                      {selectedStudy.client}
+                    </p>
+                    <h2 className="text-xl sm:text-2xl font-extrabold tracking-tight mt-0.5 max-w-xl">
+                      {selectedStudy.headline}
+                    </h2>
+                  </div>
+                  <div className="rounded-2xl bg-white/95 backdrop-blur-md px-4 py-2.5 text-stone-900 border border-amber-300 shadow-lg">
+                    <p className="text-xl sm:text-2xl font-extrabold text-amber-700 leading-none">
+                      {selectedStudy.heroMetric.value}
+                    </p>
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-stone-600 mt-1">
+                      {selectedStudy.heroMetric.label}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right: Concise Summary, 3 Visual KPI Cards & Action */}
+              <div className="lg:col-span-5 p-6 sm:p-9 flex flex-col justify-between bg-gradient-to-br from-white via-[#FFFDF8] to-[#FFF8E7]/80">
+                <div className="space-y-5">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-extrabold uppercase tracking-wider text-amber-700 bg-amber-100/90 px-3 py-1 rounded-full">
+                      Spotlight Outcome
+                    </span>
+                    <span className="text-xs font-bold text-stone-400">{selectedStudy.year}</span>
+                  </div>
+
+                  <div>
+                    <h3 className="text-2xl font-extrabold text-stone-900 tracking-tight">
+                      {selectedStudy.client}
+                    </h3>
+                    <p className="text-sm text-stone-600 mt-2 leading-relaxed">
+                      {selectedStudy.summary}
+                    </p>
+                  </div>
+
+                  {/* 3 Visual KPI Cards */}
+                  <div className="grid grid-cols-3 gap-2.5">
+                    {selectedStudy.metrics.map((m) => (
+                      <div
+                        key={m.label}
+                        className="rounded-2xl bg-white p-3.5 border border-amber-200/80 shadow-2xs text-center"
                       >
-                        {tag}
-                      </span>
-                    )
-                  )}
+                        <p className="text-lg sm:text-xl font-extrabold text-amber-700 tracking-tight">
+                          {m.value}
+                        </p>
+                        <p className="text-[10px] font-bold text-stone-600 mt-1 leading-tight">
+                          {m.label}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Deliverable Tags */}
+                  <div>
+                    <p className="text-[11px] font-extrabold uppercase tracking-wider text-stone-500 mb-2">
+                      Deployed Architecture &amp; Pods
+                    </p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {selectedStudy.deliverables.map((item) => (
+                        <span
+                          key={item}
+                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#FFF8E7] text-stone-800 text-xs font-semibold border border-amber-200/80"
+                        >
+                          <CheckCircle2 className="w-3 h-3 text-amber-600" />
+                          {item}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
                 </div>
 
-                <h2 className="text-2xl sm:text-3xl lg:text-[34px] font-extrabold text-stone-950 leading-[1.15] mb-4">
-                  Autonomous Cross-Border Treasury & Instant FX Settlement Engine
-                </h2>
-
-                <p className="text-stone-700 text-sm sm:text-base leading-relaxed mb-5">
-                  Corporate CFOs across Europe and APAC were waiting up to 72 hours for multi-currency correspondent bank settlements while losing basis points to opaque FX spreads.
-                </p>
-
-                <p className="text-stone-600 text-sm leading-relaxed mb-6">
-                  BWise embedded a 9-person engineering and product pod for 8 months—architecting an event-sourced double-entry ledger, an algorithmic liquidity router connected to 14 Tier-1 clearing rails, and a biometric executive approval app on iOS and Android.
-                </p>
-
-                <div className="space-y-2.5 pt-4 border-t border-amber-200/80">
-                  <p className="text-[11px] font-bold uppercase tracking-widest text-amber-800">
-                    Key Production Deliverables
-                  </p>
-                  <ul className="space-y-2 text-xs sm:text-sm text-stone-700">
-                    <li className="flex items-start gap-2.5">
-                      <CheckCircle2 className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-                      <span>Deterministic double-entry ledger capable of 12,000+ concurrent transactions/sec</span>
-                    </li>
-                    <li className="flex items-start gap-2.5">
-                      <CheckCircle2 className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-                      <span>Real-time automated reconciliation with SAP S/4HANA, NetSuite, and SWIFT ISO 20022</span>
-                    </li>
-                    <li className="flex items-start gap-2.5">
-                      <CheckCircle2 className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-                      <span>Hardware-key biometric sign-off workflow for multi-million-dollar treasury sweeps</span>
-                    </li>
-                  </ul>
+                <div className="pt-6 mt-6 border-t border-amber-200/70 flex items-center justify-between gap-3">
+                  <button
+                    type="button"
+                    onClick={openConsultationModal}
+                    className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-gradient-to-r from-[#FBBF24] via-[#F59E0B] to-[#F59E0B] hover:from-[#FCD34D] hover:to-[#D97706] text-[#14111B] text-xs sm:text-sm font-extrabold shadow-md transition hover:scale-[1.02] cursor-pointer"
+                  >
+                    <span>Build a Similar System</span>
+                    <ArrowUpRight className="w-4 h-4" />
+                  </button>
                 </div>
               </div>
-
-              <div className="pt-2 flex flex-wrap items-center gap-4">
-                <Link
-                  to="/contact?project=aetherpay-similar"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold text-sm shadow-md shadow-amber-500/20 transition-all"
-                >
-                  <span>Request Architecture Walkthrough</span>
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
-                <Link
-                  to="/services?category=software-solutions"
-                  className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-stone-800 hover:text-amber-700 transition-colors"
-                >
-                  <span>Explore Software Studios</span>
-                  <ArrowUpRight className="w-4 h-4" />
-                </Link>
-              </div>
             </div>
-          </div>
-
-          {/* Verified Production Telemetry Ledger */}
-          <div className="mt-10 sm:mt-14 pt-8 border-t border-amber-200/80 grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8">
-            <div>
-              <p className="text-3xl sm:text-4xl font-extrabold text-amber-700 tracking-tight">$2.4B+</p>
-              <p className="text-sm font-bold text-stone-900 mt-1">Annualized Settlement Volume</p>
-              <p className="text-xs text-stone-600 mt-0.5">Processed across 38 currencies with zero ledger drift</p>
-            </div>
-            <div className="sm:border-l sm:border-amber-200/80 sm:pl-8">
-              <p className="text-3xl sm:text-4xl font-extrabold text-stone-950 tracking-tight">42ms</p>
-              <p className="text-sm font-bold text-stone-900 mt-1">Global p99 Ledger Commit</p>
-              <p className="text-xs text-stone-600 mt-0.5">Multi-region active-active deployment across EU & APAC</p>
-            </div>
-            <div className="sm:border-l sm:border-amber-200/80 sm:pl-8">
-              <p className="text-3xl sm:text-4xl font-extrabold text-stone-950 tracking-tight">+184%</p>
-              <p className="text-sm font-bold text-stone-900 mt-1">Enterprise Onboarding Velocity</p>
-              <p className="text-xs text-stone-600 mt-0.5">Automated KYB/AML verification cut from 11 days to 4 hours</p>
-            </div>
-          </div>
-        </div>
+          </motion.div>
+        </AnimatePresence>
       </section>
 
       {/* =====================================================================
-          3. DISCIPLINE FILTER & FULL-WIDTH EDITORIAL CASE-STUDY SPREADS
+          3. INTERACTIVE VISUAL CASE STUDY GALLERY CARDS
          ===================================================================== */}
-      <section className="py-14 sm:py-20 px-4 sm:px-8">
-        <div className="max-w-[1240px] mx-auto">
-          {/* Interactive Filter Bar */}
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-8 border-b border-stone-300">
-            <div className="flex items-center gap-2 text-xs font-extrabold uppercase tracking-[0.18em] text-stone-500">
-              <SlidersHorizontal className="w-3.5 h-3.5 text-amber-600" />
-              <span>Filter Archive by Discipline</span>
-            </div>
+      <section className="max-w-[1320px] mx-auto px-4 sm:px-8">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-lg sm:text-xl font-extrabold text-stone-900 flex items-center gap-2">
+            <Layers className="w-5 h-5 text-amber-600" />
+            Click Any Case Study to Inspect Telemetry ({filteredStudies.length})
+          </h2>
+        </div>
 
-            <div className="flex flex-wrap items-center gap-2" role="tablist" aria-label="Filter case studies by discipline">
-              {FILTER_OPTIONS.map((opt) => {
-                const isActive = activeFilter === opt.id;
-                return (
-                  <button
-                    key={opt.id}
-                    type="button"
-                    role="tab"
-                    aria-selected={isActive}
-                    onClick={() => setActiveFilter(opt.id)}
-                    className={`px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
-                      isActive
-                        ? 'bg-stone-950 text-white shadow-sm'
-                        : 'bg-stone-200/70 text-stone-700 hover:bg-stone-300/70 hover:text-stone-950'
-                    }`}
-                  >
-                    {opt.label}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredStudies.map((study) => {
+            const isSelected = selectedStudy.id === study.id;
+            return (
+              <motion.div
+                layout
+                key={study.id}
+                onClick={() => {
+                  setSelectedStudy(study);
+                  window.scrollTo({ top: 120, behavior: 'smooth' });
+                }}
+                className={`group rounded-3xl overflow-hidden cursor-pointer transition-all duration-300 flex flex-col border ${
+                  isSelected
+                    ? 'bg-white border-amber-500 ring-2 ring-amber-400/30 shadow-[0_20px_50px_rgba(245,158,11,0.18)] -translate-y-1'
+                    : 'bg-white/95 border-amber-200/80 hover:border-amber-400 shadow-[0_12px_30px_rgba(26,22,18,0.05)] hover:shadow-[0_18px_45px_rgba(245,158,11,0.14)] hover:-translate-y-1'
+                }`}
+              >
+                <div className="relative h-56 overflow-hidden bg-stone-900">
+                  <img
+                    src={assetUrl(study.image)}
+                    alt={study.imageAlt}
+                    loading="lazy"
+                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-stone-950/85 via-stone-950/20 to-transparent" />
 
-          {/* Alternating Full-Width Editorial Spreads */}
-          <div className="divide-y divide-stone-300/80">
-            <AnimatePresence mode="popLayout">
-              {filteredStudies.map((study, idx) => {
-                const isReversed = idx % 2 === 1;
-                const isOpen = !!expandedArchitecture[study.id];
+                  <div className="absolute top-3.5 left-3.5 right-3.5 flex items-center justify-between">
+                    <span className="px-2.5 py-1 rounded-full bg-white/90 backdrop-blur-md text-stone-900 text-[10px] font-extrabold uppercase tracking-wider">
+                      {study.sector}
+                    </span>
+                    <span className="px-2.5 py-1 rounded-full bg-amber-400 text-stone-950 text-[11px] font-extrabold shadow-xs">
+                      {study.heroMetric.value}
+                    </span>
+                  </div>
 
-                return (
-                  <motion.article
-                    key={study.id}
-                    layout
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -12 }}
-                    transition={{ duration: 0.35 }}
-                    className="py-12 sm:py-16"
-                  >
-                    {/* Spread Header */}
-                    <div className="flex flex-wrap items-baseline justify-between gap-3 mb-6">
-                      <div className="flex items-baseline gap-4">
-                        <span className="text-xs font-mono font-bold text-amber-700 uppercase tracking-widest">
-                          Case Dossier / {study.index}
-                        </span>
-                        <h3 className="text-lg sm:text-xl font-extrabold text-stone-950">{study.client}</h3>
-                      </div>
-                      <span className="text-xs font-medium text-stone-500">
-                        {study.sector} • {study.year}
-                      </span>
-                    </div>
+                  <div className="absolute bottom-3.5 left-3.5 right-3.5 text-white">
+                    <p className="text-[11px] font-bold text-amber-300">{study.client}</p>
+                    <h3 className="text-base font-extrabold leading-snug line-clamp-2 mt-0.5">
+                      {study.headline}
+                    </h3>
+                  </div>
+                </div>
 
-                    {/* Split Visual & Editorial Content */}
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-                      {/* Large Realistic Photograph */}
-                      <div className={`lg:col-span-7 ${isReversed ? 'lg:order-2' : 'lg:order-1'}`}>
-                        <figure className="overflow-hidden rounded-2xl border border-amber-200/80 bg-white shadow-[0_18px_45px_rgba(245,158,11,0.10)]">
-                          <img
-                            src={study.image}
-                            alt={study.imageAlt}
-                            loading="lazy"
-                            width={1400}
-                            height={900}
-                            className="w-full h-[280px] sm:h-[400px] lg:h-[450px] object-cover object-center transition-transform duration-700 hover:scale-[1.02]"
-                          />
-                          <figcaption className="px-4 sm:px-5 py-3 bg-[#FFF8E7] border-t border-amber-200/70 text-stone-700 text-xs flex items-center justify-between gap-4">
-                            <span>{study.imageCaption}</span>
-                            <span className="text-amber-700 font-mono font-bold shrink-0">{study.year}</span>
-                          </figcaption>
-                        </figure>
-                      </div>
+                <div className="p-5 flex-1 flex flex-col justify-between">
+                  <p className="text-xs text-stone-600 line-clamp-2 leading-relaxed">
+                    {study.summary}
+                  </p>
 
-                      {/* Narrative & Verified Outcomes */}
-                      <div className={`lg:col-span-5 ${isReversed ? 'lg:order-1' : 'lg:order-2'} space-y-5`}>
-                        <div className="flex flex-wrap gap-1.5">
-                          {study.disciplineLabels.map((lbl) => (
-                            <span
-                              key={lbl}
-                              className="px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-amber-500/12 text-amber-900 border border-amber-500/25"
-                            >
-                              {lbl}
-                            </span>
-                          ))}
-                        </div>
-
-                        <h2 className="text-2xl sm:text-3xl font-extrabold text-stone-950 leading-tight">
-                          {study.title}
-                        </h2>
-
-                        <p className="text-stone-600 text-sm sm:text-base leading-relaxed">{study.subtitle}</p>
-
-                        <div className="space-y-3 pt-2 text-sm leading-relaxed">
-                          <div>
-                            <span className="font-bold text-stone-950">The Reality: </span>
-                            <span className="text-stone-600">{study.challenge}</span>
-                          </div>
-                          <div>
-                            <span className="font-bold text-stone-950">What We Shipped: </span>
-                            <span className="text-stone-600">{study.solution}</span>
-                          </div>
-                        </div>
-
-                        {/* Expandable Technical Blueprint */}
-                        <div className="pt-2">
-                          <button
-                            type="button"
-                            onClick={() => toggleArchitecture(study.id)}
-                            aria-expanded={isOpen}
-                            className="text-xs font-extrabold uppercase tracking-wider text-stone-900 hover:text-amber-700 inline-flex items-center gap-2 cursor-pointer border-b border-stone-900/30 pb-1 transition-colors"
-                          >
-                            <span>{isOpen ? 'Hide Technical Blueprint' : 'Inspect Technical Blueprint'}</span>
-                            <span className="text-amber-600">{isOpen ? '−' : '+'}</span>
-                          </button>
-
-                          {isOpen && (
-                            <div className="mt-3 p-4 rounded-xl bg-amber-50/85 border border-amber-200/80 text-stone-800 space-y-2 text-xs">
-                              <p className="text-[10px] font-bold uppercase tracking-widest text-amber-800">
-                                Production Architecture Highlights
-                              </p>
-                              <ul className="space-y-1.5">
-                                {study.architectureNotes.map((note) => (
-                                  <li key={note} className="flex items-start gap-2">
-                                    <span className="text-amber-600 font-bold mt-0.5">•</span>
-                                    <span>{note}</span>
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                          )}
-                        </div>
-
-                        {/* Editorial Pull-Quote if available */}
-                        {study.quote && (
-                          <blockquote className="pl-4 border-l-2 border-amber-500 text-xs sm:text-sm italic text-stone-700">
-                            “{study.quote.text}”
-                            <footer className="mt-1 not-italic font-bold text-stone-900">
-                              — {study.quote.author}, <span className="font-normal text-stone-500">{study.quote.role}</span>
-                            </footer>
-                          </blockquote>
-                        )}
-
-                        {/* Connected BWise Studios */}
-                        <div className="pt-2 flex flex-wrap items-center gap-3">
-                          <span className="text-[11px] font-bold uppercase tracking-wider text-stone-400">
-                            Studios Deployed:
-                          </span>
-                          {study.studioLinks.map((st) => (
-                            <Link
-                              key={st.label}
-                              to={st.to}
-                              className="inline-flex items-center gap-1 text-xs font-bold text-stone-900 hover:text-amber-700 underline underline-offset-4"
-                            >
-                              <span>{st.label}</span>
-                              <ArrowUpRight className="w-3.5 h-3.5" />
-                            </Link>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Horizontal Outcome Strip */}
-                    <div className="mt-8 pt-6 border-t border-stone-200/90 grid grid-cols-1 sm:grid-cols-3 gap-6">
-                      {study.metrics.map((m) => (
-                        <div key={m.label} className="flex items-baseline gap-4 sm:block">
-                          <p className="text-2xl sm:text-3xl font-extrabold text-stone-950 tracking-tight">{m.value}</p>
-                          <div>
-                            <p className="text-xs sm:text-sm font-bold text-stone-800 mt-0.5">{m.label}</p>
-                            <p className="text-xs text-stone-500">{m.detail}</p>
-                          </div>
+                  <div className="mt-4 pt-3.5 border-t border-amber-100 flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      {study.metrics.slice(0, 2).map((m) => (
+                        <div key={m.label}>
+                          <p className="text-xs font-extrabold text-amber-700">{m.value}</p>
+                          <p className="text-[10px] text-stone-500">{m.label}</p>
                         </div>
                       ))}
                     </div>
-                  </motion.article>
-                );
-              })}
-            </AnimatePresence>
-          </div>
+                    <span className="inline-flex items-center gap-1 text-xs font-extrabold text-amber-700 group-hover:translate-x-0.5 transition-transform">
+                      Inspect <ArrowUpRight className="w-3.5 h-3.5" />
+                    </span>
+                  </div>
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
       </section>
 
       {/* =====================================================================
-          4. DOCUMENTARY PROCESS REALITY & CONVERSION SECTION
+          4. CONCISE VISUAL CTA BANNER
          ===================================================================== */}
-      <section className="relative z-10 py-16 sm:py-24 px-4 sm:px-8 bg-gradient-to-b from-[#F5E8D0] to-[#EFE0C2] border-t border-amber-300/60 text-stone-900">
-        <div className="max-w-[1240px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
-          <div className="lg:col-span-6 space-y-6">
-            <span className="text-xs font-extrabold uppercase tracking-[0.2em] text-amber-800">
-              How Our Work Ships
+      <section className="max-w-[1320px] mx-auto px-4 sm:px-8 mt-14">
+        <div className="rounded-[32px] bg-gradient-to-r from-[#F9E2AE]/90 via-[#FFF8E7]/95 to-[#F9E4B7]/90 border-2 border-amber-300/80 p-8 sm:p-12 shadow-[0_18px_50px_rgba(245,158,11,0.16)] flex flex-col md:flex-row items-center justify-between gap-6">
+          <div>
+            <span className="text-xs font-extrabold uppercase tracking-wider text-amber-800">
+              Next Flagship Case Study
             </span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold leading-tight text-stone-950">
-              Zero agency theater. Direct collaboration with the builders writing your code and shaping your brand.
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight mt-1">
+              Have a high-stakes product or growth target on your roadmap?
             </h2>
-            <p className="text-stone-700 text-sm sm:text-base leading-relaxed">
-              Every project in our portfolio was delivered by a dedicated pod combining systems architects, product designers, and growth strategists in one shared Slack and repository with your team.
-            </p>
-            <div className="grid grid-cols-2 gap-6 pt-2 border-t border-amber-300/70">
-              <div>
-                <p className="text-2xl font-extrabold text-amber-700">Weekly</p>
-                <p className="text-xs text-stone-700 mt-1">
-                  Production staging deployments from Week 2 onward—never months of dark-room mystery.
-                </p>
-              </div>
-              <div>
-                <p className="text-2xl font-extrabold text-amber-700">100% IP</p>
-                <p className="text-xs text-stone-700 mt-1">
-                  Full source-code, design token, and infrastructure ownership transferred cleanly to your organization.
-                </p>
-              </div>
-            </div>
-            <div className="pt-4 flex flex-wrap gap-4">
-              <Link
-                to="/contact"
-                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-stone-900 hover:bg-stone-800 text-white font-bold text-sm shadow-md transition-all"
-              >
-                <span>Start a Project Brief</span>
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-              <Link
-                to="/industries"
-                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-white/85 hover:bg-white border border-amber-300/80 text-stone-900 font-semibold text-sm shadow-xs transition-all"
-              >
-                <span>Explore Industries We Serve</span>
-              </Link>
-            </div>
           </div>
-
-          <div className="lg:col-span-6">
-            <figure className="overflow-hidden rounded-2xl border-2 border-amber-300/80 bg-white shadow-[0_20px_50px_rgba(245,158,11,0.16)]">
-              <img
-                src={assetUrl('assets/pages/portfolio/studio-craft-process.jpg')}
-                alt="BWise engineers and product designers mapping system architecture during a live sprint review"
-                loading="lazy"
-                width={1400}
-                height={933}
-                className="w-full h-[300px] sm:h-[380px] object-cover"
-              />
-              <figcaption className="px-5 py-3.5 bg-[#FFF8E7] border-t border-amber-200/80 text-xs text-stone-700 flex items-center justify-between">
-                <span>Architecture & product critique session — BWise Engineering & Brand Pod</span>
-                <span className="text-amber-800 font-bold">12 Specialized Studios</span>
-              </figcaption>
-            </figure>
-          </div>
+          <button
+            type="button"
+            onClick={openConsultationModal}
+            className="px-7 py-3.5 rounded-full bg-stone-900 hover:bg-stone-800 text-white text-xs sm:text-sm font-bold shadow-md transition hover:scale-105 shrink-0 cursor-pointer"
+          >
+            Book a Free Consultation →
+          </button>
         </div>
       </section>
     </div>
