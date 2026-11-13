@@ -340,7 +340,7 @@ export const IndustriesPage: React.FC = () => {
       {/* =====================================================================
           2. INTERACTIVE SECTOR DOSSIER EXPLORER (DARK OBSIDIAN STAGE)
          ===================================================================== */}
-      <section className="bg-[#14111B] text-white py-14 sm:py-24 px-4 sm:px-8 border-b border-white/10">
+      <section data-theme="dark" className="bg-[#14111B] text-white py-14 sm:py-24 px-4 sm:px-8 border-b border-white/10">
         <div className="max-w-[1240px] mx-auto">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-8 mb-10 border-b border-white/15">
             <div>
@@ -607,7 +607,7 @@ export const IndustriesPage: React.FC = () => {
       {/* =====================================================================
           4. CROSS-INDUSTRY ENGINEERING & COMPLIANCE STANDARDS LEDGER
          ===================================================================== */}
-      <section className="py-16 sm:py-20 px-4 sm:px-8 bg-stone-900 text-white">
+      <section data-theme="dark" className="py-16 sm:py-20 px-4 sm:px-8 bg-stone-900 text-white">
         <div className="max-w-[1240px] mx-auto">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8 pb-12 border-b border-white/15">
             <div className="max-w-2xl">
