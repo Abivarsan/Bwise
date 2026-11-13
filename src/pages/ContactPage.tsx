@@ -1,318 +1,343 @@
-import React, { useState, useEffect } from 'react';
-import { useSearchParams, Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import React, { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import {
   CheckCircle2,
   Clock,
-  Globe,
+  Cpu,
+  Globe2,
+  Lightbulb,
   Mail,
   MapPin,
+  Megaphone,
   Phone,
   Send,
   Sparkles,
-  ArrowLeft,
 } from 'lucide-react';
-import { PRIORITY_SERVICES } from '../data/servicesData';
-import { ServiceIcon } from '../components/hive/HoneycombGrid3D';
-import { BwiseBeeCharacter } from '../components/hive/BwiseBeeCharacter';
+import { getServiceBySlug } from '../data/servicesData';
 import { HiveCornerDecorations } from '../components/layout/HiveCornerDecorations';
+import { assetUrl } from '../utils/assets';
+
+const STUDIO_TRACKS = [
+  {
+    slug: 'software-solutions',
+    title: 'Software Solutions',
+    subtitle: 'Web, Mobile, QA, SEO & AI Optimization',
+    icon: Cpu,
+  },
+  {
+    slug: 'social-media-marketing',
+    title: 'Social Media Marketing',
+    subtitle: 'Paid Social, Community & Content Systems',
+    icon: Megaphone,
+  },
+  {
+    slug: 'digital-strategy-ideas',
+    title: 'Digital Strategy Ideas',
+    subtitle: 'Brand Architecture, Logo & Executive BI',
+    icon: Lightbulb,
+  },
+  {
+    slug: 'full-hive-scope',
+    title: 'Multi-Studio / Custom Pod',
+    subtitle: 'Cross-functional engineering & growth squad',
+    icon: Sparkles,
+  },
+];
+
+const GLOBAL_HUBS = [
+  { city: 'Toronto', role: 'North America HQ', status: 'Active Studio' },
+  { city: 'London', role: 'EMEA Strategy Hub', status: 'Active Studio' },
+  { city: 'Colombo', role: 'Engineering Center', status: '24/5 Delivery' },
+];
 
 export const ContactPage: React.FC = () => {
   const [searchParams] = useSearchParams();
-  const initialServiceSlug = searchParams.get('service');
-  const initialTopic = searchParams.get('topic');
+  const initialServiceParam = searchParams.get('service');
+  const initialMatched = initialServiceParam ? getServiceBySlug(initialServiceParam) : null;
 
-  const [selectedSlugs, setSelectedSlugs] = useState<string[]>(
-    initialServiceSlug ? [initialServiceSlug] : ['web-development']
+  const [selectedTrack, setSelectedTrack] = useState<string>(
+    initialMatched ? initialMatched.categorySlug : 'software-solutions'
   );
-  const [fullName, setFullName] = useState('');
-  const [email, setEmail] = useState('');
-  const [company, setCompany] = useState('');
-  const [budget, setBudget] = useState('$25k – $50k');
-  const [message, setMessage] = useState(initialTopic || '');
   const [submitted, setSubmitted] = useState(false);
-
-  useEffect(() => {
-    if (initialServiceSlug && !selectedSlugs.includes(initialServiceSlug)) {
-      setSelectedSlugs((prev) => [...prev, initialServiceSlug]);
-    }
-  }, [initialServiceSlug]);
-
-  const toggleServiceSelection = (slug: string) => {
-    setSelectedSlugs((prev) =>
-      prev.includes(slug) ? prev.filter((s) => s !== slug) : [...prev, slug]
-    );
-  };
+  const [formState, setFormState] = useState({
+    name: '',
+    email: '',
+    company: '',
+    budget: '$25k – $50k',
+    goals: '',
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitted(true);
   };
 
+  const activeTrackObj =
+    STUDIO_TRACKS.find((t) => t.slug === selectedTrack) || STUDIO_TRACKS[0];
+
   return (
-    <div className="min-h-screen bg-honeycomb-pattern relative overflow-hidden pt-24 sm:pt-28 pb-12 sm:pb-16 px-4 sm:px-8">
-      {/* Decorative Honeycomb/Pentagon Line Art at Top-Left & Top-Right Edges */}
+    <div className="min-h-screen bg-honeycomb-pattern relative overflow-hidden pt-24 sm:pt-28 pb-20">
       <HiveCornerDecorations />
 
-      <div className="relative z-10 max-w-[1280px] mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
-          {/* Left Column: Direct Hive Contact Info & Mascot */}
-          <div className="lg:col-span-5 space-y-6">
-            <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-bold uppercase tracking-wider">
-              <Sparkles className="w-3.5 h-3.5" />
-              Connect With the Hive
-            </span>
+      <div className="max-w-[1280px] mx-auto px-4 sm:px-8 relative z-10">
+        {/* =====================================================================
+            CONCISE HEADER
+           ===================================================================== */}
+        <div className="mb-10">
+          <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-extrabold uppercase tracking-wider">
+            <Sparkles className="w-3.5 h-3.5" />
+            Direct Principal Briefing
+          </span>
+          <h1 className="text-3xl sm:text-5xl font-extrabold text-stone-900 tracking-tight mt-2.5">
+            Start Your Project With the Hive.
+          </h1>
+        </div>
 
-            <h1 className="text-3xl sm:text-5xl font-extrabold text-stone-900 tracking-tight leading-[1.1]">
-              Let&apos;s Architect Your Next Digital Breakthrough
-            </h1>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* =====================================================================
+              LEFT COLUMN: VISUAL STUDIO CARD & DIRECT CHANNELS
+             ===================================================================== */}
+          <div className="lg:col-span-5 space-y-5">
+            {/* Realistic Studio Visual Card */}
+            <div className="rounded-[28px] overflow-hidden bg-stone-900 border-2 border-amber-300/80 shadow-[0_18px_45px_rgba(245,158,11,0.14)] group">
+              <div className="relative h-56 overflow-hidden">
+                <img
+                  src={assetUrl('/assets/pages/careers/hive-studio-hero.jpg')}
+                  alt="BWise Strategy & Engineering Studio"
+                  fetchPriority="high"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-stone-950/90 via-stone-950/30 to-transparent" />
+                <div className="absolute top-4 left-4">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400 text-stone-950 text-[11px] font-extrabold">
+                    <Clock className="w-3.5 h-3.5" />
+                    Response Under 4 Business Hours
+                  </span>
+                </div>
+                <div className="absolute bottom-4 left-4 right-4 text-white">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-amber-300">
+                    No Sales Gatekeepers
+                  </p>
+                  <h2 className="text-lg font-extrabold mt-0.5">
+                    You Speak Directly With Our Principal Architects
+                  </h2>
+                </div>
+              </div>
 
-            <p className="text-sm sm:text-base text-stone-600 leading-relaxed">
-              Select the priority Beehive studios your project requires, and our specialist architects will prepare a tailored roadmap, wireframe preview, and growth forecast within 24 hours.
-            </p>
+              {/* Global Studio Hubs Strip */}
+              <div className="p-4 bg-white grid grid-cols-3 gap-2">
+                {GLOBAL_HUBS.map((hub) => (
+                  <div
+                    key={hub.city}
+                    className="p-2.5 rounded-xl bg-[#FFF8E7] border border-amber-200/80 text-center"
+                  >
+                    <div className="flex items-center justify-center gap-1 text-xs font-extrabold text-stone-900">
+                      <Globe2 className="w-3 h-3 text-amber-600" />
+                      {hub.city}
+                    </div>
+                    <p className="text-[10px] font-semibold text-stone-500 mt-0.5">{hub.role}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
 
-            {/* Studio Contact Card */}
-            <div className="rounded-3xl bg-white p-6 border border-stone-200/80 shadow-sm space-y-4">
-              <div className="flex items-start gap-3.5">
-                <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
+            {/* Direct Contact Channels */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3">
+              <a
+                href="mailto:hello@bwisedigital.com"
+                className="flex items-center gap-3.5 p-4 rounded-2xl bg-white/95 border border-amber-200/80 hover:border-amber-400 shadow-2xs transition group"
+              >
+                <div className="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                   <Mail className="w-5 h-5" />
                 </div>
                 <div>
-                  <p className="text-xs font-bold uppercase tracking-wider text-stone-400">
+                  <p className="text-[11px] font-bold uppercase tracking-wider text-stone-400">
                     Direct Studio Desk
                   </p>
-                  <p className="text-sm font-extrabold text-stone-900">hello@bwiseagency.com</p>
+                  <p className="text-sm font-extrabold text-stone-900">hello@bwisedigital.com</p>
                 </div>
-              </div>
+              </a>
 
-              <div className="flex items-start gap-3.5">
-                <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
+              <a
+                href="tel:+18005552947"
+                className="flex items-center gap-3.5 p-4 rounded-2xl bg-white/95 border border-amber-200/80 hover:border-amber-400 shadow-2xs transition group"
+              >
+                <div className="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                   <Phone className="w-5 h-5" />
                 </div>
                 <div>
-                  <p className="text-xs font-bold uppercase tracking-wider text-stone-400">
-                    Global Strategy Hotline
+                  <p className="text-[11px] font-bold uppercase tracking-wider text-stone-400">
+                    Client Strategy Line
                   </p>
-                  <p className="text-sm font-extrabold text-stone-900">+1 (888) 555-9811</p>
+                  <p className="text-sm font-extrabold text-stone-900">+1 (800) 555-BWISE</p>
                 </div>
-              </div>
+              </a>
 
-              <div className="flex items-start gap-3.5">
+              <div className="flex items-center gap-3.5 p-4 rounded-2xl bg-white/95 border border-amber-200/80 shadow-2xs">
                 <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
                   <MapPin className="w-5 h-5" />
                 </div>
                 <div>
-                  <p className="text-xs font-bold uppercase tracking-wider text-stone-400">
-                    Flagship Beehive Hubs
+                  <p className="text-[11px] font-bold uppercase tracking-wider text-stone-400">
+                    Global Delivery Hubs
                   </p>
                   <p className="text-sm font-extrabold text-stone-900">
-                    San Francisco • London • Bengaluru • Dubai
+                    Toronto · London · Colombo
                   </p>
                 </div>
-              </div>
-
-              <div className="flex items-start gap-3.5">
-                <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
-                  <Clock className="w-5 h-5" />
-                </div>
-                <div>
-                  <p className="text-xs font-bold uppercase tracking-wider text-stone-400">
-                    Response SLA
-                  </p>
-                  <p className="text-sm font-extrabold text-stone-900">
-                    Under 4 Business Hours (24/7 Hive Coverage)
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Interactive Bee Card */}
-            <div className="rounded-3xl bg-gradient-to-br from-[#F9E4B7] to-[#E8BE70] p-6 border border-amber-300/80 flex items-center gap-4 shadow-md">
-              <BwiseBeeCharacter className="w-28 h-28 shrink-0" />
-              <div>
-                <h3 className="text-base font-extrabold text-stone-900">
-                  Not sure which service studio to pick?
-                </h3>
-                <p className="text-xs text-stone-800 mt-1 leading-relaxed">
-                  Return to our interactive 3D Beehive on the home page and let our guide bee walk you through each room!
-                </p>
-                <Link
-                  to="/"
-                  className="inline-flex items-center gap-1 text-xs font-extrabold text-amber-950 underline mt-2"
-                >
-                  <ArrowLeft className="w-3.5 h-3.5" />
-                  Back to Interactive Beehive
-                </Link>
               </div>
             </div>
           </div>
 
-          {/* Right Column: Interactive Project & Priority Service Configurator Form */}
+          {/* =====================================================================
+              RIGHT COLUMN: STREAMLINED INTERACTIVE BRIEFING FORM
+             ===================================================================== */}
           <div className="lg:col-span-7">
-            <div className="bg-white rounded-[32px] p-6 sm:p-10 shadow-[0_24px_60px_rgba(26,22,18,0.08)] border border-stone-200/80">
+            <div className="bg-white/95 rounded-[32px] p-6 sm:p-10 shadow-[0_24px_60px_rgba(26,22,18,0.06)] border-2 border-amber-200/80">
               {submitted ? (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="text-center py-10 space-y-5"
-                >
-                  <div className="mx-auto w-36 h-36">
-                    <BwiseBeeCharacter className="w-full h-full" />
+                <div className="text-center py-12 space-y-5">
+                  <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto">
+                    <CheckCircle2 className="w-9 h-9" />
                   </div>
-                  <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold">
-                    <CheckCircle2 className="w-4 h-4" />
-                    Brief Received by the Bwise Hive!
-                  </span>
                   <h2 className="text-2xl sm:text-3xl font-extrabold text-stone-900">
-                    Thank You, {fullName || 'Partner'}!
+                    Your Briefing Request Is Locked In!
                   </h2>
-                  <p className="text-sm text-stone-600 max-w-md mx-auto leading-relaxed">
-                    Your inquiry for{' '}
-                    <strong className="text-stone-900">
-                      {selectedSlugs
-                        .map((s) => PRIORITY_SERVICES.find((p) => p.slug === s)?.title)
-                        .filter(Boolean)
-                        .join(', ') || 'Bwise Digital Solutions'}
-                    </strong>{' '}
-                    has been routed to our specialist studio leads. We will reach out to{' '}
-                    <strong className="text-stone-900">{email}</strong> shortly.
+                  <p className="text-sm text-stone-600 max-w-md mx-auto">
+                    Our <strong className="text-amber-700">{activeTrackObj.title}</strong> lead is reviewing your brief and will reply within 4 business hours.
                   </p>
-                  <div className="pt-4 flex flex-wrap justify-center gap-3">
-                    <button
-                      type="button"
-                      onClick={() => setSubmitted(false)}
-                      className="px-6 py-2.5 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-800 text-xs font-bold transition cursor-pointer"
-                    >
-                      Submit Another Inquiry
-                    </button>
-                    <Link
-                      to="/"
-                      className="px-6 py-2.5 rounded-full bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold transition"
-                    >
-                      Return to Interactive Beehive
-                    </Link>
-                  </div>
-                </motion.div>
+                  <button
+                    type="button"
+                    onClick={() => setSubmitted(false)}
+                    className="px-6 py-2.5 rounded-full bg-stone-900 text-white text-xs font-bold hover:bg-stone-800 transition cursor-pointer"
+                  >
+                    Submit Another Brief
+                  </button>
+                </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-6">
+                  {/* 4 Visual Studio Track Selector Cards */}
                   <div>
-                    <h2 className="text-xl sm:text-2xl font-extrabold text-stone-900">
-                      1. Select Your Priority Hive Services
-                    </h2>
-                    <p className="text-xs text-stone-500 mt-1">
-                      Click one or more of our 12 specialized studios below:
-                    </p>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 mt-3.5">
-                      {PRIORITY_SERVICES.map((svc) => {
-                        const active = selectedSlugs.includes(svc.slug);
+                    <label className="block text-xs font-extrabold uppercase tracking-wider text-stone-700 mb-3">
+                      1. Select Your Studio Division
+                    </label>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                      {STUDIO_TRACKS.map((track) => {
+                        const Icon = track.icon;
+                        const isChosen = track.slug === selectedTrack;
                         return (
                           <button
-                            key={svc.id}
+                            key={track.slug}
                             type="button"
-                            onClick={() => toggleServiceSelection(svc.slug)}
-                            className={`flex items-center gap-2 px-3 py-2.5 rounded-xl border text-left text-xs font-bold transition-all cursor-pointer ${
-                              active
-                                ? 'bg-amber-500 text-white border-amber-500 shadow-sm'
-                                : 'bg-[#FAF8F5] hover:bg-amber-50 text-stone-800 border-stone-200/80'
+                            onClick={() => setSelectedTrack(track.slug)}
+                            className={`flex items-start gap-3 p-3.5 rounded-2xl border text-left transition-all cursor-pointer ${
+                              isChosen
+                                ? 'bg-amber-50 border-amber-500 ring-2 ring-amber-400/25 shadow-xs'
+                                : 'bg-[#FAF8F5] border-stone-200 hover:border-amber-300'
                             }`}
                           >
-                            <ServiceIcon
-                              name={svc.iconName}
-                              className={`w-4 h-4 shrink-0 ${active ? 'text-white' : 'text-amber-600'}`}
-                            />
-                            <span className="truncate">{svc.title}</span>
+                            <div
+                              className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${
+                                isChosen
+                                  ? 'bg-amber-500 text-white'
+                                  : 'bg-white text-amber-600 border border-amber-200'
+                              }`}
+                            >
+                              <Icon className="w-4 h-4" />
+                            </div>
+                            <div className="min-w-0">
+                              <p className="text-xs font-extrabold text-stone-900">
+                                {track.title}
+                              </p>
+                              <p className="text-[11px] text-stone-500 truncate mt-0.5">
+                                {track.subtitle}
+                              </p>
+                            </div>
                           </button>
                         );
                       })}
                     </div>
                   </div>
 
-                  <div className="pt-2 border-t border-stone-100">
-                    <h2 className="text-xl sm:text-2xl font-extrabold text-stone-900 mb-4">
-                      2. Your Project Details
-                    </h2>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-xs font-bold text-stone-700 mb-1.5">
-                          Your Full Name *
-                        </label>
-                        <input
-                          type="text"
-                          required
-                          value={fullName}
-                          onChange={(e) => setFullName(e.target.value)}
-                          placeholder="Alex Morgan"
-                          className="w-full px-4 py-3 rounded-xl bg-[#FAF8F5] border border-stone-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-400 text-sm text-stone-900"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-xs font-bold text-stone-700 mb-1.5">
-                          Work Email *
-                        </label>
-                        <input
-                          type="email"
-                          required
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          placeholder="alex@company.com"
-                          className="w-full px-4 py-3 rounded-xl bg-[#FAF8F5] border border-stone-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-400 text-sm text-stone-900"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-xs font-bold text-stone-700 mb-1.5">
-                          Company / Brand Name
-                        </label>
-                        <input
-                          type="text"
-                          value={company}
-                          onChange={(e) => setCompany(e.target.value)}
-                          placeholder="Acme Technologies"
-                          className="w-full px-4 py-3 rounded-xl bg-[#FAF8F5] border border-stone-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-400 text-sm text-stone-900"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-xs font-bold text-stone-700 mb-1.5">
-                          Estimated Investment Range
-                        </label>
-                        <select
-                          value={budget}
-                          onChange={(e) => setBudget(e.target.value)}
-                          className="w-full px-4 py-3 rounded-xl bg-[#FAF8F5] border border-stone-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-400 text-sm text-stone-900"
-                        >
-                          <option value="$10k – $25k">$10k – $25k</option>
-                          <option value="$25k – $50k">$25k – $50k</option>
-                          <option value="$50k – $100k">$50k – $100k</option>
-                          <option value="$100k+ Enterprise">$100k+ Enterprise</option>
-                        </select>
-                      </div>
-                    </div>
-
-                    <div className="mt-4">
+                  {/* Contact Inputs */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
                       <label className="block text-xs font-bold text-stone-700 mb-1.5">
-                        Project Goals &amp; Requirements *
+                        Full Name *
                       </label>
-                      <textarea
-                        rows={4}
+                      <input
+                        type="text"
                         required
-                        value={message}
-                        onChange={(e) => setMessage(e.target.value)}
-                        placeholder="Tell us about the digital product, growth goals, or timeline you have in mind..."
-                        className="w-full px-4 py-3 rounded-xl bg-[#FAF8F5] border border-stone-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-400 text-sm text-stone-900"
+                        placeholder="Alex Morgan"
+                        value={formState.name}
+                        onChange={(e) => setFormState({ ...formState, name: e.target.value })}
+                        className="w-full px-4 py-3 rounded-xl bg-[#FAF8F5] border border-stone-200 text-sm text-stone-900 focus:outline-none focus:border-amber-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-stone-700 mb-1.5">
+                        Work Email *
+                      </label>
+                      <input
+                        type="email"
+                        required
+                        placeholder="alex@company.com"
+                        value={formState.email}
+                        onChange={(e) => setFormState({ ...formState, email: e.target.value })}
+                        className="w-full px-4 py-3 rounded-xl bg-[#FAF8F5] border border-stone-200 text-sm text-stone-900 focus:outline-none focus:border-amber-500"
                       />
                     </div>
                   </div>
 
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold text-stone-700 mb-1.5">
+                        Company / Website
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="Acme Corp (https://...)"
+                        value={formState.company}
+                        onChange={(e) => setFormState({ ...formState, company: e.target.value })}
+                        className="w-full px-4 py-3 rounded-xl bg-[#FAF8F5] border border-stone-200 text-sm text-stone-900 focus:outline-none focus:border-amber-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-stone-700 mb-1.5">
+                        Estimated Investment Range
+                      </label>
+                      <select
+                        value={formState.budget}
+                        onChange={(e) => setFormState({ ...formState, budget: e.target.value })}
+                        className="w-full px-4 py-3 rounded-xl bg-[#FAF8F5] border border-stone-200 text-sm text-stone-900 focus:outline-none focus:border-amber-500"
+                      >
+                        <option>$10k – $25k</option>
+                        <option>$25k – $50k</option>
+                        <option>$50k – $100k</option>
+                        <option>$100k+ Enterprise Scope</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-stone-700 mb-1.5">
+                      Project Goals &amp; Timeline *
+                    </label>
+                    <textarea
+                      rows={3}
+                      required
+                      placeholder={`Tell our ${activeTrackObj.title} pod about your key milestones...`}
+                      value={formState.goals}
+                      onChange={(e) => setFormState({ ...formState, goals: e.target.value })}
+                      className="w-full px-4 py-3 rounded-xl bg-[#FAF8F5] border border-stone-200 text-sm text-stone-900 focus:outline-none focus:border-amber-500"
+                    />
+                  </div>
+
                   <button
                     type="submit"
-                    className="w-full py-4 rounded-full bg-gradient-to-r from-[#F5A646] to-[#E08319] hover:from-[#F29A30] hover:to-[#CC720E] text-white font-extrabold text-sm sm:text-base shadow-[0_12px_30px_rgba(224,131,25,0.35)] flex items-center justify-center gap-2 transition hover:scale-[1.01] cursor-pointer"
+                    className="w-full py-4 rounded-full bg-gradient-to-r from-[#FBBF24] via-[#F59E0B] to-[#F59E0B] hover:from-[#FCD34D] hover:to-[#D97706] text-[#14111B] text-sm font-extrabold shadow-lg shadow-amber-500/25 flex items-center justify-center gap-2 transition hover:scale-[1.01] cursor-pointer"
                   >
                     <Send className="w-4 h-4" />
-                    <span>Launch Project Consultation</span>
+                    <span>Launch Studio Briefing</span>
                   </button>
                 </form>
               )}

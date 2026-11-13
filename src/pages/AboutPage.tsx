@@ -1,161 +1,266 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import {
-  Award,
+  ArrowRight,
   CheckCircle2,
-  Compass,
   Cpu,
-  Globe,
-  Hexagon,
+  Globe2,
   Layers,
   ShieldCheck,
   Sparkles,
-  Target,
   TrendingUp,
-  Users,
 } from 'lucide-react';
 import { BwiseBeeCharacter } from '../components/hive/BwiseBeeCharacter';
 import { HiveCornerDecorations } from '../components/layout/HiveCornerDecorations';
-import { PRIORITY_SERVICES } from '../data/servicesData';
+import { useConsultationModal } from '../context/ConsultationModalContext';
+import { assetUrl } from '../utils/assets';
+
+const HIVE_PILLARS = [
+  {
+    number: '01',
+    title: 'Zero Silos Between Code & Growth',
+    summary:
+      'Engineers, brand designers, and SEO/GEO strategists share one telemetry feed and ship in unified 2-week sprints.',
+    metric: '3.2x Faster Delivery',
+    icon: Layers,
+  },
+  {
+    number: '02',
+    title: 'Built for the Generative AI Era',
+    summary:
+      'Every platform we ship is structured for both human conversion and AI citation across ChatGPT, Perplexity, and Gemini.',
+    metric: '+312% AI Visibility',
+    icon: Cpu,
+  },
+  {
+    number: '03',
+    title: 'Revenue-Grade Accountability',
+    summary:
+      'We measure success in pipeline velocity, conversion lift, and uptime SLAs—never vanity agency impressions.',
+    metric: '$180M+ Client Pipeline',
+    icon: TrendingUp,
+  },
+];
+
+const LEADERSHIP_PODS = [
+  {
+    pod: 'Pod 01',
+    name: 'Full-Stack & Mobile Engineering',
+    leadRole: 'Principal Systems Architects',
+    summary: 'Cloud-native web platforms, native iOS/Android apps, and zero-downtime CI/CD.',
+    image: '/assets/pages/careers/engineering-pairing.jpg',
+    tags: ['React & Next.js', 'Swift & Kotlin', 'Automated QA'],
+  },
+  {
+    pod: 'Pod 02',
+    name: 'AI, Search & Generative Visibility',
+    leadRole: 'AI & Search Engineers',
+    summary: 'Autonomous LLM agents, technical SEO infrastructure, and Generative Engine Optimization.',
+    image: '/assets/pages/careers/architecture-whiteboard.jpg',
+    tags: ['Custom AI Agents', 'Technical SEO', 'GEO Citations'],
+  },
+  {
+    pod: 'Pod 03',
+    name: 'Performance Media & Content',
+    leadRole: 'Growth & Acquisition Leads',
+    summary: 'Algorithmic paid social studios, community stewardship, and compounding editorial content.',
+    image: '/assets/pages/portfolio/kora-botanicals.jpg',
+    tags: ['Paid Social ROAS', 'Content Systems', 'Community'],
+  },
+  {
+    pod: 'Pod 04',
+    name: 'Brand Craft & Revenue Analytics',
+    leadRole: 'Creative & BI Directors',
+    summary: 'Iconic brand systems, bespoke geometry logos, and executive multi-touch attribution.',
+    image: '/assets/pages/portfolio/studio-craft-process.jpg',
+    tags: ['Brand Architecture', 'Logo Systems', 'Executive BI'],
+  },
+];
+
+const STUDIO_GALLERY = [
+  {
+    image: '/assets/pages/careers/hive-studio-hero.jpg',
+    title: 'Cross-Functional Pod Standups',
+    location: 'Toronto · Colombo · London',
+  },
+  {
+    image: '/assets/pages/careers/design-critique.jpg',
+    title: 'Design Systems & Typography Critique',
+    location: 'Brand & Product Studio',
+  },
+  {
+    image: '/assets/pages/portfolio/studio-craft-process.jpg',
+    title: 'Tactile Craft & Telemetry Reviews',
+    location: 'Principal Engineering Wing',
+  },
+];
 
 export const AboutPage: React.FC = () => {
-  const pillars = [
-    {
-      icon: Hexagon,
-      title: 'Structural Efficiency',
-      description:
-        'In nature, the hexagonal honeycomb achieves maximum structural strength with minimal material waste. We organize our engineering and marketing sprints the exact same way—zero bloat, maximum velocity.',
-    },
-    {
-      icon: Cpu,
-      title: 'Swarm Intelligence & AI',
-      description:
-        'Our 12 specialized studios share live telemetry across SEO, Generative Engine Optimization (GEO), Paid Media, and Software Engineering so insights in one room immediately strengthen every other channel.',
-    },
-    {
-      icon: Target,
-      title: 'Measurable Commercial Nectar',
-      description:
-        'We reject vanity metrics. Every design system, code deployment, and media campaign is engineered around verified pipeline attribution, customer lifetime value, and net revenue growth.',
-    },
-  ];
-
-  const leadershipPods = [
-    {
-      role: 'Strategy & Growth Pod',
-      lead: 'Elena Rostova — Chief Strategy Officer',
-      studios: ['Digital Strategy Ideas', 'Social Media Advertising', 'Digital Analytics'],
-      highlight: 'Former VP of Growth scaling 4 SaaS unicorns from Series A to IPO.',
-    },
-    {
-      role: 'Search & AI Intelligence Pod',
-      lead: 'Dr. Marcus Vance — Head of AI & Search',
-      studios: ['Search Engine Optimisation', 'Generative Engine Optimisation', 'Artificial Intelligence Optimization'],
-      highlight: 'Pioneered LLM citation frameworks and enterprise RAG agent architectures.',
-    },
-    {
-      role: 'Creative & Brand Equity Pod',
-      lead: 'Aria Thorne — Executive Creative Director',
-      studios: ['Content Marketing', 'Social Media Management', 'Brand Handling', 'Unique Logo Designing'],
-      highlight: 'Multi-award-winning identity architect with 15+ years in global brand design.',
-    },
-    {
-      role: 'Full-Stack & Mobile Engineering Pod',
-      lead: 'Devon K. Sterling — Principal Systems Architect',
-      studios: ['Web Development', 'Mobile App Development'],
-      highlight: 'Architected high-concurrency web & mobile platforms serving 40M+ monthly users.',
-    },
-  ];
+  const [activePhotoIdx, setActivePhotoIdx] = useState(0);
+  const { openConsultationModal } = useConsultationModal();
 
   return (
-    <div className="min-h-screen bg-honeycomb-pattern relative overflow-hidden">
-      {/* Decorative Honeycomb/Pentagon Line Art at Top-Left & Top-Right Edges */}
+    <div className="min-h-screen bg-honeycomb-pattern relative overflow-hidden pt-24 sm:pt-28 pb-20">
       <HiveCornerDecorations />
 
-      {/* Hero Banner */}
-      <section className="relative z-10 max-w-[1280px] mx-auto px-4 sm:px-8 pt-24 sm:pt-28 pb-16">
+      {/* =====================================================================
+          1. VISUAL HERO + INTERACTIVE STUDIO MOSAIC
+         ===================================================================== */}
+      <section className="max-w-[1280px] mx-auto px-4 sm:px-8 pb-16">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-          <motion.div
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.45 }}
-            className="lg:col-span-7 space-y-5"
-          >
-            <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-bold uppercase tracking-wider">
-              <Sparkles className="w-3.5 h-3.5" />
-              About Bwise Agency
+          {/* Left Concise Manifesto */}
+          <div className="lg:col-span-6 space-y-5">
+            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-100/90 border border-amber-300/70 text-amber-900 text-xs font-extrabold uppercase tracking-wider">
+              <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+              Inside the BWise Beehive
             </span>
 
             <h1 className="text-3xl sm:text-5xl font-extrabold text-stone-900 tracking-tight leading-[1.1]">
-              Built Like a Beehive. Engineered for Digital Dominance.
+              One Connected Hive.{' '}
+              <span className="bg-gradient-to-r from-amber-600 via-amber-500 to-orange-600 bg-clip-text text-transparent">
+                Zero Agency Bloat.
+              </span>
             </h1>
 
-            <p className="text-sm sm:text-base text-stone-600 leading-relaxed max-w-2xl">
-              Founded on the principle that modern digital growth requires seamless collaboration between creative storytelling, algorithmic search intelligence, and rock-solid software engineering, <strong>Bwise</strong> brings 12 specialized studios together inside one unified Hive architecture.
+            <p className="text-sm sm:text-base text-stone-600 leading-relaxed">
+              We founded BWise Digital to replace fragmented vendor chains with a single, interconnected studio where principal engineers, designers, and growth strategists build together.
             </p>
 
-            <div className="pt-2 flex flex-wrap items-center gap-4">
-              <Link
-                to="/services"
-                className="px-7 py-3.5 rounded-full bg-gradient-to-b from-[#F5A646] to-[#E08319] hover:from-[#F29A30] hover:to-[#CC720E] text-white text-sm font-bold shadow-[0_10px_25px_rgba(224,131,25,0.35)] transition"
-              >
-                Explore Our 12 Studios
-              </Link>
-              <Link
-                to="/contact"
-                className="px-7 py-3.5 rounded-full bg-white hover:bg-amber-50 text-stone-800 text-sm font-bold border border-stone-300 transition"
-              >
-                Meet Our Team →
-              </Link>
+            {/* Compact Metrics Row */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+              {[
+                { value: '12', label: 'Specialist Studios' },
+                { value: '340+', label: 'Global Launches' },
+                { value: '96%', label: 'Client Retention' },
+                { value: '$180M+', label: 'Attributed Pipeline' },
+              ].map((st) => (
+                <div
+                  key={st.label}
+                  className="rounded-2xl bg-white/90 border border-amber-200/80 p-3.5 shadow-2xs"
+                >
+                  <p className="text-xl sm:text-2xl font-extrabold text-amber-700">{st.value}</p>
+                  <p className="text-[11px] font-bold text-stone-600 mt-0.5">{st.label}</p>
+                </div>
+              ))}
             </div>
-          </motion.div>
 
-          {/* Right Visual Card */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5 }}
-            className="lg:col-span-5 flex flex-col items-center"
-          >
-            <div className="relative w-full rounded-[32px] bg-gradient-to-br from-[#F9E4B7] via-[#F2CE89] to-[#E3A84B] p-8 shadow-xl border border-amber-300/70 flex flex-col items-center text-center">
-              <BwiseBeeCharacter className="w-52 h-52" />
-              <h3 className="text-xl font-extrabold text-stone-900 mt-2">
-                The Bwise Hive Philosophy
-              </h3>
-              <p className="text-xs sm:text-sm text-stone-800 mt-1.5 leading-relaxed">
-                Every bee in a hive has a clear mission, communicates in real time, and builds upon the same geometric foundation. That is how we deliver complex digital products on time, every time.
-              </p>
+            <div className="flex flex-wrap items-center gap-3 pt-2">
+              <button
+                type="button"
+                onClick={openConsultationModal}
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-[#FBBF24] via-[#F59E0B] to-[#F59E0B] hover:from-[#FCD34D] hover:to-[#D97706] text-[#14111B] text-xs sm:text-sm font-extrabold shadow-md transition hover:scale-105 cursor-pointer"
+              >
+                <span>Meet Our Studio Leads</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+              <Link
+                to="/portfolio"
+                className="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-white hover:bg-amber-50 text-stone-800 text-xs sm:text-sm font-bold border border-amber-300/80 transition"
+              >
+                Inspect Shipped Work
+              </Link>
             </div>
-          </motion.div>
+          </div>
+
+          {/* Right Interactive Studio Photo Switcher */}
+          <div className="lg:col-span-6">
+            <div className="rounded-[32px] bg-white/95 p-4 border-2 border-amber-300/80 shadow-[0_24px_60px_rgba(245,158,11,0.15)]">
+              <div className="relative aspect-[16/10] rounded-2xl overflow-hidden bg-stone-900 group">
+                <img
+                  key={STUDIO_GALLERY[activePhotoIdx].image}
+                  src={assetUrl(STUDIO_GALLERY[activePhotoIdx].image)}
+                  alt={STUDIO_GALLERY[activePhotoIdx].title}
+                  fetchPriority="high"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-stone-950/85 via-stone-950/20 to-transparent" />
+
+                <div className="absolute top-4 left-4">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 backdrop-blur-md text-stone-900 text-[11px] font-extrabold">
+                    <Globe2 className="w-3.5 h-3.5 text-amber-600" />
+                    {STUDIO_GALLERY[activePhotoIdx].location}
+                  </span>
+                </div>
+
+                <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between text-white">
+                  <div>
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-amber-300">
+                      Inside Our Pods
+                    </p>
+                    <h3 className="text-lg font-extrabold">{STUDIO_GALLERY[activePhotoIdx].title}</h3>
+                  </div>
+                </div>
+              </div>
+
+              {/* Thumbnail Selector Strip */}
+              <div className="grid grid-cols-3 gap-2.5 mt-3">
+                {STUDIO_GALLERY.map((item, idx) => {
+                  const isCurrent = idx === activePhotoIdx;
+                  return (
+                    <button
+                      key={item.title}
+                      type="button"
+                      onClick={() => setActivePhotoIdx(idx)}
+                      className={`relative h-16 rounded-xl overflow-hidden border-2 transition-all cursor-pointer ${
+                        isCurrent
+                          ? 'border-amber-500 ring-2 ring-amber-400/30 scale-[1.02]'
+                          : 'border-transparent opacity-70 hover:opacity-100'
+                      }`}
+                    >
+                      <img
+                        src={assetUrl(item.image)}
+                        alt={item.title}
+                        loading="lazy"
+                        className="w-full h-full object-cover"
+                      />
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Core Architectural Pillars */}
-      <section className="bg-white py-16 border-y border-stone-200/70">
+      {/* =====================================================================
+          2. 3 CONCISE HIVE ARCHITECTURE PILLARS
+         ===================================================================== */}
+      <section className="bg-white/90 backdrop-blur-xs py-16 border-y border-amber-200/70">
         <div className="max-w-[1280px] mx-auto px-4 sm:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <span className="text-xs font-bold uppercase tracking-wider text-amber-600">
-              Our Core DNA
-            </span>
-            <h2 className="text-2xl sm:text-4xl font-extrabold text-stone-900 mt-2">
-              Why the Honeycomb Is Our Blueprint
-            </h2>
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
+            <div>
+              <span className="text-xs font-extrabold uppercase tracking-wider text-amber-700">
+                Why the Honeycomb Works
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight mt-1">
+                Structural Efficiency by Design
+              </h2>
+            </div>
+            <p className="text-xs sm:text-sm text-stone-600 max-w-md">
+              Every pod shares common context, tooling, and live attribution from day one.
+            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {pillars.map((pillar, idx) => {
+            {HIVE_PILLARS.map((pillar) => {
               const Icon = pillar.icon;
               return (
                 <div
-                  key={idx}
-                  className="rounded-3xl bg-[#FAF8F5] p-7 border border-stone-200/80 hover:border-amber-400 transition-all shadow-xs"
+                  key={pillar.number}
+                  className="group rounded-3xl p-6 bg-[#FAF8F5] border border-amber-200/80 hover:border-amber-400 hover:bg-white transition-all duration-300 hover:-translate-y-1 shadow-xs"
                 >
-                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 text-white flex items-center justify-center mb-5 shadow-md shadow-amber-500/20">
-                    <Icon className="w-6 h-6" />
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 text-white flex items-center justify-center shadow-xs">
+                      <Icon className="w-5 h-5" />
+                    </div>
+                    <span className="px-3 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-extrabold">
+                      {pillar.metric}
+                    </span>
                   </div>
-                  <h3 className="text-lg font-extrabold text-stone-900 mb-2">{pillar.title}</h3>
-                  <p className="text-sm text-stone-600 leading-relaxed">{pillar.description}</p>
+                  <h3 className="text-lg font-extrabold text-stone-900">{pillar.title}</h3>
+                  <p className="text-xs sm:text-sm text-stone-600 mt-2 leading-relaxed">
+                    {pillar.summary}
+                  </p>
                 </div>
               );
             })}
@@ -163,60 +268,98 @@ export const AboutPage: React.FC = () => {
         </div>
       </section>
 
-      {/* Cross-Functional Department Pods */}
+      {/* =====================================================================
+          3. 4 VISUAL SPECIALIST PODS
+         ===================================================================== */}
       <section className="max-w-[1280px] mx-auto px-4 sm:px-8 py-16">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
           <div>
-            <span className="px-3 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-bold uppercase tracking-wider">
-              Specialist Leadership
+            <span className="text-xs font-extrabold uppercase tracking-wider text-amber-700">
+              Cross-Functional Leadership
             </span>
-            <h2 className="text-2xl sm:text-4xl font-extrabold text-stone-900 mt-2">
-              4 Interdisciplinary Pods. {PRIORITY_SERVICES.length} Dedicated Studios.
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight mt-1">
+              Four Specialist Pods. Direct Principal Access.
             </h2>
           </div>
-          <Link to="/" className="text-sm font-bold text-amber-700 hover:text-amber-800 underline">
-            Launch Interactive Beehive Map →
+          <Link
+            to="/careers"
+            className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-extrabold text-amber-700 hover:text-amber-800"
+          >
+            Join Our Engineering &amp; Creative Pods <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {leadershipPods.map((pod, idx) => (
+          {LEADERSHIP_PODS.map((pod) => (
             <div
-              key={idx}
-              className="bg-white rounded-3xl p-7 border border-stone-200/80 shadow-sm flex flex-col justify-between"
+              key={pod.pod}
+              className="group rounded-3xl bg-white/95 border border-amber-200/80 hover:border-amber-400 overflow-hidden shadow-[0_12px_35px_rgba(26,22,18,0.05)] hover:shadow-[0_20px_50px_rgba(245,158,11,0.15)] transition-all duration-300 flex flex-col sm:flex-row"
             >
-              <div>
-                <div className="flex items-center justify-between gap-2 mb-3">
-                  <span className="px-3 py-1 rounded-full bg-amber-50 text-amber-800 text-xs font-extrabold">
-                    Pod 0{idx + 1}
+              <div className="sm:w-48 h-48 sm:h-auto relative overflow-hidden bg-stone-900 shrink-0">
+                <img
+                  src={assetUrl(pod.image)}
+                  alt={pod.name}
+                  loading="lazy"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                />
+                <div className="absolute top-3 left-3">
+                  <span className="px-2.5 py-1 rounded-full bg-amber-400 text-stone-950 text-[10px] font-extrabold uppercase">
+                    {pod.pod}
                   </span>
-                  <Users className="w-5 h-5 text-amber-500" />
                 </div>
-                <h3 className="text-xl font-extrabold text-stone-900">{pod.role}</h3>
-                <p className="text-xs font-bold text-amber-700 mt-1">{pod.lead}</p>
-                <p className="text-xs sm:text-sm text-stone-600 mt-2.5 leading-relaxed">
-                  {pod.highlight}
-                </p>
               </div>
 
-              <div className="mt-5 pt-4 border-t border-stone-100">
-                <p className="text-[11px] font-bold uppercase tracking-wider text-stone-400 mb-2">
-                  Connected Hive Rooms:
-                </p>
-                <div className="flex flex-wrap gap-1.5">
-                  {pod.studios.map((st, i) => (
+              <div className="p-6 flex-1 flex flex-col justify-between">
+                <div>
+                  <span className="text-[11px] font-bold text-amber-700">{pod.leadRole}</span>
+                  <h3 className="text-lg font-extrabold text-stone-900 mt-0.5">{pod.name}</h3>
+                  <p className="text-xs text-stone-600 mt-2 leading-relaxed">{pod.summary}</p>
+                </div>
+
+                <div className="flex flex-wrap gap-1.5 mt-4 pt-3 border-t border-amber-100">
+                  {pod.tags.map((tag) => (
                     <span
-                      key={i}
-                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#FAF8F5] border border-stone-200 text-xs font-semibold text-stone-800"
+                      key={tag}
+                      className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-[#FFF8E7] text-stone-800 text-[11px] font-semibold border border-amber-200/70"
                     >
-                      <CheckCircle2 className="w-3.5 h-3.5 text-amber-500" />
-                      {st}
+                      <CheckCircle2 className="w-3 h-3 text-amber-600" />
+                      {tag}
                     </span>
                   ))}
                 </div>
               </div>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* =====================================================================
+          4. CONCISE BOTTOM CTA BANNER
+         ===================================================================== */}
+      <section className="max-w-[1280px] mx-auto px-4 sm:px-8">
+        <div className="rounded-[32px] bg-gradient-to-r from-[#F9E2AE]/90 via-[#FFF8E7]/95 to-[#F9E4B7]/90 border-2 border-amber-300/80 p-8 sm:p-12 shadow-[0_18px_50px_rgba(245,158,11,0.16)] flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="flex items-center gap-5">
+            <div className="hidden sm:block shrink-0">
+              <BwiseBeeCharacter className="w-24 h-24 drop-shadow-md" />
+            </div>
+            <div>
+              <span className="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-amber-800">
+                <ShieldCheck className="w-3.5 h-3.5 text-amber-600" />
+                Partner With BWise
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight mt-1">
+                Ready to step inside the Beehive?
+              </h2>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={openConsultationModal}
+            className="px-7 py-3.5 rounded-full bg-stone-900 hover:bg-stone-800 text-white text-xs sm:text-sm font-bold shadow-md transition hover:scale-105 shrink-0 cursor-pointer"
+          >
+            Book a Free Consultation →
+          </button>
         </div>
       </section>
     </div>
