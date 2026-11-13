@@ -272,7 +272,7 @@ export const CareersPage: React.FC = () => {
       {/* =====================================================================
           2. "HOW WE WORK" — DOCUMENTARY PHOTO ESSAY (NO GENERIC ICON CARDS)
          ===================================================================== */}
-      <section className="py-16 sm:py-24 px-4 sm:px-8 bg-[#14111B] text-white border-b border-white/10">
+      <section data-theme="dark" className="py-16 sm:py-24 px-4 sm:px-8 bg-[#14111B] text-white border-b border-white/10">
         <div className="max-w-[1240px] mx-auto space-y-16 sm:space-y-24">
           <div className="max-w-3xl">
             <span className="text-xs font-extrabold uppercase tracking-[0.2em] text-amber-400 block mb-3">

@@ -27,7 +27,7 @@ export const HomePage: React.FC = () => {
       {/* =====================================================================
           AGENCY IMPACT METRICS STRIP
          ===================================================================== */}
-      <section className="bg-[#161310] text-white py-12 border-y border-amber-500/20">
+      <section data-theme="dark" className="bg-[#161310] text-white py-12 border-y border-amber-500/20">
         <div className="max-w-[1360px] mx-auto px-4 sm:px-8">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
             {agencyStats.map((stat, idx) => (

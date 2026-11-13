@@ -225,7 +225,7 @@ export const PortfolioPage: React.FC = () => {
       {/* =====================================================================
           2. FLAGSHIP CASE STUDY — FULL-BLEED OBSIDIAN SHOWCASE (INDEX 01)
          ===================================================================== */}
-      <section className="bg-[#14111B] text-white py-12 sm:py-20 px-4 sm:px-8 border-b border-white/10">
+      <section data-theme="dark" className="bg-[#14111B] text-white py-12 sm:py-20 px-4 sm:px-8 border-b border-white/10">
         <div className="max-w-[1240px] mx-auto">
           {/* Top Metadata Strip */}
           <div className="flex flex-wrap items-center justify-between gap-4 pb-6 mb-8 border-b border-white/15 text-xs uppercase tracking-[0.18em] text-stone-400">
@@ -542,7 +542,7 @@ export const PortfolioPage: React.FC = () => {
       {/* =====================================================================
           4. DOCUMENTARY PROCESS REALITY & CONVERSION SECTION
          ===================================================================== */}
-      <section className="py-16 sm:py-24 px-4 sm:px-8 bg-[#161310] text-white">
+      <section data-theme="dark" className="py-16 sm:py-24 px-4 sm:px-8 bg-[#161310] text-white">
         <div className="max-w-[1240px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
           <div className="lg:col-span-6 space-y-6">
             <span className="text-xs font-extrabold uppercase tracking-[0.2em] text-amber-400">

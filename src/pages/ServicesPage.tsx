@@ -507,7 +507,7 @@ export const ServicesPage: React.FC = () => {
       {/* =====================================================================
           COMMON SERVICE SECTION HERO BANNER
          ===================================================================== */}
-      <div className="max-w-[1240px] mx-auto px-4 sm:px-8 pt-10 sm:pt-14 pb-8">
+      <div id={activeCategory.slug} className="max-w-[1240px] mx-auto px-4 sm:px-8 pt-10 sm:pt-14 pb-8 scroll-mt-28">
         <motion.div
           key={activeCategory.slug}
           initial={{ opacity: 0, y: 16 }}

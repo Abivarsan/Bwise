@@ -6,7 +6,7 @@ import { PRIORITY_SERVICES } from '../../data/servicesData';
 
 export const Footer: React.FC = () => {
   return (
-    <footer className="bg-[#161310] text-stone-300 border-t border-amber-500/20">
+    <footer data-theme="dark" className="bg-[#161310] text-stone-300 border-t border-amber-500/20">
       <div className="max-w-[1360px] mx-auto px-4 sm:px-8 pt-16 pb-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 pb-12 border-b border-stone-800">
           {/* Column 1: Brand & Mission */}
