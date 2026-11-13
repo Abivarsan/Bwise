@@ -15,6 +15,7 @@ import {
 import { PRIORITY_SERVICES } from '../data/servicesData';
 import { ServiceIcon } from '../components/hive/HoneycombGrid3D';
 import { BwiseBeeCharacter } from '../components/hive/BwiseBeeCharacter';
+import { HiveCornerDecorations } from '../components/layout/HiveCornerDecorations';
 
 export const ContactPage: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -49,8 +50,11 @@ export const ContactPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-honeycomb-pattern pt-24 sm:pt-28 pb-12 sm:pb-16 px-4 sm:px-8">
-      <div className="max-w-[1280px] mx-auto">
+    <div className="min-h-screen bg-honeycomb-pattern relative overflow-hidden pt-24 sm:pt-28 pb-12 sm:pb-16 px-4 sm:px-8">
+      {/* Decorative Honeycomb/Pentagon Line Art at Top-Left & Top-Right Edges */}
+      <HiveCornerDecorations />
+
+      <div className="relative z-10 max-w-[1280px] mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
           {/* Left Column: Direct Hive Contact Info & Mascot */}
           <div className="lg:col-span-5 space-y-6">

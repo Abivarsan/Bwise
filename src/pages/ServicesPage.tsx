@@ -30,6 +30,7 @@ import {
 import { ServiceIcon } from '../components/hive/HoneycombGrid3D';
 import { BwiseBeeCharacter } from '../components/hive/BwiseBeeCharacter';
 import { BwiseLogo } from '../components/layout/BwiseLogo';
+import { HiveCornerDecorations } from '../components/layout/HiveCornerDecorations';
 
 /**
  * Single Dedicated Sub-Service Subsection Card
@@ -428,30 +429,8 @@ export const ServicesPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-honeycomb-pattern relative overflow-hidden pt-[76px] sm:pt-[88px] pb-20">
-      {/* Decorative Honeycomb Line Art at Edges */}
-      <div
-        className="hidden xl:block absolute top-10 -left-20 w-72 h-96 opacity-25 pointer-events-none"
-        aria-hidden="true"
-      >
-        <svg viewBox="0 0 200 300" fill="none" stroke="#D97706" strokeWidth="1.5">
-          <polygon points="60,10 100,32 100,78 60,100 20,78 20,32" />
-          <polygon points="140,10 180,32 180,78 140,100 100,78 100,32" />
-          <polygon points="100,78 140,100 140,146 100,168 60,146 60,100" />
-          <polygon points="20,78 60,100 60,146 20,168 -20,146 -20,100" />
-          <polygon points="60,146 100,168 100,214 60,236 20,214 20,168" />
-        </svg>
-      </div>
-      <div
-        className="hidden xl:block absolute top-16 -right-16 w-80 h-96 opacity-25 pointer-events-none"
-        aria-hidden="true"
-      >
-        <svg viewBox="0 0 200 300" fill="none" stroke="#D97706" strokeWidth="1.5">
-          <polygon points="60,10 100,32 100,78 60,100 20,78 20,32" />
-          <polygon points="140,10 180,32 180,78 140,100 100,78 100,32" />
-          <polygon points="100,78 140,100 140,146 100,168 60,146 60,100" />
-          <polygon points="140,146 180,168 180,214 140,236 100,214 100,168" />
-        </svg>
-      </div>
+      {/* Decorative Honeycomb/Pentagon Line Art at Top-Left & Top-Right Edges */}
+      <HiveCornerDecorations />
 
       {/* =====================================================================
           STICKY TOP CATEGORY SWITCHER BAR (3 Main Categories)
@@ -610,16 +589,16 @@ export const ServicesPage: React.FC = () => {
           BOTTOM CALL TO ACTION BANNER (Matching S6.jpg)
          ===================================================================== */}
       <div className="max-w-[1240px] mx-auto px-4 sm:px-8 mt-12">
-        <div className="relative rounded-[36px] bg-gradient-to-r from-stone-900 via-stone-900 to-stone-950 p-8 sm:p-14 text-white shadow-2xl border border-amber-400/30 overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8">
+        <div className="relative rounded-[36px] bg-gradient-to-r from-[#F9E2AE]/90 via-[#FFF8E7]/95 to-[#F9E4B7]/90 p-8 sm:p-14 text-stone-900 shadow-[0_20px_55px_rgba(245,158,11,0.16)] border-2 border-amber-300/80 overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="space-y-3 max-w-xl">
-            <span className="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-amber-400 bg-amber-400/10 px-3 py-1 rounded-full border border-amber-400/20">
-              <Sparkles className="w-3.5 h-3.5" />
+            <span className="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-amber-800 bg-white/85 px-3 py-1 rounded-full border border-amber-300/70">
+              <Sparkles className="w-3.5 h-3.5 text-amber-600" />
               Accelerate with Bwise
             </span>
-            <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight">
+            <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-stone-900">
               Ready to work with our {activeCategory.title} pod?
             </h2>
-            <p className="text-sm sm:text-base text-stone-300 leading-relaxed">
+            <p className="text-sm sm:text-base text-stone-700 leading-relaxed">
               Schedule an architectural discovery session with our senior engineers and growth strategists.
             </p>
           </div>
@@ -628,13 +607,13 @@ export const ServicesPage: React.FC = () => {
             <button
               type="button"
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-              className="px-6 py-3 rounded-full bg-white/10 hover:bg-white/20 text-amber-200 text-xs sm:text-sm font-bold border border-white/15 transition cursor-pointer"
+              className="px-6 py-3 rounded-full bg-white hover:bg-amber-50 text-stone-800 text-xs sm:text-sm font-bold border border-amber-300/80 shadow-xs transition cursor-pointer"
             >
               Back to Top
             </button>
             <Link
               to="/contact"
-              className="px-8 py-3.5 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white text-xs sm:text-sm font-bold shadow-lg shadow-amber-500/30 transition hover:scale-105"
+              className="px-8 py-3.5 rounded-full bg-stone-900 hover:bg-stone-800 text-white text-xs sm:text-sm font-bold shadow-md transition hover:scale-105"
             >
               Start Your Project →
             </Link>

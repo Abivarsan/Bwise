@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowDownRight, ArrowRight, CheckCircle2, ChevronDown, MapPin } from 'lucide-react';
+import { HiveCornerDecorations } from '../components/layout/HiveCornerDecorations';
 
 type DepartmentFilter = 'all' | 'engineering-ai' | 'design-creative' | 'growth-strategy';
 
@@ -179,11 +180,14 @@ export const CareersPage: React.FC = () => {
     department === 'all' ? OPEN_ROLES : OPEN_ROLES.filter((role) => role.department === department);
 
   return (
-    <div className="min-h-screen bg-[#FAF8F5] text-stone-900">
+    <div className="min-h-screen bg-honeycomb-pattern text-stone-900 relative overflow-hidden">
+      {/* Decorative Honeycomb/Pentagon Line Art at Top-Left & Top-Right Edges */}
+      <HiveCornerDecorations />
+
       {/* =====================================================================
           1. DOCUMENTARY STUDIO PHOTO MOSAIC HERO ("INSIDE THE HIVE")
          ===================================================================== */}
-      <section className="pt-24 sm:pt-28 pb-16 sm:pb-24 px-4 sm:px-8 border-b border-stone-200/80">
+      <section className="relative z-10 pt-24 sm:pt-28 pb-16 sm:pb-24 px-4 sm:px-8 border-b border-amber-200/80">
         <div className="max-w-[1240px] mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-end mb-10 sm:mb-14">
             <div className="lg:col-span-7">
@@ -220,7 +224,7 @@ export const CareersPage: React.FC = () => {
           {/* Asymmetric Documentary Photo Mosaic */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 items-stretch">
             {/* Primary LCP Studio Hero Image */}
-            <figure className="lg:col-span-7 overflow-hidden rounded-2xl border border-stone-200 bg-stone-900 flex flex-col justify-between">
+            <figure className="lg:col-span-7 overflow-hidden rounded-2xl border border-amber-200/80 bg-white shadow-[0_18px_45px_rgba(245,158,11,0.10)] flex flex-col justify-between">
               <img
                 src={assetUrl('assets/pages/careers/hive-studio-hero.jpg')}
                 alt="BWise engineers and designers collaborating around laptops and architectural notes in a sunlit studio"
@@ -229,15 +233,15 @@ export const CareersPage: React.FC = () => {
                 height={1000}
                 className="w-full h-[280px] sm:h-[420px] object-cover"
               />
-              <figcaption className="px-5 py-3.5 bg-stone-900 text-stone-300 text-xs flex items-center justify-between gap-4">
+              <figcaption className="px-5 py-3.5 bg-[#FFF8E7] border-t border-amber-200/70 text-stone-700 text-xs flex items-center justify-between gap-4">
                 <span>Cross-disciplinary pod sprint review — Engineering, Product Design & Growth under one roof</span>
-                <span className="text-amber-400 font-mono shrink-0">01 / Studio Floor</span>
+                <span className="text-amber-800 font-mono font-bold shrink-0">01 / Studio Floor</span>
               </figcaption>
             </figure>
 
             {/* Right Stacked Documentary Photos */}
             <div className="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4 sm:gap-6">
-              <figure className="overflow-hidden rounded-2xl border border-stone-200 bg-stone-900">
+              <figure className="overflow-hidden rounded-2xl border border-amber-200/80 bg-white shadow-[0_12px_32px_rgba(245,158,11,0.08)]">
                 <img
                   src={assetUrl('assets/pages/careers/engineering-pairing.jpg')}
                   alt="Two systems engineers pairing on distributed ledger code at a dual-monitor desk"
@@ -245,13 +249,13 @@ export const CareersPage: React.FC = () => {
                   height={800}
                   className="w-full h-[190px] sm:h-[195px] object-cover"
                 />
-                <figcaption className="px-4 py-2.5 bg-stone-900 text-stone-300 text-xs flex items-center justify-between">
+                <figcaption className="px-4 py-2.5 bg-[#FFF8E7] border-t border-amber-200/70 text-stone-700 text-xs flex items-center justify-between">
                   <span>Systems pairing & live code review</span>
-                  <span className="text-amber-400 font-mono">02 / Engineering</span>
+                  <span className="text-amber-800 font-mono font-bold">02 / Engineering</span>
                 </figcaption>
               </figure>
 
-              <figure className="overflow-hidden rounded-2xl border border-stone-200 bg-stone-900">
+              <figure className="overflow-hidden rounded-2xl border border-amber-200/80 bg-white shadow-[0_12px_32px_rgba(245,158,11,0.08)]">
                 <img
                   src={assetUrl('assets/pages/careers/design-critique.jpg')}
                   alt="Product designers and brand strategists critiquing typography and layout prints"
@@ -259,9 +263,9 @@ export const CareersPage: React.FC = () => {
                   height={800}
                   className="w-full h-[190px] sm:h-[195px] object-cover"
                 />
-                <figcaption className="px-4 py-2.5 bg-stone-900 text-stone-300 text-xs flex items-center justify-between">
+                <figcaption className="px-4 py-2.5 bg-[#FFF8E7] border-t border-amber-200/70 text-stone-700 text-xs flex items-center justify-between">
                   <span>Weekly typography & interaction critique</span>
-                  <span className="text-amber-400 font-mono">03 / Design Craft</span>
+                  <span className="text-amber-800 font-mono font-bold">03 / Design Craft</span>
                 </figcaption>
               </figure>
             </div>
@@ -270,41 +274,41 @@ export const CareersPage: React.FC = () => {
       </section>
 
       {/* =====================================================================
-          2. "HOW WE WORK" — DOCUMENTARY PHOTO ESSAY (NO GENERIC ICON CARDS)
+          2. "HOW WE WORK" — DOCUMENTARY PHOTO ESSAY (WARM HONEYCOMB THEME)
          ===================================================================== */}
-      <section data-theme="dark" className="py-16 sm:py-24 px-4 sm:px-8 bg-[#14111B] text-white border-b border-white/10">
+      <section className="relative z-10 py-16 sm:py-24 px-4 sm:px-8 bg-gradient-to-br from-white via-amber-50/50 to-amber-100/40 text-stone-900 border-b border-amber-200/80">
         <div className="max-w-[1240px] mx-auto space-y-16 sm:space-y-24">
           <div className="max-w-3xl">
-            <span className="text-xs font-extrabold uppercase tracking-[0.2em] text-amber-400 block mb-3">
+            <span className="text-xs font-extrabold uppercase tracking-[0.2em] text-amber-700 block mb-3">
               Our Operating Rhythm
             </span>
-            <h2 className="text-3xl sm:text-4xl lg:text-[44px] font-extrabold leading-[1.12]">
+            <h2 className="text-3xl sm:text-4xl lg:text-[44px] font-extrabold text-stone-950 leading-[1.12]">
               How we protect maker time, elevate craft, and avoid agency bureaucracy.
             </h2>
           </div>
 
           {/* Essay Chapter I */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center pt-8 border-t border-white/15">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center pt-8 border-t border-amber-200/80">
             <div className="lg:col-span-6 space-y-5">
-              <span className="text-xs font-mono font-bold uppercase tracking-widest text-amber-400">
+              <span className="text-xs font-mono font-bold uppercase tracking-widest text-amber-700">
                 Principle 01 / Small Autonomous Pods
               </span>
-              <h3 className="text-2xl sm:text-3xl font-extrabold text-white leading-tight">
+              <h3 className="text-2xl sm:text-3xl font-extrabold text-stone-950 leading-tight">
                 No chains of account managers playing telephone between you and the problem.
               </h3>
-              <p className="text-stone-300 text-sm sm:text-base leading-relaxed">
+              <p className="text-stone-600 text-sm sm:text-base leading-relaxed">
                 Every BWise engagement is run by a tight-knit pod of 4 to 7 senior builders—a systems architect, product designer, frontend/mobile engineers, and growth lead. You help shape the technical direction directly with the founders and VPs whose products we build.
               </p>
-              <blockquote className="pl-4 border-l-2 border-amber-400 text-xs sm:text-sm text-stone-300 italic">
+              <blockquote className="pl-4 border-l-2 border-amber-500 text-xs sm:text-sm text-stone-700 italic">
                 “In my first month at BWise, I co-designed a clinical FHIR pipeline with a hospital CMIO and saw it go live across 40 wards. Zero red tape—just focused engineering.”
-                <footer className="mt-1.5 not-italic font-bold text-white">
+                <footer className="mt-1.5 not-italic font-bold text-stone-950">
                   — Lead Systems Architect, Software Solutions Studio
                 </footer>
               </blockquote>
             </div>
 
             <div className="lg:col-span-6">
-              <figure className="overflow-hidden rounded-2xl border border-white/15 bg-stone-900">
+              <figure className="overflow-hidden rounded-2xl border border-amber-200/80 bg-white shadow-[0_18px_45px_rgba(245,158,11,0.10)]">
                 <img
                   src={assetUrl('assets/pages/careers/architecture-whiteboard.jpg')}
                   alt="BWise pod mapping system architecture and user flows in a studio workshop"
@@ -313,37 +317,37 @@ export const CareersPage: React.FC = () => {
                   height={800}
                   className="w-full h-[260px] sm:h-[360px] object-cover"
                 />
-                <figcaption className="px-5 py-3 bg-[#1B1725] text-xs text-stone-300 flex items-center justify-between">
+                <figcaption className="px-5 py-3 bg-[#FFF8E7] border-t border-amber-200/70 text-xs text-stone-700 flex items-center justify-between">
                   <span>Direct architecture workshop — zero middle-management handoffs</span>
-                  <span className="text-amber-400 font-mono">Pod Autonomy</span>
+                  <span className="text-amber-800 font-mono font-bold">Pod Autonomy</span>
                 </figcaption>
               </figure>
             </div>
           </div>
 
           {/* Essay Chapter II */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center pt-8 border-t border-white/15">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center pt-8 border-t border-amber-200/80">
             <div className="lg:col-span-6 lg:order-2 space-y-5">
-              <span className="text-xs font-mono font-bold uppercase tracking-widest text-amber-400">
+              <span className="text-xs font-mono font-bold uppercase tracking-widest text-amber-700">
                 Principle 02 / Uninterrupted Deep Work
               </span>
-              <h3 className="text-2xl sm:text-3xl font-extrabold text-white leading-tight">
+              <h3 className="text-2xl sm:text-3xl font-extrabold text-stone-950 leading-tight">
                 Async-first communication and long blocks of quiet focus time every day.
               </h3>
-              <p className="text-stone-300 text-sm sm:text-base leading-relaxed">
+              <p className="text-stone-600 text-sm sm:text-base leading-relaxed">
                 Great software and enduring brand systems aren’t built in back-to-back status meetings. We default to written RFCs, Loom walkthroughs, and protected 4-hour daily maker blocks so you can enter flow state and finish your work at a sustainable hour.
               </p>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-3 border-t border-white/10 text-xs sm:text-sm">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-3 border-t border-amber-200/80 text-xs sm:text-sm">
                 <div>
-                  <p className="font-bold text-amber-400">Top-of-Market Compensation</p>
-                  <p className="text-stone-400 mt-1">
+                  <p className="font-bold text-amber-800">Top-of-Market Compensation</p>
+                  <p className="text-stone-600 mt-1">
                     Competitive base salary benchmarked globally, plus annual studio profit-sharing bonuses.
                   </p>
                 </div>
                 <div>
-                  <p className="font-bold text-amber-400">Hardware & Craft Budget</p>
-                  <p className="text-stone-400 mt-1">
+                  <p className="font-bold text-amber-800">Hardware & Craft Budget</p>
+                  <p className="text-stone-600 mt-1">
                     Apple M-series Max workstation, 4K studio display, and $2,000/yr for books, courses, and conferences.
                   </p>
                 </div>
@@ -351,7 +355,7 @@ export const CareersPage: React.FC = () => {
             </div>
 
             <div className="lg:col-span-6 lg:order-1">
-              <figure className="overflow-hidden rounded-2xl border border-white/15 bg-stone-900">
+              <figure className="overflow-hidden rounded-2xl border border-amber-200/80 bg-white shadow-[0_18px_45px_rgba(245,158,11,0.10)]">
                 <img
                   src={assetUrl('assets/pages/careers/quiet-deep-work.jpg')}
                   alt="Sunlit architectural studio space designed for quiet deep work and focus"
@@ -360,9 +364,9 @@ export const CareersPage: React.FC = () => {
                   height={900}
                   className="w-full h-[260px] sm:h-[360px] object-cover"
                 />
-                <figcaption className="px-5 py-3 bg-[#1B1725] text-xs text-stone-300 flex items-center justify-between">
+                <figcaption className="px-5 py-3 bg-[#FFF8E7] border-t border-amber-200/70 text-xs text-stone-700 flex items-center justify-between">
                   <span>Protected daily maker blocks & calm studio acoustics</span>
-                  <span className="text-amber-400 font-mono">Deep Craft</span>
+                  <span className="text-amber-800 font-mono font-bold">Deep Craft</span>
                 </figcaption>
               </figure>
             </div>
@@ -498,29 +502,29 @@ export const CareersPage: React.FC = () => {
                         </div>
 
                         {/* Right Column: Stack & Direct Application Action */}
-                        <div className="lg:col-span-4 flex flex-col justify-between p-6 rounded-2xl bg-stone-900 text-white space-y-6">
+                        <div className="lg:col-span-4 flex flex-col justify-between p-6 rounded-2xl bg-gradient-to-br from-[#F9E4B7]/65 via-[#FFF8E7] to-[#F5E8D0]/80 border border-amber-300/80 text-stone-900 space-y-6">
                           <div className="space-y-3">
-                            <p className="text-[11px] font-bold uppercase tracking-widest text-amber-400">
+                            <p className="text-[11px] font-bold uppercase tracking-widest text-amber-800">
                               Core Tools & Craft Stack
                             </p>
                             <div className="flex flex-wrap gap-1.5">
                               {role.stackTags.map((tag) => (
                                 <span
                                   key={tag}
-                                  className="px-2.5 py-1 rounded-full text-xs font-semibold bg-white/10 text-stone-200"
+                                  className="px-2.5 py-1 rounded-full text-xs font-semibold bg-white/90 text-stone-800 border border-amber-200/80"
                                 >
                                   {tag}
                                 </span>
                               ))}
                             </div>
-                            <p className="text-xs text-stone-400 pt-2 leading-relaxed">
+                            <p className="text-xs text-stone-600 pt-2 leading-relaxed">
                               Our hiring process respects your time: a 30-minute conversation with a studio lead, a paid or real-world architecture/craft walkthrough (never whiteboard trick puzzles), and a final pod chat.
                             </p>
                           </div>
 
                           <Link
                             to={`/contact?role=${encodeURIComponent(role.title)}`}
-                            className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full bg-amber-400 hover:bg-amber-300 text-stone-950 font-bold text-xs sm:text-sm transition-all"
+                            className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full bg-stone-900 hover:bg-stone-800 text-white font-bold text-xs sm:text-sm shadow-xs transition-all"
                           >
                             <span>Apply for {role.code}</span>
                             <ArrowRight className="w-4 h-4" />
@@ -535,21 +539,21 @@ export const CareersPage: React.FC = () => {
           </div>
 
           {/* Open / Fellowship Application Banner */}
-          <div className="mt-14 p-8 sm:p-10 rounded-3xl bg-stone-900 text-white flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div className="mt-14 p-8 sm:p-10 rounded-3xl bg-gradient-to-r from-[#F9E2AE]/90 via-[#FFF8E7]/95 to-[#F9E4B7]/90 border-2 border-amber-300/80 shadow-[0_20px_55px_rgba(245,158,11,0.14)] text-stone-900 flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div className="max-w-xl space-y-2">
-              <span className="text-xs font-extrabold uppercase tracking-widest text-amber-400">
+              <span className="text-xs font-extrabold uppercase tracking-widest text-amber-800">
                 Open Craft Application
               </span>
-              <h3 className="text-xl sm:text-2xl font-extrabold">
+              <h3 className="text-xl sm:text-2xl font-extrabold text-stone-950">
                 Don’t see your exact title listed? Send us your favorite shipped work.
               </h3>
-              <p className="text-xs sm:text-sm text-stone-300 leading-relaxed">
+              <p className="text-xs sm:text-sm text-stone-700 leading-relaxed">
                 We are always eager to meet exceptional systems engineers, product designers, technical writers, and growth operators. Share a link to something you built and why you’re proud of it.
               </p>
             </div>
             <Link
               to="/contact?role=Open+Craft+Application"
-              className="shrink-0 inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-white hover:bg-stone-100 text-stone-950 font-bold text-sm transition-all"
+              className="shrink-0 inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-stone-900 hover:bg-stone-800 text-white font-bold text-sm shadow-md transition-all"
             >
               <span>Introduce Yourself</span>
               <ArrowRight className="w-4 h-4" />
