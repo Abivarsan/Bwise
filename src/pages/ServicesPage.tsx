@@ -28,10 +28,11 @@ import { assetUrl } from '../utils/assets';
 const SERVICE_VISUAL_MAP: Record<string, string> = {
   'web-development': '/assets/pages/industries/enterprise-saas.jpg',
   'mobile-app-development': '/assets/pages/portfolio/aetherpay-fintech.jpg',
+  'ui-ux-design': '/assets/pages/careers/design-critique.jpg',
   'application-testing': '/assets/pages/careers/engineering-pairing.jpg',
   'search-engine-optimisation': '/assets/pages/industries/proptech-realestate.jpg',
-  'artificial-intelligence-optimization': '/assets/pages/portfolio/nexus-industrial-iot.jpg',
   'generative-engine-optimisation': '/assets/pages/careers/architecture-whiteboard.jpg',
+  'artificial-intelligence-optimization': '/assets/pages/portfolio/nexus-industrial-iot.jpg',
   'social-media-advertising': '/assets/pages/industries/luxury-ecommerce.jpg',
   'social-media-management': '/assets/pages/portfolio/solstice-hospitality.jpg',
   'content-marketing': '/assets/pages/portfolio/kora-botanicals.jpg',
@@ -399,10 +400,10 @@ export const ServicesPage: React.FC = () => {
           <div className="space-y-1.5">
             <span className="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-amber-800">
               <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-              Ready to Launch?
+              BWise · Jaffna, Sri Lanka
             </span>
             <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-stone-900">
-              Deploy a dedicated {activeCategory.title} pod in under 10 days.
+              Ready to launch your {activeCategory.title} project with our team?
             </h2>
           </div>
 

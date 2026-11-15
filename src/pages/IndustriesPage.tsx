@@ -6,7 +6,7 @@ import {
   ArrowUpRight,
   Building2,
   CheckCircle2,
-  CreditCard,
+  GraduationCap,
   HeartPulse,
   Layers,
   Lock,
@@ -37,158 +37,158 @@ interface IndustryDossier {
 
 const INDUSTRIES: IndustryDossier[] = [
   {
-    id: 'fintech',
+    id: 'retail-ecommerce',
     number: '01',
-    name: 'FinTech, Banking & Institutional Wealth',
-    shortName: 'FinTech & Banking',
-    tagline: 'Low-latency trading interfaces, multi-currency ledgers & SOC2-compliant acquisition.',
-    icon: CreditCard,
-    image: '/assets/pages/industries/fintech-banking.jpg',
-    imageAlt: 'Institutional financial analyst reviewing real-time FX liquidity dashboards',
-    complianceBadges: ['SOC2 Type II', 'PCI-DSS Level 1', 'ISO 27001'],
-    lead: 'We build sub-second WebSocket treasury desks, biometric mobile banking apps, and compliance-reviewed SEO/GEO engines that lower institutional CAC.',
+    name: 'Retail, E-Commerce & Consumer Brands',
+    shortName: 'Retail & E-Commerce',
+    tagline: 'Online stores, payment/inventory integration & high-converting social media ads.',
+    icon: ShoppingBag,
+    image: '/assets/pages/industries/luxury-ecommerce.jpg',
+    imageAlt: 'Modern e-commerce storefront and brand packaging showcase',
+    complianceBadges: ['Custom Web Stores', 'Payment Gateways', 'Meta & TikTok Ads'],
+    lead: 'We help retail and D2C businesses in Sri Lanka and abroad launch fast online stores, sync inventory, and scale sales through targeted Facebook, Instagram, and Google campaigns.',
     capabilities: [
-      { title: 'Real-Time FX & Ledger UI', outcome: 'Sub-50ms order book & settlement rendering' },
-      { title: 'Biometric Mobile Approvals', outcome: 'Hardware-backed passkey & multi-sig flows' },
-      { title: 'Compliant Search Authority', outcome: 'FINRA/FCA-aligned technical SEO & GEO' },
+      { title: 'E-Commerce Web & Mobile Stores', outcome: 'Seamless checkout, cart recovery & mobile-first UI' },
+      { title: 'Social Commerce & Paid Ads', outcome: 'Targeted product catalog ads driving daily orders' },
+      { title: 'Brand Packaging & Logo Identity', outcome: 'Memorable visual identity that stands out on shelves & feeds' },
     ],
     benchmarks: [
-      { metric: '-44%', label: 'Qualified Institutional CAC' },
-      { metric: '99.99%', label: 'Core Ledger Uptime' },
+      { metric: '3.2x', label: 'Online Checkout Velocity' },
+      { metric: '+180%', label: 'Social Ad Engagement' },
     ],
     recommendedServices: [
       { label: 'Web Development', slug: 'web-development', categorySlug: 'software-solutions' },
-      { label: 'Mobile App Development', slug: 'mobile-app-development', categorySlug: 'software-solutions' },
-      { label: 'Digital Analytics', slug: 'digital-analytics', categorySlug: 'digital-strategy-ideas' },
-    ],
-  },
-  {
-    id: 'healthcare',
-    number: '02',
-    name: 'HealthTech, Clinical AI & Diagnostics',
-    shortName: 'HealthTech & AI',
-    tagline: 'HIPAA-compliant clinician workstations, patient portals & medical search authority.',
-    icon: HeartPulse,
-    image: '/assets/pages/industries/healthcare-medtech.jpg',
-    imageAlt: 'Physician reviewing diagnostic imaging and patient telemetry on clinical tablet',
-    complianceBadges: ['HIPAA Compliant', 'HL7 / FHIR R4', 'WCAG 2.2 AA'],
-    lead: 'We design zero-footprint browser imaging viewers, frictionless telehealth intake flows, and physician-reviewed medical schema that earns AI citations.',
-    capabilities: [
-      { title: 'Clinical Triage Workstations', outcome: '52% faster radiologist & physician case review' },
-      { title: 'FHIR / EHR Interoperability', outcome: 'Zero-PHI-leakage Epic & Cerner integrations' },
-      { title: 'Medical GEO & E-E-A-T', outcome: 'Verified citations across AI health answers' },
-    ],
-    benchmarks: [
-      { metric: '-52%', label: 'Clinician Triage Time' },
-      { metric: '+310%', label: 'Organic Patient Intake' },
-    ],
-    recommendedServices: [
-      { label: 'AI Optimization', slug: 'artificial-intelligence-optimization', categorySlug: 'software-solutions' },
-      { label: 'Application Testing', slug: 'application-testing', categorySlug: 'software-solutions' },
-      { label: 'Search Engine Optimisation', slug: 'search-engine-optimisation', categorySlug: 'software-solutions' },
-    ],
-  },
-  {
-    id: 'luxury-commerce',
-    number: '03',
-    name: 'Luxury Retail & Direct-to-Consumer',
-    shortName: 'Luxury & D2C',
-    tagline: 'Sub-second headless flagships, editorial art direction & high-ROAS paid social.',
-    icon: ShoppingBag,
-    image: '/assets/pages/industries/luxury-ecommerce.jpg',
-    imageAlt: 'Creative director inspecting luxury packaging and digital flagship lookbook',
-    complianceBadges: ['Shopify Plus / Hydrogen', 'Global Multi-Currency', 'Edge CDN'],
-    lead: 'We pair tactile editorial storytelling with sub-second edge commerce and algorithmic paid social studios that protect luxury brand equity.',
-    capabilities: [
-      { title: 'Sub-Second Edge Storefronts', outcome: '0.6s LCP across 30+ international markets' },
-      { title: 'AI Clienteling & Guided Rituals', outcome: '+68% higher average order value (AOV)' },
-      { title: 'Full-Funnel Paid Social Studio', outcome: '4.6x blended ROAS on Meta & TikTok' },
-    ],
-    benchmarks: [
-      { metric: '3.4x', label: 'Mobile Checkout Conversion' },
-      { metric: '+68%', label: 'Average Order Value Lift' },
-    ],
-    recommendedServices: [
-      { label: 'Brand Management', slug: 'brand-management', categorySlug: 'digital-strategy-ideas' },
       { label: 'Social Media Advertising', slug: 'social-media-advertising', categorySlug: 'social-media-marketing' },
       { label: 'Unique Logo Design', slug: 'unique-logo-design', categorySlug: 'digital-strategy-ideas' },
     ],
   },
   {
-    id: 'enterprise-saas',
-    number: '04',
-    name: 'Enterprise B2B SaaS & Cloud Infrastructure',
-    shortName: 'Enterprise SaaS',
-    tagline: 'Product-led growth engines, interactive sandboxes & generative AI citations.',
-    icon: Layers,
-    image: '/assets/pages/industries/enterprise-saas.jpg',
-    imageAlt: 'Engineering and product leadership collaborating in glass-walled studio',
-    complianceBadges: ['SOC2 Ready', 'OpenAPI / GraphQL', 'Multi-Region Edge'],
-    lead: 'We help B2B SaaS leaders dominate ChatGPT/Perplexity software comparisons, launch interactive browser sandboxes, and tie every touchpoint to pipeline.',
+    id: 'education-edtech',
+    number: '02',
+    name: 'Education, Academies & EdTech Platforms',
+    shortName: 'Education & EdTech',
+    tagline: 'Learning management portals, student mobile apps & enrollment marketing.',
+    icon: GraduationCap,
+    image: '/assets/pages/industries/fintech-banking.jpg',
+    imageAlt: 'Digital learning portal and analytics dashboard for education providers',
+    complianceBadges: ['LMS & Student Portals', 'Mobile Learning Apps', 'Lead Generation'],
+    lead: 'From private academies and training institutes in Jaffna to international EdTech startups, we build interactive learning portals and run student enrollment campaigns.',
     capabilities: [
-      { title: 'Generative Engine Optimization', outcome: '#1 citation share in AI software queries' },
-      { title: 'Interactive Product Sandboxes', outcome: 'Self-serve enterprise evaluation before sales' },
-      { title: 'Multi-Touch Revenue BI', outcome: 'Closed-loop CRM & warehouse attribution' },
+      { title: 'Student & Course Management Portals', outcome: 'Online admissions, video lessons & progress tracking' },
+      { title: 'Enrollment Social & Search Campaigns', outcome: 'High-intent student & parent lead generation' },
+      { title: 'Interactive Educational Content', outcome: 'Engaging video reels, carousels & search articles' },
     ],
     benchmarks: [
-      { metric: '+290%', label: 'AI Search Citation Share' },
-      { metric: '3.8x', label: 'Enterprise Demo Pipeline' },
+      { metric: '+210%', label: 'Student Course Inquiries' },
+      { metric: '24/7', label: 'Self-Serve Portal Access' },
     ],
     recommendedServices: [
-      { label: 'Generative Engine Optimisation', slug: 'generative-engine-optimisation', categorySlug: 'software-solutions' },
+      { label: 'Web Development', slug: 'web-development', categorySlug: 'software-solutions' },
       { label: 'Content Marketing', slug: 'content-marketing', categorySlug: 'social-media-marketing' },
+      { label: 'Social Media Management', slug: 'social-media-management', categorySlug: 'social-media-marketing' },
+    ],
+  },
+  {
+    id: 'healthcare-wellness',
+    number: '03',
+    name: 'Healthcare, Clinics & Wellness Centers',
+    shortName: 'Healthcare & Wellness',
+    tagline: 'Patient appointment portals, clinic mobile apps & local search authority.',
+    icon: HeartPulse,
+    image: '/assets/pages/industries/healthcare-medtech.jpg',
+    imageAlt: 'Clinician reviewing patient appointment portal and digital records on tablet',
+    complianceBadges: ['Appointment Booking', 'Secure Patient Data', 'Local SEO & GEO'],
+    lead: 'We build easy-to-use patient booking websites, clinic management dashboards, and trustworthy medical search profiles so patients can find and book care effortlessly.',
+    capabilities: [
+      { title: 'Online Appointment & Telehealth Portals', outcome: 'Automated SMS/WhatsApp reminders & doctor schedules' },
+      { title: 'Local Search & Google Maps SEO', outcome: 'Top visibility when patients search for specialists nearby' },
+      { title: 'Patient Education & Social Presence', outcome: 'Clear, empathetic health content & community trust' },
+    ],
+    benchmarks: [
+      { metric: '-55%', label: 'Reception Phone Overhead' },
+      { metric: '+195%', label: 'Direct Online Bookings' },
+    ],
+    recommendedServices: [
+      { label: 'Mobile App Development', slug: 'mobile-app-development', categorySlug: 'software-solutions' },
+      { label: 'Search Engine Optimisation', slug: 'search-engine-optimisation', categorySlug: 'software-solutions' },
+      { label: 'Application Testing', slug: 'application-testing', categorySlug: 'software-solutions' },
+    ],
+  },
+  {
+    id: 'startups-saas',
+    number: '04',
+    name: 'Startups, SMEs & Software Enterprises',
+    shortName: 'Startups & SMEs',
+    tagline: 'MVP engineering, AI workflow integration & full-funnel B2B digital growth.',
+    icon: Layers,
+    image: '/assets/pages/industries/enterprise-saas.jpg',
+    imageAlt: 'Software engineering and product team collaborating in studio',
+    complianceBadges: ['Full-Stack MVPs', 'AI & Automation', 'Dedicated Pods'],
+    lead: 'We partner with founders and growing SMEs to design, build, test, and market custom SaaS products, internal business dashboards, and AI-powered customer workflows.',
+    capabilities: [
+      { title: 'Custom Web & Cloud Applications', outcome: 'Scalable React, Node.js & cloud-native architectures' },
+      { title: 'AI Agents & Workflow Automation', outcome: 'Smart chatbots and automated customer support/lead triage' },
+      { title: 'B2B LinkedIn & Search Growth', outcome: 'Authority content, SEO, and Generative Engine Optimisation' },
+    ],
+    benchmarks: [
+      { metric: '2-Week', label: 'Agile Release Sprints' },
+      { metric: '100%', label: 'QA-Tested Deployments' },
+    ],
+    recommendedServices: [
+      { label: 'AI Optimization', slug: 'artificial-intelligence-optimization', categorySlug: 'software-solutions' },
+      { label: 'Generative Engine Optimisation', slug: 'generative-engine-optimisation', categorySlug: 'software-solutions' },
       { label: 'Digital Analytics', slug: 'digital-analytics', categorySlug: 'digital-strategy-ideas' },
     ],
   },
   {
-    id: 'proptech',
+    id: 'real-estate-construction',
     number: '05',
-    name: 'PropTech, Commercial Real Estate & Smart Cities',
-    shortName: 'PropTech & CRE',
-    tagline: 'Interactive 3D property digital twins, investor portals & hyper-local search.',
+    name: 'Real Estate, Property & Construction',
+    shortName: 'Real Estate & Property',
+    tagline: 'Property listing platforms, buyer lead generation & corporate brand identity.',
     icon: Building2,
     image: '/assets/pages/industries/proptech-realestate.jpg',
-    imageAlt: 'Architectural scale model and digital twin viewport in real estate development studio',
-    complianceBadges: ['WebGL / Mapbox 3D', 'Yardi / MRI Sync', 'Automated QA'],
-    lead: 'We replace static PDFs with interactive 3D stacking plans, real-time BMS telemetry portals, and programmatic local search across hundreds of properties.',
+    imageAlt: 'Modern architectural model and interactive property listing showcase',
+    complianceBadges: ['Property Portals', 'Lead Capture CRM', 'Local & Global SEO'],
+    lead: 'We create interactive property showcase websites, virtual inquiry funnels, and targeted digital campaigns connecting developers and agencies with local and diaspora buyers.',
     capabilities: [
-      { title: 'WebGL 3D Stacking Plans', outcome: '60fps interactive floorplate & sun-path tours' },
-      { title: 'LP Investor Data Rooms', outcome: 'Automated distribution & K-1 document vaults' },
-      { title: 'Hyper-Local Geo-Grid SEO', outcome: 'Top-3 map pack rankings across every market' },
+      { title: 'Interactive Property Listing Portals', outcome: 'Filterable listings, map views & instant WhatsApp/email leads' },
+      { title: 'Targeted Buyer Lead Campaigns', outcome: 'High-intent social & search ads for local & overseas buyers' },
+      { title: 'Developer & Project Branding', outcome: 'Premium logos, brochures & digital project launches' },
     ],
     benchmarks: [
-      { metric: '+175%', label: 'Direct Leasing Inquiries' },
-      { metric: '-38%', label: 'Pre-Leasing Cycle Time' },
+      { metric: '+175%', label: 'Qualified Buyer Leads' },
+      { metric: 'Fast', label: 'Mobile Property Browsing' },
     ],
     recommendedServices: [
       { label: 'Web Development', slug: 'web-development', categorySlug: 'software-solutions' },
-      { label: 'Search Engine Optimisation', slug: 'search-engine-optimisation', categorySlug: 'software-solutions' },
       { label: 'Brand Management', slug: 'brand-management', categorySlug: 'digital-strategy-ideas' },
+      { label: 'Social Media Advertising', slug: 'social-media-advertising', categorySlug: 'social-media-marketing' },
     ],
   },
   {
-    id: 'hospitality-aviation',
+    id: 'hospitality-tourism',
     number: '06',
-    name: 'Hospitality, Private Aviation & Bespoke Travel',
-    shortName: 'Hospitality & Aviation',
-    tagline: 'Direct-booking engines, charter configurators & high-net-worth loyalty apps.',
+    name: 'Hospitality, Hotels, Travel & Restaurants',
+    shortName: 'Hospitality & Travel',
+    tagline: 'Direct booking websites, visual storytelling & engaging social media management.',
     icon: Plane,
     image: '/assets/pages/industries/hospitality-aviation.jpg',
-    imageAlt: 'Bespoke architectural resort lobby and private aviation concierge experience',
-    complianceBadges: ['PMS / GDS Native', 'Multi-Lingual Edge', 'VIP Mobile Pass'],
-    lead: 'We build commission-free direct booking engines, empty-leg jet charter configurators, and Digital Key companion apps for ultra-luxury hospitality.',
+    imageAlt: 'Boutique hotel and hospitality brand digital booking experience',
+    complianceBadges: ['Direct Booking Web', 'Visual Content Studio', 'Review & Social Growth'],
+    lead: 'We help hotels, resorts, tour operators, and restaurants attract travelers and diners through direct booking websites, mouth-watering visual content, and search visibility.',
     capabilities: [
-      { title: 'Direct Villa & Charter Booking', outcome: '3-step multi-currency itinerary checkout' },
-      { title: 'VIP Companion Mobile App', outcome: 'Offline itineraries, Digital Key & WhatsApp concierge' },
-      { title: 'UHNW Social & Editorial', outcome: 'High-intent private client acquisition' },
+      { title: 'Commission-Free Direct Booking Sites', outcome: 'Room/table reservations & tour package inquiry flows' },
+      { title: 'Instagram, Facebook & Video Storytelling', outcome: 'Reels, photography & active guest community management' },
+      { title: 'Travel SEO & AI Discovery', outcome: 'Capture travelers searching for Sri Lanka & regional stays' },
     ],
     benchmarks: [
-      { metric: '+215%', label: 'Direct Booking Share' },
-      { metric: '-38%', label: 'OTA Commission Fees' },
+      { metric: '+215%', label: 'Direct Booking Inquiries' },
+      { metric: '360°', label: 'Social & Search Visibility' },
     ],
     recommendedServices: [
-      { label: 'Mobile App Development', slug: 'mobile-app-development', categorySlug: 'software-solutions' },
       { label: 'Social Media Management', slug: 'social-media-management', categorySlug: 'social-media-marketing' },
+      { label: 'Web Development', slug: 'web-development', categorySlug: 'software-solutions' },
       { label: 'Unique Logo Design', slug: 'unique-logo-design', categorySlug: 'digital-strategy-ideas' },
     ],
   },
@@ -211,14 +211,14 @@ export const IndustriesPage: React.FC = () => {
           <div>
             <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-bold uppercase tracking-wider">
               <Sparkles className="w-3.5 h-3.5" />
-              6 Core Verticals
+              Industries We Empower
             </span>
             <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-stone-950 mt-2.5">
-              Domain-Fluent Engineering &amp; Growth.
+              Tailored Software &amp; Digital Growth by Sector.
             </h1>
           </div>
           <p className="text-sm sm:text-base text-stone-600 max-w-md">
-            Compliance-ready architectures, custom product interfaces, and search authority tailored to high-trust industries.
+            From Jaffna and across Sri Lanka to global markets, we build custom digital solutions tailored to your industry.
           </p>
         </div>
 
@@ -279,7 +279,7 @@ export const IndustriesPage: React.FC = () => {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-stone-950/90 via-stone-950/25 to-transparent" />
 
-                {/* Top Compliance Badges */}
+                {/* Top Deliverable Badges */}
                 <div className="absolute top-5 left-5 right-5 flex flex-wrap items-center gap-2">
                   {activeSector.complianceBadges.map((badge) => (
                     <span
@@ -313,7 +313,7 @@ export const IndustriesPage: React.FC = () => {
                 <div className="space-y-5">
                   <div className="flex items-center gap-2">
                     <span className="px-3 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-extrabold uppercase tracking-wider">
-                      Vertical #{activeSector.number}
+                      Industry Focus #{activeSector.number}
                     </span>
                   </div>
 
@@ -347,7 +347,7 @@ export const IndustriesPage: React.FC = () => {
                   {/* Recommended Studios */}
                   <div>
                     <p className="text-[11px] font-extrabold uppercase tracking-wider text-stone-500 mb-2">
-                      Connected Beehive Studios for {activeSector.shortName}
+                      Recommended BWise Studios for {activeSector.shortName}
                     </p>
                     <div className="flex flex-wrap gap-2">
                       {activeSector.recommendedServices.map((svc) => (
@@ -370,14 +370,14 @@ export const IndustriesPage: React.FC = () => {
                     onClick={openConsultationModal}
                     className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-[#FBBF24] via-[#F59E0B] to-[#F59E0B] hover:from-[#FCD34D] hover:to-[#D97706] text-[#14111B] text-xs sm:text-sm font-extrabold shadow-md transition hover:scale-105 cursor-pointer"
                   >
-                    <span>Book {activeSector.shortName} Pod</span>
+                    <span>Discuss Your {activeSector.shortName} Project</span>
                     <ArrowRight className="w-4 h-4" />
                   </button>
                   <Link
                     to="/portfolio"
                     className="text-xs font-extrabold text-amber-700 hover:text-amber-800 inline-flex items-center gap-1"
                   >
-                    View Sector Case Studies <ArrowUpRight className="w-3.5 h-3.5" />
+                    View Project Showcases <ArrowUpRight className="w-3.5 h-3.5" />
                   </Link>
                 </div>
               </div>
@@ -437,7 +437,7 @@ export const IndustriesPage: React.FC = () => {
       </section>
 
       {/* =====================================================================
-          4. COMPACT SECURITY & COMPLIANCE TRUST BAR
+          4. COMPACT QUALITY & DELIVERY COMMITMENT BAR
          ===================================================================== */}
       <section className="max-w-[1320px] mx-auto px-4 sm:px-8">
         <div className="rounded-[28px] bg-gradient-to-r from-[#F9E2AE]/85 via-[#FFF8E7]/95 to-[#F9E4B7]/85 border-2 border-amber-300/80 p-6 sm:p-8 shadow-md flex flex-col lg:flex-row items-center justify-between gap-6">
@@ -447,23 +447,25 @@ export const IndustriesPage: React.FC = () => {
             </div>
             <div>
               <h3 className="text-base sm:text-lg font-extrabold text-stone-900">
-                Enterprise-Ready Governance &amp; Security by Default
+                Reliable Engineering &amp; Transparent Digital Marketing
               </h3>
               <p className="text-xs text-stone-600 mt-0.5">
-                100% IP assignment on day one · Automated CI/CD security gates · 99.99% production SLA
+                100% client code &amp; brand ownership · Dedicated QA testing · Ongoing post-launch support from Jaffna
               </p>
             </div>
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
-            {['SOC2 Type II', 'HIPAA / FHIR', 'PCI-DSS L1', 'WCAG 2.2 AA', 'ISO 27001'].map((tag) => (
-              <span
-                key={tag}
-                className="px-3 py-1.5 rounded-full bg-white text-stone-800 text-xs font-extrabold border border-amber-300/80 shadow-2xs"
-              >
-                {tag}
-              </span>
-            ))}
+            {['Responsive Web & Mobile', 'QA Tested', 'SEO & AI Ready', 'Custom Branding', 'Analytics Reporting'].map(
+              (tag) => (
+                <span
+                  key={tag}
+                  className="px-3 py-1.5 rounded-full bg-white text-stone-800 text-xs font-extrabold border border-amber-300/80 shadow-2xs"
+                >
+                  {tag}
+                </span>
+              )
+            )}
           </div>
         </div>
       </section>

@@ -359,19 +359,19 @@ export const HoneycombGrid3D: React.FC<HoneycombGrid3DProps> = ({
 
   // Row 0 Services (4)
   const row0Services = React.useMemo(
-    () => PRIORITY_SERVICES.filter((s) => s.hiveCell.row === 0).sort((a, b) => a.hiveCell.col - b.hiveCell.col),
+    () => PRIORITY_SERVICES.filter((s) => s.hiveCell.row === 0).sort((a, b) => a.hiveCell.col - b.hiveCell.col).slice(0, 4),
     []
   );
 
   // Row 1 Services (4)
   const row1Services = React.useMemo(
-    () => PRIORITY_SERVICES.filter((s) => s.hiveCell.row === 1).sort((a, b) => a.hiveCell.col - b.hiveCell.col),
+    () => PRIORITY_SERVICES.filter((s) => s.hiveCell.row === 1).sort((a, b) => a.hiveCell.col - b.hiveCell.col).slice(0, 4),
     []
   );
 
   // Row 2 Services (4)
   const row2Services = React.useMemo(
-    () => PRIORITY_SERVICES.filter((s) => s.hiveCell.row === 2).sort((a, b) => a.hiveCell.col - b.hiveCell.col),
+    () => PRIORITY_SERVICES.filter((s) => s.hiveCell.row === 2).sort((a, b) => a.hiveCell.col - b.hiveCell.col).slice(0, 4),
     []
   );
 

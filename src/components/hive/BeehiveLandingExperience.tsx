@@ -538,7 +538,7 @@ export const BeehiveLandingExperience: React.FC = () => {
                                 {category.title}
                               </h3>
                               <p className="text-[11px] text-stone-500 truncate mt-0.5">
-                                {category.slug === 'software-solutions' && 'Web • Mobile • QA Testing • SEO • AIO • GEO'}
+                                {category.slug === 'software-solutions' && 'Web • Mobile • UI/UX • QA Testing • SEO • GEO • AIO'}
                                 {category.slug === 'social-media-marketing' && 'Advertising • Management • Content Marketing'}
                                 {category.slug === 'digital-strategy-ideas' && 'Brand Management • Logo Design • Digital Analytics'}
                               </p>
