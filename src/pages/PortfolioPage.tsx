@@ -10,7 +10,7 @@ interface CaseStudy {
   number: string;
   client: string;
   sector: string;
-  categoryFilter: 'fintech' | 'healthtech' | 'commerce' | 'enterprise';
+  categoryFilter: 'software' | 'mobile' | 'marketing' | 'branding';
   year: string;
   timeline: string;
   image: string;
@@ -25,119 +25,119 @@ interface CaseStudy {
 
 const CASE_STUDIES: CaseStudy[] = [
   {
-    id: 'aetherpay',
+    id: 'enterprise-web-commerce',
     number: '01',
-    client: 'AetherPay Global',
-    sector: 'FinTech & Cross-Border Treasury',
-    categoryFilter: 'fintech',
+    client: 'Custom Web & E-Commerce Platform',
+    sector: 'Software Solutions · Web Development',
+    categoryFilter: 'software',
     year: '2025',
-    timeline: '16 Weeks',
+    timeline: '8 Weeks',
     image: '/assets/pages/portfolio/aetherpay-fintech.jpg',
-    imageAlt: 'AetherPay institutional treasury terminal across desktop and mobile',
-    headline: 'Re-architecting institutional FX settlement across 42 currencies.',
+    imageAlt: 'Full-stack web application and real-time analytics dashboard across desktop and mobile',
+    headline: 'Full-stack e-commerce & inventory management platform built for high-volume retail.',
     summary:
-      'Replaced six legacy banking portals with a single keyboard-first WebSocket trading desk and biometric mobile approval app.',
-    heroMetric: { value: '$4.8B+', label: 'Annualized Settlement Volume' },
+      'Engineered a fast, responsive web platform with real-time stock synchronization, local & international payment gateway integration, and an intuitive admin dashboard.',
+    heroMetric: { value: '3.2x', label: 'Online Order Velocity' },
     metrics: [
-      { value: '+184%', label: 'Activation Velocity' },
-      { value: '1.1s', label: 'FX Quote Latency' },
-      { value: '99.99%', label: 'Core Ledger Uptime' },
+      { value: '< 1.2s', label: 'Page Load Time' },
+      { value: '99.9%', label: 'System Uptime' },
+      { value: '+145%', label: 'Mobile Conversions' },
     ],
-    deliverables: ['React + TypeScript', 'Swift & Kotlin', 'WebSockets', 'SOC2 Type II'],
+    deliverables: ['React & TypeScript', 'Node.js API', 'Payment Integration', 'Automated QA'],
     flagship: true,
   },
   {
-    id: 'vellum-health',
+    id: 'mobile-booking-app',
     number: '02',
-    client: 'Vellum Diagnostics',
-    sector: 'HealthTech & Clinical AI',
-    categoryFilter: 'healthtech',
+    client: 'Cross-Platform Service & Booking App',
+    sector: 'Software Solutions · Mobile App Development',
+    categoryFilter: 'mobile',
     year: '2025',
-    timeline: '14 Weeks',
+    timeline: '10 Weeks',
     image: '/assets/pages/portfolio/vellum-medtech.jpg',
-    imageAlt: 'Clinician reviewing Vellum Diagnostics AI radiology triage workstation',
-    headline: 'Cutting diagnostic triage time in half for 1,900+ radiologists.',
+    imageAlt: 'Cross-platform mobile application and appointment scheduling interface',
+    headline: 'Native-feel iOS & Android application for instant customer bookings and live notifications.',
     summary:
-      'Zero-footprint DICOM browser viewer paired with HIPAA-compliant generative search across 14,000 clinical oncology pages.',
-    heroMetric: { value: '-52%', label: 'Median Case Review Time' },
+      'Designed and built a cross-platform mobile app featuring real-time slot scheduling, push notifications, multilingual support, and end-to-end automated QA testing.',
+    heroMetric: { value: '-60%', label: 'Manual Booking Overhead' },
     metrics: [
-      { value: '+310%', label: 'Organic & AI Citations' },
-      { value: '1,900+', label: 'Daily Active Clinicians' },
-      { value: '100%', label: 'HIPAA Audit Pass' },
+      { value: 'iOS + Android', label: 'Unified Codebase' },
+      { value: '4.8★', label: 'User Experience Rating' },
+      { value: '100%', label: 'QA Test Coverage' },
     ],
-    deliverables: ['Next.js & WebGL', 'Clinical AI Triage', 'Technical SEO & GEO'],
+    deliverables: ['Mobile App Dev', 'UI/UX Design', 'Push Notifications', 'Application Testing'],
   },
   {
-    id: 'kora-botanicals',
+    id: 'social-growth-campaign',
     number: '03',
-    client: 'Kōra Atelier Paris',
-    sector: 'Luxury Direct-to-Consumer',
-    categoryFilter: 'commerce',
+    client: 'Multi-Channel Social Media & Lead Engine',
+    sector: 'Social Media Marketing · Ads & Content',
+    categoryFilter: 'marketing',
+    year: '2025',
+    timeline: 'Ongoing',
+    image: '/assets/pages/portfolio/kora-botanicals.jpg',
+    imageAlt: 'Creative social media campaign visuals and performance analytics',
+    headline: 'Turning Facebook, Instagram & LinkedIn attention into qualified daily customer inquiries.',
+    summary:
+      'Combined scroll-stopping short-form video reels, bilingual creative graphics, active community management, and targeted Meta & LinkedIn ad campaigns.',
+    heroMetric: { value: '+240%', label: 'Qualified Lead Inquiries' },
+    metrics: [
+      { value: '3.8x', label: 'Ad Spend Return' },
+      { value: '+190%', label: 'Organic Engagement' },
+      { value: 'Daily', label: 'Community Management' },
+    ],
+    deliverables: ['Social Media Advertising', 'Social Media Management', 'Content Marketing'],
+  },
+  {
+    id: 'brand-identity-system',
+    number: '04',
+    client: 'Complete Brand Identity & Logo System',
+    sector: 'Digital Strategy · Brand & Logo Design',
+    categoryFilter: 'branding',
+    year: '2024',
+    timeline: '4 Weeks',
+    image: '/assets/pages/portfolio/studio-craft-process.jpg',
+    imageAlt: 'Designers crafting custom vector logo geometry and brand guidelines',
+    headline: 'Crafting a distinctive visual identity, custom logo mark, and digital brand kit.',
+    summary:
+      'Delivered bespoke vector logo design, color & typography guidelines, social media templates, and packaging/stationery assets for a cohesive market presence.',
+    heroMetric: { value: '100%', label: 'Custom Vector Craft' },
+    metrics: [
+      { value: 'Full Kit', label: 'Brand Guidelines' },
+      { value: 'Social + Web', label: 'Ready-to-Use Templates' },
+      { value: '+85%', label: 'Brand Recall Lift' },
+    ],
+    deliverables: ['Unique Logo Design', 'Brand Management', 'Social Media Kit'],
+  },
+  {
+    id: 'seo-geo-analytics',
+    number: '05',
+    client: 'Search Visibility (SEO/GEO) & Analytics Hub',
+    sector: 'Software & Strategy · SEO, AI & Analytics',
+    categoryFilter: 'software',
     year: '2024',
     timeline: '12 Weeks',
-    image: '/assets/pages/portfolio/kora-botanicals.jpg',
-    imageAlt: 'Kora Atelier botanical skincare flagship e-commerce experience',
-    headline: 'A tactile headless flagship that tripled mobile checkout conversion.',
-    summary:
-      'Bespoke monogram typography, sub-second edge storefront, and interactive AI skin-ritual diagnostic across 14 markets.',
-    heroMetric: { value: '3.4x', label: 'Mobile Checkout Conversion' },
-    metrics: [
-      { value: '+68%', label: 'Average Order Value' },
-      { value: '0.6s', label: 'Global Edge Load' },
-      { value: '4.6x', label: 'Paid Social ROAS' },
-    ],
-    deliverables: ['Shopify Hydrogen', 'Brand Identity', 'Paid Social Studio'],
-  },
-  {
-    id: 'nexus-grid',
-    number: '04',
-    client: 'Nexus Grid Systems',
-    sector: 'Industrial IoT & Clean Energy',
-    categoryFilter: 'enterprise',
-    year: '2024',
-    timeline: '18 Weeks',
-    image: '/assets/pages/portfolio/nexus-industrial-iot.jpg',
-    imageAlt: 'Field engineer inspecting solar microgrid telemetry on ruggedized tablet',
-    headline: 'Real-time predictive maintenance for 8,400 distributed microgrids.',
-    summary:
-      'Offline-first field tablet app and 60fps WebGL digital twin streaming 1.2M sensor events per minute.',
-    heroMetric: { value: '-41%', label: 'Unplanned Grid Downtime' },
-    metrics: [
-      { value: '$19.4M', label: 'Annual O&M Savings' },
-      { value: '60fps', label: 'WebGL Digital Twin' },
-      { value: '8,400', label: 'Connected Sites' },
-    ],
-    deliverables: ['React Native', 'WebGL Telemetry', 'Predictive AI Alerts'],
-  },
-  {
-    id: 'solstice-resorts',
-    number: '05',
-    client: 'Solstice Private Havens',
-    sector: 'Ultra-Luxury Hospitality',
-    categoryFilter: 'commerce',
-    year: '2024',
-    timeline: '10 Weeks',
     image: '/assets/pages/portfolio/solstice-hospitality.jpg',
-    imageAlt: 'Solstice architectural resort overlooking ocean horizon at dusk',
-    headline: 'Shifting $62M in villa bookings from third-party OTAs to direct.',
+    imageAlt: 'High-converting direct booking website and search analytics dashboard',
+    headline: 'Ranking #1 on Google search and AI answer engines with real-time conversion tracking.',
     summary:
-      'Cinematic villa-composer booking flow with multi-currency private aviation add-ons and AI search concierge.',
-    heroMetric: { value: '+215%', label: 'Direct Villa Bookings' },
+      'Implemented technical SEO, structured schema for Generative Engine Optimisation (GEO), and a custom GA4/Looker analytics dashboard tracking every lead.',
+    heroMetric: { value: '+215%', label: 'Organic Search Traffic' },
     metrics: [
-      { value: '$14,200', label: 'Average Direct Booking' },
-      { value: '-38%', label: 'OTA Commission Bleed' },
-      { value: '94%', label: 'Repeat Guest Rate' },
+      { value: 'Top 3', label: 'Core Keyword Rankings' },
+      { value: 'AI Ready', label: 'GEO Structured Data' },
+      { value: 'Real-Time', label: 'Lead Attribution' },
     ],
-    deliverables: ['Custom Booking Engine', 'GEO Concierge', 'Editorial Video'],
+    deliverables: ['Search Engine Optimisation', 'Generative Engine Optimisation', 'Digital Analytics'],
   },
 ];
 
 const FILTERS = [
-  { id: 'all', label: 'All Case Studies' },
-  { id: 'fintech', label: 'FinTech & Banking' },
-  { id: 'healthtech', label: 'HealthTech & AI' },
-  { id: 'commerce', label: 'Luxury & Commerce' },
-  { id: 'enterprise', label: 'Industrial & IoT' },
+  { id: 'all', label: 'All Projects' },
+  { id: 'software', label: 'Web, SEO & AI' },
+  { id: 'mobile', label: 'Mobile Apps & QA' },
+  { id: 'marketing', label: 'Social Media & Content' },
+  { id: 'branding', label: 'Branding & Logo Design' },
 ] as const;
 
 export const PortfolioPage: React.FC = () => {
@@ -162,10 +162,10 @@ export const PortfolioPage: React.FC = () => {
           <div>
             <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-bold uppercase tracking-wider">
               <Sparkles className="w-3.5 h-3.5" />
-              Verified Production Shipments
+              BWise Digital &amp; Software Showcase
             </span>
             <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-stone-950 mt-2.5">
-              Systems Built to Perform in the Wild.
+              Solutions Crafted in Jaffna for Real Growth.
             </h1>
           </div>
 
@@ -219,10 +219,10 @@ export const PortfolioPage: React.FC = () => {
                 {/* Top Floating Badges */}
                 <div className="absolute top-5 left-5 right-5 flex items-center justify-between gap-2">
                   <span className="px-3.5 py-1.5 rounded-full bg-white/90 backdrop-blur-md text-stone-900 text-xs font-extrabold shadow-sm">
-                    Case #{selectedStudy.number} · {selectedStudy.sector}
+                    Showcase #{selectedStudy.number} · {selectedStudy.sector}
                   </span>
                   <span className="px-3.5 py-1.5 rounded-full bg-amber-400 text-stone-950 text-xs font-extrabold shadow-md">
-                    Shipped in {selectedStudy.timeline}
+                    Timeline: {selectedStudy.timeline}
                   </span>
                 </div>
 
@@ -252,7 +252,7 @@ export const PortfolioPage: React.FC = () => {
                 <div className="space-y-5">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-extrabold uppercase tracking-wider text-amber-700 bg-amber-100/90 px-3 py-1 rounded-full">
-                      Spotlight Outcome
+                      BWise Studio Deliverable
                     </span>
                     <span className="text-xs font-bold text-stone-400">{selectedStudy.year}</span>
                   </div>
@@ -286,7 +286,7 @@ export const PortfolioPage: React.FC = () => {
                   {/* Deliverable Tags */}
                   <div>
                     <p className="text-[11px] font-extrabold uppercase tracking-wider text-stone-500 mb-2">
-                      Deployed Architecture &amp; Pods
+                      BWise Studios Involved
                     </p>
                     <div className="flex flex-wrap gap-1.5">
                       {selectedStudy.deliverables.map((item) => (
@@ -308,7 +308,7 @@ export const PortfolioPage: React.FC = () => {
                     onClick={openConsultationModal}
                     className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-gradient-to-r from-[#FBBF24] via-[#F59E0B] to-[#F59E0B] hover:from-[#FCD34D] hover:to-[#D97706] text-[#14111B] text-xs sm:text-sm font-extrabold shadow-md transition hover:scale-[1.02] cursor-pointer"
                   >
-                    <span>Build a Similar System</span>
+                    <span>Start a Similar Project With BWise</span>
                     <ArrowUpRight className="w-4 h-4" />
                   </button>
                 </div>
@@ -325,7 +325,7 @@ export const PortfolioPage: React.FC = () => {
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-lg sm:text-xl font-extrabold text-stone-900 flex items-center gap-2">
             <Layers className="w-5 h-5 text-amber-600" />
-            Click Any Case Study to Inspect Telemetry ({filteredStudies.length})
+            Select Any Project to Preview Details ({filteredStudies.length})
           </h2>
         </div>
 
@@ -387,7 +387,7 @@ export const PortfolioPage: React.FC = () => {
                       ))}
                     </div>
                     <span className="inline-flex items-center gap-1 text-xs font-extrabold text-amber-700 group-hover:translate-x-0.5 transition-transform">
-                      Inspect <ArrowUpRight className="w-3.5 h-3.5" />
+                      Preview <ArrowUpRight className="w-3.5 h-3.5" />
                     </span>
                   </div>
                 </div>
@@ -404,10 +404,10 @@ export const PortfolioPage: React.FC = () => {
         <div className="rounded-[32px] bg-gradient-to-r from-[#F9E2AE]/90 via-[#FFF8E7]/95 to-[#F9E4B7]/90 border-2 border-amber-300/80 p-8 sm:p-12 shadow-[0_18px_50px_rgba(245,158,11,0.16)] flex flex-col md:flex-row items-center justify-between gap-6">
           <div>
             <span className="text-xs font-extrabold uppercase tracking-wider text-amber-800">
-              Next Flagship Case Study
+              BWise · Jaffna, Sri Lanka
             </span>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight mt-1">
-              Have a high-stakes product or growth target on your roadmap?
+              Ready to launch your next website, mobile app, or marketing campaign?
             </h2>
           </div>
           <button

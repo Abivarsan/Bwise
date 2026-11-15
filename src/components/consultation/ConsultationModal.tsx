@@ -446,7 +446,7 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({ isOpen, on
                       autoComplete="street-address"
                       value={formData.address}
                       onChange={(e) => handleChange('address', e.target.value)}
-                      placeholder="120 Market St, Suite 400"
+                      placeholder="Jaffna, Sri Lanka"
                       className="w-full px-4 py-3 rounded-xl sm:rounded-2xl border border-amber-200/90 hover:border-amber-300 text-sm sm:text-base text-stone-900 placeholder:text-stone-400 bg-[#FAF8F5]/90 hover:bg-white focus:bg-white transition-all focus:outline-none focus:border-amber-500 focus:ring-4 focus:ring-amber-500/20"
                     />
                   </div>

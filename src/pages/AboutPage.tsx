@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   ArrowRight,
+  ArrowUpRight,
   CheckCircle2,
   Cpu,
-  Globe2,
   Layers,
+  MapPin,
   ShieldCheck,
   Sparkles,
   TrendingUp,
@@ -18,80 +19,95 @@ import { assetUrl } from '../utils/assets';
 const HIVE_PILLARS = [
   {
     number: '01',
-    title: 'Zero Silos Between Code & Growth',
+    title: 'Software & Digital Marketing Under One Roof',
     summary:
-      'Engineers, brand designers, and SEO/GEO strategists share one telemetry feed and ship in unified 2-week sprints.',
-    metric: '3.2x Faster Delivery',
+      'Our web & mobile developers, UI/UX designers, and digital marketers collaborate in one Jaffna studio so your brand and technology move together.',
+    metric: 'Unified Execution',
     icon: Layers,
   },
   {
     number: '02',
-    title: 'Built for the Generative AI Era',
+    title: 'Modern Tech & Search Visibility',
     summary:
-      'Every platform we ship is structured for both human conversion and AI citation across ChatGPT, Perplexity, and Gemini.',
-    metric: '+312% AI Visibility',
+      'We build fast, responsive web and mobile apps paired with technical SEO and AI search optimization (GEO) so customers find you first.',
+    metric: 'Web, Mobile & AI',
     icon: Cpu,
   },
   {
     number: '03',
-    title: 'Revenue-Grade Accountability',
+    title: 'Creative Branding & Measurable Growth',
     summary:
-      'We measure success in pipeline velocity, conversion lift, and uptime SLAs—never vanity agency impressions.',
-    metric: '$180M+ Client Pipeline',
+      'From unique logo design and brand identity to targeted social media campaigns on Facebook, Instagram, and LinkedIn.',
+    metric: 'Results-Driven',
     icon: TrendingUp,
   },
 ];
 
 const LEADERSHIP_PODS = [
   {
-    pod: 'Pod 01',
-    name: 'Full-Stack & Mobile Engineering',
-    leadRole: 'Principal Systems Architects',
-    summary: 'Cloud-native web platforms, native iOS/Android apps, and zero-downtime CI/CD.',
+    pod: 'Studio Pod 01',
+    name: 'Web & Mobile Software Engineering',
+    leadRole: 'Full-Stack & Mobile Developers',
+    summary: 'Custom websites, web applications, iOS/Android mobile apps, and thorough QA testing.',
     image: '/assets/pages/careers/engineering-pairing.jpg',
-    tags: ['React & Next.js', 'Swift & Kotlin', 'Automated QA'],
+    tags: ['Web Development', 'Mobile Apps', 'QA & Testing'],
   },
   {
-    pod: 'Pod 02',
-    name: 'AI, Search & Generative Visibility',
-    leadRole: 'AI & Search Engineers',
-    summary: 'Autonomous LLM agents, technical SEO infrastructure, and Generative Engine Optimization.',
+    pod: 'Studio Pod 02',
+    name: 'SEO, AI & Generative Search',
+    leadRole: 'Search & AI Specialists',
+    summary: 'Search Engine Optimisation (SEO), AI workflow integration, and Generative Engine Optimisation (GEO).',
     image: '/assets/pages/careers/architecture-whiteboard.jpg',
-    tags: ['Custom AI Agents', 'Technical SEO', 'GEO Citations'],
+    tags: ['Technical SEO', 'AI Optimization', 'GEO Visibility'],
   },
   {
-    pod: 'Pod 03',
-    name: 'Performance Media & Content',
-    leadRole: 'Growth & Acquisition Leads',
-    summary: 'Algorithmic paid social studios, community stewardship, and compounding editorial content.',
+    pod: 'Studio Pod 03',
+    name: 'Social Media & Content Marketing',
+    leadRole: 'Digital Marketing Specialists',
+    summary: 'Data-driven social media advertising, consistent page management, and engaging visual/video content.',
     image: '/assets/pages/portfolio/kora-botanicals.jpg',
-    tags: ['Paid Social ROAS', 'Content Systems', 'Community'],
+    tags: ['Facebook & Instagram Ads', 'Page Management', 'Content Creation'],
   },
   {
-    pod: 'Pod 04',
-    name: 'Brand Craft & Revenue Analytics',
-    leadRole: 'Creative & BI Directors',
-    summary: 'Iconic brand systems, bespoke geometry logos, and executive multi-touch attribution.',
+    pod: 'Studio Pod 04',
+    name: 'Brand Identity, Logo & Analytics',
+    leadRole: 'Creative Designers & Analysts',
+    summary: 'Memorable logo design, cohesive brand guidelines, and clear digital performance reporting.',
     image: '/assets/pages/portfolio/studio-craft-process.jpg',
-    tags: ['Brand Architecture', 'Logo Systems', 'Executive BI'],
+    tags: ['Unique Logo Design', 'Brand Handling', 'Digital Analytics'],
   },
 ];
 
 const STUDIO_GALLERY = [
   {
     image: '/assets/pages/careers/hive-studio-hero.jpg',
-    title: 'Cross-Functional Pod Standups',
-    location: 'Toronto · Colombo · London',
+    title: 'Collaborative Software & Creative Studio',
+    location: 'Jaffna, Sri Lanka',
   },
   {
     image: '/assets/pages/careers/design-critique.jpg',
-    title: 'Design Systems & Typography Critique',
-    location: 'Brand & Product Studio',
+    title: 'Brand Identity, UI/UX & Social Creative',
+    location: 'BWise Creative Wing · Jaffna',
   },
   {
     image: '/assets/pages/portfolio/studio-craft-process.jpg',
-    title: 'Tactile Craft & Telemetry Reviews',
-    location: 'Principal Engineering Wing',
+    title: 'Full-Stack Web & Mobile Engineering',
+    location: 'BWise Engineering Pod · Jaffna',
+  },
+];
+
+const OFFICIAL_SOCIALS = [
+  {
+    name: 'LinkedIn (@bwiselk)',
+    href: 'https://www.linkedin.com/company/bwiselk/',
+  },
+  {
+    name: 'Facebook (BWise)',
+    href: 'https://www.facebook.com/profile.php?id=61592147020833',
+  },
+  {
+    name: 'Instagram (@bwise.lk)',
+    href: 'https://www.instagram.com/bwise.lk/?hl=en',
   },
 ];
 
@@ -104,35 +120,35 @@ export const AboutPage: React.FC = () => {
       <HiveCornerDecorations />
 
       {/* =====================================================================
-          1. VISUAL HERO + INTERACTIVE STUDIO MOSAIC
+          1. VISUAL HERO + JAFFNA STUDIO MOSAIC
          ===================================================================== */}
       <section className="max-w-[1280px] mx-auto px-4 sm:px-8 pb-16">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-          {/* Left Concise Manifesto */}
+          {/* Left Concise Story */}
           <div className="lg:col-span-6 space-y-5">
             <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-100/90 border border-amber-300/70 text-amber-900 text-xs font-extrabold uppercase tracking-wider">
-              <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-              Inside the BWise Beehive
+              <MapPin className="w-3.5 h-3.5 text-amber-600" />
+              Based in Jaffna, Sri Lanka
             </span>
 
             <h1 className="text-3xl sm:text-5xl font-extrabold text-stone-900 tracking-tight leading-[1.1]">
-              One Connected Hive.{' '}
+              Where Software Engineering Meets{' '}
               <span className="bg-gradient-to-r from-amber-600 via-amber-500 to-orange-600 bg-clip-text text-transparent">
-                Zero Agency Bloat.
+                Creative Digital Growth.
               </span>
             </h1>
 
             <p className="text-sm sm:text-base text-stone-600 leading-relaxed">
-              We founded BWise Digital to replace fragmented vendor chains with a single, interconnected studio where principal engineers, designers, and growth strategists build together.
+              <strong>BWise (`bwise.lk`)</strong> is a Software Development &amp; Digital Marketing Agency headquartered in <strong>Jaffna, Sri Lanka</strong>. Inspired by the precision of a beehive, our 12 specialized studio cells bring together full-stack developers, mobile engineers, brand designers, and digital marketers to help businesses build modern software and grow their digital presence.
             </p>
 
-            {/* Compact Metrics Row */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+            {/* Compact Highlights Row */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-1">
               {[
+                { value: 'Jaffna', label: 'Sri Lanka HQ' },
                 { value: '12', label: 'Specialist Studios' },
-                { value: '340+', label: 'Global Launches' },
-                { value: '96%', label: 'Client Retention' },
-                { value: '$180M+', label: 'Attributed Pipeline' },
+                { value: '3', label: 'Core Divisions' },
+                { value: '360°', label: 'Tech & Marketing' },
               ].map((st) => (
                 <div
                   key={st.label}
@@ -144,20 +160,41 @@ export const AboutPage: React.FC = () => {
               ))}
             </div>
 
+            {/* Official Social Links */}
+            <div className="pt-1">
+              <p className="text-[11px] font-extrabold uppercase tracking-wider text-stone-500 mb-2">
+                Connect With BWise on Social Media
+              </p>
+              <div className="flex flex-wrap items-center gap-2">
+                {OFFICIAL_SOCIALS.map((soc) => (
+                  <a
+                    key={soc.name}
+                    href={soc.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white hover:bg-amber-500 text-stone-800 hover:text-white text-xs font-bold border border-amber-200/90 shadow-2xs transition"
+                  >
+                    <span>{soc.name}</span>
+                    <ArrowUpRight className="w-3.5 h-3.5" />
+                  </a>
+                ))}
+              </div>
+            </div>
+
             <div className="flex flex-wrap items-center gap-3 pt-2">
               <button
                 type="button"
                 onClick={openConsultationModal}
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-[#FBBF24] via-[#F59E0B] to-[#F59E0B] hover:from-[#FCD34D] hover:to-[#D97706] text-[#14111B] text-xs sm:text-sm font-extrabold shadow-md transition hover:scale-105 cursor-pointer"
               >
-                <span>Meet Our Studio Leads</span>
+                <span>Talk to Our Jaffna Team</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
               <Link
-                to="/portfolio"
+                to="/services?category=software-solutions#software-solutions"
                 className="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-white hover:bg-amber-50 text-stone-800 text-xs sm:text-sm font-bold border border-amber-300/80 transition"
               >
-                Inspect Shipped Work
+                Explore Our Services
               </Link>
             </div>
           </div>
@@ -177,7 +214,7 @@ export const AboutPage: React.FC = () => {
 
                 <div className="absolute top-4 left-4">
                   <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 backdrop-blur-md text-stone-900 text-[11px] font-extrabold">
-                    <Globe2 className="w-3.5 h-3.5 text-amber-600" />
+                    <MapPin className="w-3.5 h-3.5 text-amber-600" />
                     {STUDIO_GALLERY[activePhotoIdx].location}
                   </span>
                 </div>
@@ -185,7 +222,7 @@ export const AboutPage: React.FC = () => {
                 <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between text-white">
                   <div>
                     <p className="text-[10px] font-bold uppercase tracking-widest text-amber-300">
-                      Inside Our Pods
+                      Inside BWise
                     </p>
                     <h3 className="text-lg font-extrabold">{STUDIO_GALLERY[activePhotoIdx].title}</h3>
                   </div>
@@ -229,15 +266,16 @@ export const AboutPage: React.FC = () => {
         <div className="max-w-[1280px] mx-auto px-4 sm:px-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
             <div>
-              <span className="text-xs font-extrabold uppercase tracking-wider text-amber-700">
-                Why the Honeycomb Works
+              <span className="text-xs font-extrabold uppercase tracking-wider text-amber-700 flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5" />
+                Our Approach
               </span>
               <h2 className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight mt-1">
-                Structural Efficiency by Design
+                Why Businesses Choose the BWise Beehive
               </h2>
             </div>
             <p className="text-xs sm:text-sm text-stone-600 max-w-md">
-              Every pod shares common context, tooling, and live attribution from day one.
+              Instead of juggling separate developers, designers, and social media freelancers, you get one coordinated team in Jaffna.
             </p>
           </div>
 
@@ -275,17 +313,17 @@ export const AboutPage: React.FC = () => {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
           <div>
             <span className="text-xs font-extrabold uppercase tracking-wider text-amber-700">
-              Cross-Functional Leadership
+              Our In-House Teams
             </span>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight mt-1">
-              Four Specialist Pods. Direct Principal Access.
+              Four Specialist Pods Working Together
             </h2>
           </div>
           <Link
             to="/careers"
             className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-extrabold text-amber-700 hover:text-amber-800"
           >
-            Join Our Engineering &amp; Creative Pods <ArrowRight className="w-4 h-4" />
+            Join Our Team in Jaffna <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
 
@@ -345,10 +383,10 @@ export const AboutPage: React.FC = () => {
             <div>
               <span className="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-amber-800">
                 <ShieldCheck className="w-3.5 h-3.5 text-amber-600" />
-                Partner With BWise
+                Partner With BWise · Jaffna, Sri Lanka
               </span>
               <h2 className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight mt-1">
-                Ready to step inside the Beehive?
+                Ready to build your software or scale your brand?
               </h2>
             </div>
           </div>

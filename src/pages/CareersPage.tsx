@@ -16,7 +16,7 @@ import {
 import { HiveCornerDecorations } from '../components/layout/HiveCornerDecorations';
 import { assetUrl } from '../utils/assets';
 
-type RoleDepartment = 'All' | 'Engineering' | 'Design' | 'Growth';
+type RoleDepartment = 'All' | 'Engineering' | 'Design' | 'Marketing';
 
 interface OpenRole {
   id: string;
@@ -24,7 +24,7 @@ interface OpenRole {
   department: Exclude<RoleDepartment, 'All'>;
   pod: string;
   location: string;
-  compensation: string;
+  type: string;
   summary: string;
   highlights: string[];
   stack: string[];
@@ -32,107 +32,107 @@ interface OpenRole {
 
 const OPEN_ROLES: OpenRole[] = [
   {
-    id: 'staff-fullstack-engineer',
-    title: 'Staff Full-Stack Systems Engineer',
+    id: 'fullstack-software-engineer',
+    title: 'Full-Stack Software Engineer',
     department: 'Engineering',
-    pod: 'Studio #09 · Web & Cloud Architecture',
-    location: 'Toronto / Hybrid or Remote (UTC-5 to UTC+2)',
-    compensation: '$165,000 – $195,000 CAD + Profit Share',
+    pod: 'Software Solutions · Web & Cloud Pod',
+    location: 'Jaffna, Sri Lanka (On-Site / Hybrid)',
+    type: 'Full-Time',
     summary:
-      'Architect and ship sub-second React/Next.js platforms and real-time distributed backends for enterprise clients.',
+      'Build modern, responsive web applications, backend APIs, and scalable cloud solutions for local and international clients.',
     highlights: [
-      'Own system architecture from discovery to production CI/CD',
-      'Build real-time WebSocket, GraphQL, and edge-cached web systems',
-      'Collaborate directly with design and SEO/GEO leads in a 5-person pod',
+      'Develop full-stack web platforms using React, Next.js, TypeScript, and Node.js',
+      'Integrate databases, REST/GraphQL APIs, and third-party payment/service gateways',
+      'Collaborate directly with UI/UX designers and QA engineers in agile sprints',
     ],
-    stack: ['TypeScript', 'React 19 / Next.js', 'Node.js / Go', 'PostgreSQL', 'AWS'],
+    stack: ['React / Next.js', 'TypeScript', 'Node.js', 'PostgreSQL / MongoDB', 'Git'],
   },
   {
-    id: 'senior-ai-geo-engineer',
-    title: 'Senior AI & Generative Engine (GEO) Engineer',
+    id: 'associate-software-engineer',
+    title: 'Associate Software Engineer (Web & Mobile)',
     department: 'Engineering',
-    pod: 'Studio #05 & #08 · AI & Generative Search',
-    location: 'Remote Global (Async-First)',
-    compensation: '$150,000 – $180,000 USD Equivalent',
+    pod: 'Software Solutions · Web & Mobile Pod',
+    location: 'Jaffna, Sri Lanka (On-Site / Hybrid)',
+    type: 'Full-Time',
     summary:
-      'Build production RAG pipelines, autonomous AI agents, and structured citation graphs across ChatGPT, Perplexity, and Gemini.',
+      'Contribute to custom web and cross-platform mobile applications while growing your engineering craft alongside senior developers.',
     highlights: [
-      'Ship low-latency tool-calling AI agents with strict accuracy evals',
-      'Architect entity knowledge graphs that lift brand citation share',
-      'Maintain real-time LLM citation telemetry pipelines',
+      'Build reusable UI components and mobile screens with React and React Native / Flutter',
+      'Write clean, maintainable code and participate in peer code reviews',
+      'Assist with API integration, performance tuning, and automated testing',
     ],
-    stack: ['Python', 'TypeScript', 'OpenAI / Anthropic / Gemini', 'Vector DBs'],
+    stack: ['React', 'React Native / Flutter', 'JavaScript / TypeScript', 'REST APIs'],
   },
   {
-    id: 'principal-product-designer',
-    title: 'Principal Brand & Product Designer',
+    id: 'digital-marketing-specialist',
+    title: 'Digital Marketing & Social Media Executive',
+    department: 'Marketing',
+    pod: 'Social Media Marketing · Growth Pod',
+    location: 'Jaffna, Sri Lanka (On-Site / Hybrid)',
+    type: 'Full-Time',
+    summary:
+      'Plan, launch, and optimize high-performing social media campaigns, page management, and SEO/content strategies for client brands.',
+    highlights: [
+      'Manage client pages and paid ad campaigns across Facebook, Instagram, LinkedIn, and Google',
+      'Coordinate monthly content calendars, short-form video reels, and copywriting',
+      'Track campaign KPIs, lead generation, and ROI through clear analytics reports',
+    ],
+    stack: ['Meta Ads Manager', 'Instagram & LinkedIn', 'SEO & Content', 'Google Analytics'],
+  },
+  {
+    id: 'ui-ux-brand-designer',
+    title: 'UI/UX & Creative Brand Designer',
     department: 'Design',
-    pod: 'Studio #11 & #12 · Brand & Design Systems',
-    location: 'London / Toronto / Remote',
-    compensation: '$140,000 – $170,000 USD Equivalent',
+    pod: 'Digital Strategy · Brand & Creative Pod',
+    location: 'Jaffna, Sri Lanka (On-Site / Hybrid)',
+    type: 'Full-Time',
     summary:
-      'Craft tactile digital flagships, geometric brand identities, and tokenized Figma-to-code design systems.',
+      'Craft memorable brand identities, custom logos, social media creatives, and intuitive web/mobile UI/UX prototypes.',
     highlights: [
-      'Lead visual identity, typography, and motion choreography',
-      'Deliver production-ready Figma token libraries paired with React',
-      'Co-design interactive 3D/WebGL storytelling moments',
+      'Design modern web and mobile app interfaces in Figma from wireframe to prototype',
+      'Create unique vector logos, brand guidelines, and engaging social media visuals',
+      'Work closely with developers and marketers to keep brand quality consistent',
     ],
-    stack: ['Figma Tokens', 'Editorial Typography', 'Motion / Rive', 'Design Systems'],
+    stack: ['Figma', 'Adobe Illustrator', 'Photoshop', 'Brand Identity', 'UI/UX Systems'],
   },
   {
-    id: 'senior-mobile-engineer',
-    title: 'Senior iOS & Cross-Platform Mobile Engineer',
+    id: 'intern-software-marketing-qa',
+    title: 'Intern – Full-Stack Development / Digital Marketing / QA',
     department: 'Engineering',
-    pod: 'Studio #10 · Mobile App Engineering',
-    location: 'Colombo / Toronto / Remote',
-    compensation: 'Competitive Global Base + Annual Pod Bonus',
+    pod: 'BWise Jaffna Studio · Mentored Track',
+    location: 'Jaffna, Sri Lanka (On-Site / Hybrid)',
+    type: 'Internship (6 Months)',
     summary:
-      'Build 60fps mobile experiences with biometric security and offline-first sync for FinTech and HealthTech.',
+      'Kickstart your tech or digital marketing career with hands-on mentorship on live client projects at our Jaffna studio.',
     highlights: [
-      'Develop React Native and native Swift/Kotlin modules',
-      'Implement hardware-backed passkey & biometric security',
-      'Maintain automated Maestro/Detox device-farm QA pipelines',
+      'Work on real production websites, mobile apps, QA test suites, or digital campaigns',
+      'Receive direct guidance and weekly feedback from experienced engineers and marketers',
+      'Opportunity to transition into a permanent full-time role upon completion',
     ],
-    stack: ['React Native', 'Swift / SwiftUI', 'Kotlin', 'Offline Sync', 'CI/CD'],
-  },
-  {
-    id: 'growth-paid-social-lead',
-    title: 'Performance Creative & Paid Social Strategist',
-    department: 'Growth',
-    pod: 'Studio #03 · Social Media Advertising',
-    location: 'Toronto / New York / Remote',
-    compensation: '$115,000 – $145,000 + Performance Tier',
-    summary:
-      'Lead high-velocity paid social experimentation and server-side attribution across Meta, TikTok, and LinkedIn.',
-    highlights: [
-      'Manage $100k–$1M+/mo paid acquisition budgets with ROAS rigor',
-      'Direct weekly creative hook & landing page sprints with designers',
-      'Partner with Analytics Studio on multi-touch warehouse attribution',
-    ],
-    stack: ['Meta CAPI', 'TikTok & LinkedIn Ads', 'Creative Testing', 'GA4 / BigQuery'],
+    stack: ['Web & Mobile Basics', 'QA Testing', 'Digital Marketing', 'Team Collaboration'],
   },
 ];
 
 const CULTURE_CARDS = [
   {
-    icon: Clock,
-    title: '4-Hour Uninterrupted Deep Work',
-    desc: 'Async-first written RFCs and Looms protect daily maker time for code and craft.',
+    icon: MapPin,
+    title: 'Heart of Jaffna Tech Community',
+    desc: 'Build global-standard software and creative campaigns right from our collaborative studio in Jaffna, Sri Lanka.',
   },
   {
     icon: Cpu,
-    title: 'Direct Principal Autonomy',
-    desc: 'Small 4–5 person pods talk directly with technical founders—zero middle-management layers.',
+    title: 'Hands-On Modern Tech Stack',
+    desc: 'Work with React, TypeScript, mobile frameworks, AI search optimization (GEO), and modern creative tools.',
   },
   {
-    icon: Sparkles,
-    title: 'Frontier AI & Hardware Budget',
-    desc: 'M4 Max MacBooks, studio displays, and unlimited frontier AI model & tooling access.',
+    icon: Clock,
+    title: 'Supportive Mentorship & Growth',
+    desc: 'Continuous learning, peer code/design reviews, and clear career progression from intern to lead.',
   },
   {
     icon: Globe2,
-    title: 'Global Hubs + Profit Share',
-    desc: 'Top-decile base pay plus quarterly studio profit pools across Toronto, London, and Colombo.',
+    title: 'Local & International Projects',
+    desc: 'Deliver impactful digital products and marketing campaigns for businesses across Sri Lanka and worldwide.',
   },
 ];
 
@@ -157,15 +157,15 @@ export const CareersPage: React.FC = () => {
           <div>
             <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-extrabold uppercase tracking-wider">
               <span className="w-2 h-2 rounded-full bg-amber-500 animate-ping" />
-              {OPEN_ROLES.length} Open Roles · Hiring Now
+              Jaffna, Sri Lanka · Hiring Now
             </span>
             <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-stone-950 mt-2.5">
-              Do the Best Work of Your Career.
+              Build Your Career With BWise in Jaffna.
             </h1>
           </div>
           <div className="flex flex-col sm:flex-row sm:items-center gap-4">
             <p className="text-sm text-stone-600 max-w-md">
-              We are a collective of principal engineers, designers, and growth operators shipping category-defining software without agency theater.
+              Join our growing team of software engineers, UI/UX designers, and digital marketers in Jaffna, Sri Lanka.
             </p>
             <a
               href="#open-positions"
@@ -181,7 +181,7 @@ export const CareersPage: React.FC = () => {
           <div className="lg:col-span-7 relative rounded-[28px] overflow-hidden bg-stone-900 aspect-[16/10] shadow-lg border-2 border-amber-300/70 group">
             <img
               src={assetUrl('/assets/pages/careers/hive-studio-hero.jpg')}
-              alt="BWise architects and designers collaborating around studio table"
+              alt="BWise engineers and designers collaborating in Jaffna studio"
               fetchPriority="high"
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
             />
@@ -189,14 +189,14 @@ export const CareersPage: React.FC = () => {
             <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between text-white">
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-widest text-amber-300">
-                  Cross-Functional Pods
+                  BWise Studio Culture
                 </span>
                 <p className="text-base sm:text-lg font-extrabold mt-0.5">
-                  Toronto · Colombo · London · Remote
+                  Jaffna, Sri Lanka · On-Site &amp; Hybrid Pods
                 </p>
               </div>
               <span className="px-3 py-1 rounded-full bg-amber-400 text-stone-950 text-xs font-extrabold">
-                94% 3-Year Retention
+                Software &amp; Digital Agency
               </span>
             </div>
           </div>
@@ -205,32 +205,32 @@ export const CareersPage: React.FC = () => {
             <div className="relative rounded-[24px] overflow-hidden bg-stone-900 aspect-[16/9] border border-amber-200/80 group">
               <img
                 src={assetUrl('/assets/pages/careers/engineering-pairing.jpg')}
-                alt="Two senior engineers pairing at dual-monitor workstation"
+                alt="Software engineers collaborating on web and mobile code"
                 loading="lazy"
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-transparent to-transparent" />
               <div className="absolute bottom-3.5 left-4 text-white">
                 <p className="text-[10px] font-bold uppercase tracking-wider text-amber-300">
-                  Engineering Craft
+                  Software Solutions
                 </p>
-                <p className="text-sm font-extrabold">Direct Principal Pairing</p>
+                <p className="text-sm font-extrabold">Full-Stack, Mobile &amp; QA</p>
               </div>
             </div>
 
             <div className="relative rounded-[24px] overflow-hidden bg-stone-900 aspect-[16/9] border border-amber-200/80 group">
               <img
                 src={assetUrl('/assets/pages/careers/design-critique.jpg')}
-                alt="Brand and product designers reviewing typography and interface tokens"
+                alt="Brand designers and digital marketers reviewing campaign creatives"
                 loading="lazy"
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-transparent to-transparent" />
               <div className="absolute bottom-3.5 left-4 text-white">
                 <p className="text-[10px] font-bold uppercase tracking-wider text-amber-300">
-                  Design &amp; Growth
+                  Creative &amp; Marketing
                 </p>
-                <p className="text-sm font-extrabold">Weekly Live Critiques</p>
+                <p className="text-sm font-extrabold">Branding, UI/UX &amp; Social Media</p>
               </div>
             </div>
           </div>
@@ -271,7 +271,7 @@ export const CareersPage: React.FC = () => {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
           <div>
             <span className="text-xs font-extrabold uppercase tracking-wider text-amber-700">
-              Open Positions
+              Open Positions in Jaffna
             </span>
             <h2 className="text-2xl sm:text-4xl font-extrabold text-stone-950 tracking-tight mt-1">
               Find Your Seat in the Hive
@@ -279,7 +279,7 @@ export const CareersPage: React.FC = () => {
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
-            {(['All', 'Engineering', 'Design', 'Growth'] as RoleDepartment[]).map((dept) => {
+            {(['All', 'Engineering', 'Design', 'Marketing'] as RoleDepartment[]).map((dept) => {
               const isSelected = selectedDept === dept;
               return (
                 <button
@@ -321,7 +321,7 @@ export const CareersPage: React.FC = () => {
                       <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 text-[11px] font-bold">
                         {role.department === 'Engineering' && <Code2 className="w-3 h-3" />}
                         {role.department === 'Design' && <Palette className="w-3 h-3" />}
-                        {role.department === 'Growth' && <TrendingUp className="w-3 h-3" />}
+                        {role.department === 'Marketing' && <TrendingUp className="w-3 h-3" />}
                         {role.department}
                       </span>
                       <span className="text-xs font-semibold text-stone-500">{role.pod}</span>
@@ -337,7 +337,7 @@ export const CareersPage: React.FC = () => {
                       {role.location}
                     </span>
                     <span className="text-xs font-extrabold text-amber-800 bg-amber-50 px-3 py-1 rounded-full border border-amber-200">
-                      {role.compensation}
+                      {role.type}
                     </span>
                     <span
                       className={`w-8 h-8 rounded-full flex items-center justify-center transition-transform duration-300 ${
@@ -379,7 +379,7 @@ export const CareersPage: React.FC = () => {
                         <div className="lg:col-span-4 flex flex-col justify-between gap-4 bg-white p-4 rounded-2xl border border-amber-200/80">
                           <div>
                             <p className="text-[10px] font-extrabold uppercase tracking-wider text-stone-400 mb-2">
-                              Core Stack
+                              Skills &amp; Tools
                             </p>
                             <div className="flex flex-wrap gap-1.5">
                               {role.stack.map((tech) => (
@@ -394,12 +394,12 @@ export const CareersPage: React.FC = () => {
                           </div>
 
                           <a
-                            href={`mailto:careers@bwisedigital.com?subject=${encodeURIComponent(
-                              `Application: ${role.title} (${role.pod})`
+                            href={`mailto:info@bwise.lk?subject=${encodeURIComponent(
+                              `Career Application: ${role.title} - BWise Jaffna`
                             )}`}
                             className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full bg-gradient-to-r from-[#FBBF24] via-[#F59E0B] to-[#F59E0B] hover:from-[#FCD34D] hover:to-[#D97706] text-[#14111B] text-xs font-extrabold shadow-sm transition"
                           >
-                            Apply for This Role
+                            Apply via Email
                             <ArrowUpRight className="w-4 h-4" />
                           </a>
                         </div>
@@ -410,6 +410,42 @@ export const CareersPage: React.FC = () => {
               </div>
             );
           })}
+        </div>
+
+        {/* Social Media Recruitment Strip */}
+        <div className="mt-10 rounded-3xl bg-white/95 border border-amber-200/90 p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <Sparkles className="w-5 h-5 text-amber-600 shrink-0" />
+            <p className="text-xs sm:text-sm font-bold text-stone-800">
+              Follow BWise on social media for the latest hiring announcements, internship intakes, and studio updates in Jaffna:
+            </p>
+          </div>
+          <div className="flex flex-wrap items-center gap-2 shrink-0">
+            <a
+              href="https://www.linkedin.com/company/bwiselk/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 px-3.5 py-2 rounded-full bg-[#FFF8E7] hover:bg-amber-500 text-stone-900 hover:text-white text-xs font-extrabold border border-amber-300/80 transition"
+            >
+              LinkedIn <ArrowUpRight className="w-3.5 h-3.5" />
+            </a>
+            <a
+              href="https://www.facebook.com/profile.php?id=61592147020833"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 px-3.5 py-2 rounded-full bg-[#FFF8E7] hover:bg-amber-500 text-stone-900 hover:text-white text-xs font-extrabold border border-amber-300/80 transition"
+            >
+              Facebook <ArrowUpRight className="w-3.5 h-3.5" />
+            </a>
+            <a
+              href="https://www.instagram.com/bwise.lk/?hl=en"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 px-3.5 py-2 rounded-full bg-[#FFF8E7] hover:bg-amber-500 text-stone-900 hover:text-white text-xs font-extrabold border border-amber-300/80 transition"
+            >
+              Instagram <ArrowUpRight className="w-3.5 h-3.5" />
+            </a>
+          </div>
         </div>
       </section>
     </div>

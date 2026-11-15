@@ -40,9 +40,9 @@ export const MAIN_SERVICE_CATEGORIES: ServiceCategory[] = [
     id: 'software-solutions',
     slug: 'software-solutions',
     title: 'Software Solutions',
-    tagline: 'High-performance web, native mobile apps, automated QA testing, and modern AI search optimization.',
-    description: 'Our software engineering pod constructs enterprise-grade digital systems. From mission-critical cloud apps to cross-platform mobile experiences and automated QA pipelines, we deliver fault-tolerant, scalable codebases.',
-    badge: '6 Core Services',
+    tagline: 'High-performance web, native mobile apps, intuitive UI/UX design, automated QA testing, and modern search engineering.',
+    description: 'Our software engineering pod constructs enterprise-grade digital systems. From mission-critical cloud apps to cross-platform mobile experiences, bespoke UI/UX design, automated QA pipelines, and search/AI optimization, we deliver fault-tolerant, scalable codebases.',
+    badge: '7 Core Services',
     iconName: 'Cpu',
     accentColor: '#3B82F6',
     accentGradient: 'from-blue-500 to-indigo-600',
@@ -50,10 +50,11 @@ export const MAIN_SERVICE_CATEGORIES: ServiceCategory[] = [
     subServiceSlugs: [
       'web-development',
       'mobile-app-development',
+      'ui-ux-design',
       'application-testing',
       'search-engine-optimisation',
-      'artificial-intelligence-optimization',
       'generative-engine-optimisation',
+      'artificial-intelligence-optimization',
     ],
   },
   {
@@ -120,7 +121,7 @@ export interface PriorityService {
    * Row 2 (bot 4): Web Development, Mobile App Development, Brand Handling, Unique Logo Designing
    */
   hiveCell: {
-    row: 0 | 1 | 2;
+    row: 0 | 1 | 2 | -1;
     col: 0 | 1 | 2 | 3;
     /** Target percentage coordinates (0-100) on the hive stage where the Bee flies in S2/S3 */
     beeTargetX: number;
@@ -1673,6 +1674,131 @@ export const PRIORITY_SERVICES: PriorityService[] = [
       ],
     },
   },
+  {
+    id: 13,
+    slug: 'ui-ux-design',
+    title: 'UI/UX Design',
+    shortTitle: 'UI/UX',
+    tagline: 'User-centric wireframing, high-fidelity Figma prototypes, and scalable design systems built for engagement.',
+    category: 'Software Solutions',
+    categorySlug: 'software-solutions',
+    iconName: 'PenTool',
+    hiveCell: {
+      row: -1,
+      col: 0,
+      beeTargetX: 52,
+      beeTargetY: 48,
+      s2Crop: { x: 38.0, y: 38.0, w: 12.0, h: 22.0 },
+      roomGradient: 'from-amber-500/85 via-orange-600/75 to-stone-900/90',
+      frameColor: '#F59E0B',
+      glowColor: 'rgba(245, 158, 11, 0.7)',
+      roomInteriorLabel: 'UI/UX & Product Design Studio',
+    },
+    s4Room: {
+      consultantQuestion: 'Looking to turn complex user journeys into clean, high-converting digital interfaces?',
+      voiceNarration: 'Welcome to the UI/UX Design studio. We craft intuitive wireframes, responsive design systems, and clickable prototypes.',
+      whiteboardHeading: 'UI/UX Research & Interactive Prototyping Suite',
+      whiteboardModules: ['User Journey & Wireframing', 'Figma Interactive Prototyping', 'Design System & Component Tokenization'],
+      kpiHighlight: '3.4x Higher User Engagement',
+    },
+    detail: {
+      overviewTitle: 'UI/UX Design & User Experience Overview',
+      overviewDescription:
+        'We translate complex workflows into intuitive, beautiful web and mobile interfaces. From user research and journey mapping to high-fidelity Figma prototypes and tokenized design systems, our UI/UX designers create products that users love.',
+      desktopMockupHeadline: 'Interactive Prototyping & Design Systems',
+      desktopMockupSubtext: 'Figma component libraries, responsive breakpoints, accessibility testing, and smooth interaction states.',
+      mobileMockupStat: '92% Usability Score',
+      problemsSolved: [
+        {
+          title: 'High bounce rates from confusing navigation and cluttered layouts',
+          description: 'Simplify user journeys with clean hierarchy, intuitive workflows, and effortless checkout/booking funnels.',
+        },
+        {
+          title: 'Inconsistent design across desktop, tablet, and mobile platforms',
+          description: 'Build standardized design systems and Figma component tokens that map 1:1 to code.',
+        },
+        {
+          title: 'Slow development handoffs without clear interaction specs',
+          description: 'Deliver pixel-perfect prototypes with responsive auto-layouts, micro-animations, and complete asset kits.',
+        },
+      ],
+      modernTechSummary: 'Crafting user-centered interfaces with industry-standard design tools and testing suites.',
+      techStack: ['Figma', 'Adobe XD', 'Protopie', 'Design Tokens', 'UserTesting', 'Framer'],
+      ratingScore: '4.9 / 5.0 Design Craft Rating',
+      previousProjects: [
+        {
+          title: 'FinTech Dashboard & Banking Flow',
+          category: 'UI/UX Prototyping',
+          metrics: '+45% Task Completion',
+          description: 'Redesigned multi-currency transaction flows with biometric passkey interactions.',
+          accentColor: '#3B82F6',
+          theme: 'dark',
+        },
+        {
+          title: 'E-Commerce Mobile Checkout UX',
+          category: 'Conversion Optimization',
+          metrics: '2.8x Faster Checkout',
+          description: 'Streamlined 4-step mobile checkout into a single one-thumb purchase drawer.',
+          accentColor: '#F59E0B',
+          theme: 'amber',
+        },
+        {
+          title: 'Healthcare Patient Portal UI',
+          category: 'Accessible Interface',
+          metrics: 'WCAG 2.1 AA Compliant',
+          description: 'Designed accessible doctor appointment scheduling and medical record interfaces.',
+          accentColor: '#10B981',
+          theme: 'light',
+        },
+        {
+          title: 'SaaS Design System Architecture',
+          category: 'Component Library',
+          metrics: '120+ Tokenized Components',
+          description: 'Architected reusable Figma component library integrated with React Tailwind theme.',
+          accentColor: '#EC4899',
+          theme: 'slate',
+        },
+      ],
+      processDelivery: [
+        {
+          stepNumber: '01',
+          title: 'User Research & Journey Mapping',
+          description: 'Analyze persona pain points, competitor benchmarks, and core information architecture.',
+          iconName: 'Compass',
+        },
+        {
+          stepNumber: '02',
+          title: 'Low-Fidelity Wireframes',
+          description: 'Structure page layouts, information flow, and user navigation paths.',
+          iconName: 'LayoutGrid',
+        },
+        {
+          stepNumber: '03',
+          title: 'High-Fidelity Interface Design',
+          description: 'Craft polished visual mockups with brand colors, typography, and iconography.',
+          iconName: 'PenTool',
+        },
+        {
+          stepNumber: '04',
+          title: 'Interactive Clickable Prototype',
+          description: 'Build realistic clickable prototypes in Figma for user testing and stakeholder sign-off.',
+          iconName: 'Eye',
+        },
+        {
+          stepNumber: '05',
+          title: 'Usability Testing & Refinement',
+          description: 'Validate key tasks with real users and optimize friction points and micro-interactions.',
+          iconName: 'CheckCircle2',
+        },
+        {
+          stepNumber: '06',
+          title: 'Developer Handoff & Design System',
+          description: 'Export structured Figma tokens, responsive specs, and asset packages for developers.',
+          iconName: 'PackageCheck',
+        },
+      ],
+    },
+  },
 ];
 
 export const getServiceBySlug = (slug: string | null | undefined): PriorityService => {
@@ -1694,7 +1820,11 @@ export const getMainCategoryBySlug = (slug: string | null | undefined): ServiceC
 };
 
 export const getServicesByCategory = (categorySlug: string): PriorityService[] => {
-  return PRIORITY_SERVICES.filter((s) => s.categorySlug === categorySlug);
+  const category = getMainCategoryBySlug(categorySlug);
+  if (!category) return PRIORITY_SERVICES.filter((s) => s.categorySlug === categorySlug);
+  return category.subServiceSlugs
+    .map((slug) => PRIORITY_SERVICES.find((s) => s.slug === slug))
+    .filter((s): s is PriorityService => Boolean(s));
 };
 
 export const getCategoryForService = (serviceSlug: string): ServiceCategory => {
