@@ -102,18 +102,18 @@ export interface PriorityService {
   category: string;
   categorySlug: MainCategorySlug;
   iconName:
-    | 'Lightbulb'
-    | 'Search'
-    | 'Megaphone'
-    | 'MessageSquare'
-    | 'Cog'
-    | 'FileCheck'
-    | 'TrendingUp'
-    | 'Cpu'
-    | 'Monitor'
-    | 'Smartphone'
-    | 'Tag'
-    | 'PenTool';
+  | 'Lightbulb'
+  | 'Search'
+  | 'Megaphone'
+  | 'MessageSquare'
+  | 'Cog'
+  | 'FileCheck'
+  | 'TrendingUp'
+  | 'Cpu'
+  | 'Monitor'
+  | 'Smartphone'
+  | 'Tag'
+  | 'PenTool';
   /**
    * Coordinates in the S2 / S3 Beehive Honeycomb Grid:
    * Row 0 (top 4): Digital Strategy Ideas, Search Engine Optimisation, Social Media Advertising, Social Media Management
@@ -1220,7 +1220,7 @@ export const PRIORITY_SERVICES: PriorityService[] = [
       ],
       modernTechSummary:
         'Cloud-native frontend and full-stack architecture built for speed, accessibility, and developer velocity.',
-      techStack: ['React 19 / Next.js', 'TypeScript', 'Tailwind CSS', 'GSAP & Three.js', 'Supabase / PostgreSQL', 'Vercel Edge Network'],
+      techStack: ['React 19 / Next.js', 'TypeScript', 'Tailwind CSS', 'Angular', 'Supabase / PostgreSQL', 'ASP .NET Core', 'Vercel Edge Network'],
       ratingScore: '5.0 / 5.0 Web Engineering Score',
       previousProjects: [
         {

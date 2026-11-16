@@ -71,37 +71,6 @@ export const BwiseBeeCharacter: React.FC<BwiseBeeCharacterProps> = ({
           <div className="absolute inset-4 rounded-full bg-amber-400/35 blur-2xl animate-pulse pointer-events-none" />
         )}
 
-        {/* Animated 60fps Translucent Fluttering Wing Layer (positioned behind the bee's left shoulder) */}
-        <svg
-          viewBox="0 0 300 300"
-          className="absolute inset-0 w-full h-full pointer-events-none overflow-visible"
-          style={{
-            animationDuration: isFlying ? '0.035s' : '0.065s',
-          }}
-        >
-          <defs>
-            <linearGradient id="bwiseWingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="rgba(255, 255, 255, 0.72)" />
-              <stop offset="60%" stopColor="rgba(224, 242, 254, 0.38)" />
-              <stop offset="100%" stopColor="rgba(186, 230, 253, 0.15)" />
-            </linearGradient>
-          </defs>
-          <g className="animate-wing-left">
-            <path
-              d="M 118 145 C 55 100, 12 108, 18 138 C 22 162, 68 172, 118 158 Z"
-              fill="url(#bwiseWingGrad)"
-              stroke="rgba(255,255,255,0.65)"
-              strokeWidth="1.5"
-            />
-            <path
-              d="M 115 150 C 72 132, 42 134, 26 142"
-              stroke="rgba(255,255,255,0.5)"
-              strokeWidth="1"
-              fill="none"
-            />
-          </g>
-        </svg>
-
         {/* Studio 3D Rendered Bwise Bee Character with complete legs, feet, and translucent wings */}
         <img
           src={bwiseBeeFullImg}
