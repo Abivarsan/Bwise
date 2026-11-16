@@ -222,6 +222,8 @@ export const ServicesPage: React.FC = () => {
   let initialCategorySlug: MainCategorySlug = 'software-solutions';
   if (queryCategory && MAIN_SERVICE_CATEGORIES.some((c) => c.slug === queryCategory)) {
     initialCategorySlug = queryCategory as MainCategorySlug;
+  } else if (hashSlug && MAIN_SERVICE_CATEGORIES.some((c) => c.slug === hashSlug)) {
+    initialCategorySlug = hashSlug as MainCategorySlug;
   } else if (queryService || hashSlug) {
     const matchedService = getServiceBySlug(queryService || hashSlug);
     initialCategorySlug = matchedService.categorySlug;
@@ -238,6 +240,8 @@ export const ServicesPage: React.FC = () => {
 
     if (cat && MAIN_SERVICE_CATEGORIES.some((c) => c.slug === cat)) {
       setActiveCategorySlug(cat as MainCategorySlug);
+    } else if (hash && MAIN_SERVICE_CATEGORIES.some((c) => c.slug === hash)) {
+      setActiveCategorySlug(hash as MainCategorySlug);
     } else if (svc || hash) {
       const matched = getServiceBySlug(svc || hash);
       setActiveCategorySlug(matched.categorySlug);
@@ -315,7 +319,7 @@ export const ServicesPage: React.FC = () => {
       {/* =====================================================================
           CONCISE STUDIO DIVISION HERO BANNER
          ===================================================================== */}
-      <div id={activeCategory.slug} className="max-w-[1240px] mx-auto px-4 sm:px-8 pt-8 sm:pt-12 pb-8 scroll-mt-28">
+      <div id={activeCategory.slug} className="max-w-[1240px] mx-auto px-4 sm:px-8 pt-8 sm:pt-12 pb-8 scroll-mt-36">
         <motion.div
           key={activeCategory.slug}
           initial={{ opacity: 0, y: 14 }}
