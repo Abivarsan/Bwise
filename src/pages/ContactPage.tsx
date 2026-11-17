@@ -1,20 +1,23 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import {
   ArrowUpRight,
   CheckCircle2,
   Clock,
-  Cpu,
   Globe2,
-  Lightbulb,
+  Loader2,
   Mail,
   MapPin,
-  Megaphone,
   Send,
-  Sparkles,
 } from 'lucide-react';
 import { getServiceBySlug } from '../data/servicesData';
 import { HiveCornerDecorations } from '../components/layout/HiveCornerDecorations';
+import { ToastNotification, ToastData } from '../components/ui/ToastNotification';
+import { sendFormEmail } from '../utils/sendEmail';
+import {
+  buildInquiryEmailHTML,
+  buildInquiryAutoReplyHTML,
+} from '../utils/emailTemplates';
 import { assetUrl } from '../utils/assets';
 
 const STUDIO_TRACKS = [
@@ -22,25 +25,21 @@ const STUDIO_TRACKS = [
     slug: 'software-solutions',
     title: 'Software Solutions',
     subtitle: 'Web Dev, Mobile Apps, QA, SEO & AI',
-    icon: Cpu,
   },
   {
     slug: 'social-media-marketing',
     title: 'Social Media Marketing',
     subtitle: 'Social Ads, Page Management & Content',
-    icon: Megaphone,
   },
   {
     slug: 'digital-strategy-ideas',
     title: 'Digital Strategy & Branding',
     subtitle: 'Brand Handling, Logo Design & Analytics',
-    icon: Lightbulb,
   },
   {
     slug: 'full-hive-scope',
     title: 'Full-Service Digital Package',
     subtitle: 'Combined software + marketing partnership',
-    icon: Sparkles,
   },
 ];
 
@@ -77,24 +76,89 @@ export const ContactPage: React.FC = () => {
     initialMatched ? initialMatched.categorySlug : 'software-solutions'
   );
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [honeypot, setHoneypot] = useState('');
+  const [toast, setToast] = useState<ToastData | null>(null);
+  const mountedAtRef = useRef<number>(Date.now());
+
   const [formState, setFormState] = useState({
     name: '',
     email: '',
     company: '',
     scope: 'Custom Web / Mobile Application',
+    customRequirement: '',
     goals: '',
   });
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitted(true);
-  };
 
   const activeTrackObj =
     STUDIO_TRACKS.find((t) => t.slug === selectedTrack) || STUDIO_TRACKS[0];
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
+
+    const effectiveRequirement =
+      formState.scope === 'Other' && formState.customRequirement.trim()
+        ? `Other — ${formState.customRequirement.trim()}`
+        : formState.scope;
+
+    const inquiryData = {
+      serviceCategory: activeTrackObj.title,
+      name: formState.name.trim(),
+      email: formState.email.trim(),
+      companyName: formState.company.trim(),
+      primaryRequirement: effectiveRequirement,
+      projectDetails: formState.goals.trim(),
+    };
+
+    const result = await sendFormEmail(
+      {
+        // Company notification template variables
+        email_subject: `New ${activeTrackObj.title} Inquiry: ${inquiryData.name}`,
+        email_html: buildInquiryEmailHTML(inquiryData),
+
+        // Shared routing & fallback variables
+        form_type: `${activeTrackObj.title} Inquiry`,
+        user_name: inquiryData.name,
+        user_email: inquiryData.email,
+        reply_summary: `Thank you for reaching out to BWise regarding ${activeTrackObj.title} (${effectiveRequirement}). Our team has received your project goals and will respond within 24 hours.`,
+
+        // User auto-reply template variables
+        user_reply_subject: `We Received Your ${activeTrackObj.title} Inquiry – BWise`,
+        user_reply_html: buildInquiryAutoReplyHTML(inquiryData),
+      },
+      {
+        honeypot,
+        formOpenedAt: mountedAtRef.current,
+      }
+    );
+
+    setIsSubmitting(false);
+
+    if (result.ok) {
+      setSubmitted(true);
+      setToast({
+        id: String(Date.now()),
+        type: 'success',
+        title: 'Project Inquiry Sent!',
+        message: `Confirmation sent to ${inquiryData.email}. Our ${activeTrackObj.title} team will reply within 24 hours.`,
+      });
+    } else {
+      setToast({
+        id: String(Date.now()),
+        type: result.isRateLimited ? 'warning' : 'error',
+        title: result.isRateLimited ? 'Please Wait Before Retrying' : 'Email Delivery Notice',
+        message:
+          result.error || 'Unable to send inquiry right now. Please try again or email hello@bwise.lk.',
+      });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-honeycomb-pattern relative overflow-hidden pt-24 sm:pt-28 pb-20">
+      <ToastNotification toast={toast} onDismiss={() => setToast(null)} />
       <HiveCornerDecorations />
 
       <div className="max-w-[1280px] mx-auto px-4 sm:px-8 relative z-10">
@@ -232,7 +296,18 @@ export const ContactPage: React.FC = () => {
                   </p>
                   <button
                     type="button"
-                    onClick={() => setSubmitted(false)}
+                    onClick={() => {
+                      setSubmitted(false);
+                      mountedAtRef.current = Date.now();
+                      setFormState({
+                        name: '',
+                        email: '',
+                        company: '',
+                        scope: 'Custom Web / Mobile Application',
+                        customRequirement: '',
+                        goals: '',
+                      });
+                    }}
                     className="px-6 py-2.5 rounded-full bg-stone-900 text-white text-xs font-bold hover:bg-stone-800 transition cursor-pointer"
                   >
                     Send Another Message
@@ -247,36 +322,24 @@ export const ContactPage: React.FC = () => {
                     </label>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                       {STUDIO_TRACKS.map((track) => {
-                        const Icon = track.icon;
                         const isChosen = track.slug === selectedTrack;
                         return (
                           <button
                             key={track.slug}
                             type="button"
                             onClick={() => setSelectedTrack(track.slug)}
-                            className={`flex items-start gap-3 p-3.5 rounded-2xl border text-left transition-all cursor-pointer ${
+                            className={`p-3.5 sm:p-4 rounded-2xl border text-left transition-all cursor-pointer ${
                               isChosen
                                 ? 'bg-amber-50 border-amber-500 ring-2 ring-amber-400/25 shadow-xs'
                                 : 'bg-[#FAF8F5] border-stone-200 hover:border-amber-300'
                             }`}
                           >
-                            <div
-                              className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${
-                                isChosen
-                                  ? 'bg-amber-500 text-white'
-                                  : 'bg-white text-amber-600 border border-amber-200'
-                              }`}
-                            >
-                              <Icon className="w-4 h-4" />
-                            </div>
-                            <div className="min-w-0">
-                              <p className="text-xs font-extrabold text-stone-900">
-                                {track.title}
-                              </p>
-                              <p className="text-[11px] text-stone-500 truncate mt-0.5">
-                                {track.subtitle}
-                              </p>
-                            </div>
+                            <p className="text-xs sm:text-sm font-extrabold text-stone-900">
+                              {track.title}
+                            </p>
+                            <p className="text-[11px] text-stone-500 truncate mt-0.5">
+                              {track.subtitle}
+                            </p>
                           </button>
                         );
                       })}
@@ -292,7 +355,6 @@ export const ContactPage: React.FC = () => {
                       <input
                         type="text"
                         required
-                        placeholder="Your Full Name"
                         value={formState.name}
                         onChange={(e) => setFormState({ ...formState, name: e.target.value })}
                         className="w-full px-4 py-3 rounded-xl bg-[#FAF8F5] border border-stone-200 text-sm text-stone-900 focus:outline-none focus:border-amber-500"
@@ -305,7 +367,6 @@ export const ContactPage: React.FC = () => {
                       <input
                         type="email"
                         required
-                        placeholder="you@company.com"
                         value={formState.email}
                         onChange={(e) => setFormState({ ...formState, email: e.target.value })}
                         className="w-full px-4 py-3 rounded-xl bg-[#FAF8F5] border border-stone-200 text-sm text-stone-900 focus:outline-none focus:border-amber-500"
@@ -320,7 +381,6 @@ export const ContactPage: React.FC = () => {
                       </label>
                       <input
                         type="text"
-                        placeholder="Your Business Name"
                         value={formState.company}
                         onChange={(e) => setFormState({ ...formState, company: e.target.value })}
                         className="w-full px-4 py-3 rounded-xl bg-[#FAF8F5] border border-stone-200 text-sm text-stone-900 focus:outline-none focus:border-amber-500"
@@ -333,16 +393,35 @@ export const ContactPage: React.FC = () => {
                       <select
                         value={formState.scope}
                         onChange={(e) => setFormState({ ...formState, scope: e.target.value })}
-                        className="w-full px-4 py-3 rounded-xl bg-[#FAF8F5] border border-stone-200 text-sm text-stone-900 focus:outline-none focus:border-amber-500"
+                        className="w-full px-4 py-3 rounded-xl bg-[#FAF8F5] border border-stone-200 text-sm text-stone-900 focus:outline-none focus:border-amber-500 cursor-pointer"
                       >
-                        <option>Custom Web / Mobile Application</option>
-                        <option>Social Media Marketing &amp; Ads</option>
-                        <option>Branding, Logo &amp; Creative Design</option>
-                        <option>SEO, AI Search (GEO) &amp; Analytics</option>
-                        <option>Full-Service Digital Partnership</option>
+                        <option value="Custom Web / Mobile Application">Custom Web / Mobile Application</option>
+                        <option value="Social Media Marketing & Ads">Social Media Marketing &amp; Ads</option>
+                        <option value="Branding, Logo & Creative Design">Branding, Logo &amp; Creative Design</option>
+                        <option value="SEO, AI Search (GEO) & Analytics">SEO, AI Search (GEO) &amp; Analytics</option>
+                        <option value="Full-Service Digital Partnership">Full-Service Digital Partnership</option>
+                        <option value="Other">Other</option>
                       </select>
                     </div>
                   </div>
+
+                  {/* Dynamic Custom Requirement Field if "Other" is chosen */}
+                  {formState.scope === 'Other' && (
+                    <div>
+                      <label className="block text-xs font-bold text-stone-700 mb-1.5">
+                        Please Specify Your Requirement *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={formState.customRequirement}
+                        onChange={(e) =>
+                          setFormState({ ...formState, customRequirement: e.target.value })
+                        }
+                        className="w-full px-4 py-3 rounded-xl bg-[#FAF8F5] border border-stone-200 text-sm text-stone-900 focus:outline-none focus:border-amber-500"
+                      />
+                    </div>
+                  )}
 
                   <div>
                     <label className="block text-xs font-bold text-stone-700 mb-1.5">
@@ -351,19 +430,51 @@ export const ContactPage: React.FC = () => {
                     <textarea
                       rows={3}
                       required
-                      placeholder={`Tell our ${activeTrackObj.title} team about what you want to build or achieve...`}
                       value={formState.goals}
                       onChange={(e) => setFormState({ ...formState, goals: e.target.value })}
-                      className="w-full px-4 py-3 rounded-xl bg-[#FAF8F5] border border-stone-200 text-sm text-stone-900 focus:outline-none focus:border-amber-500"
+                      className="w-full px-4 py-3 rounded-xl bg-[#FAF8F5] border border-stone-200 text-sm text-stone-900 focus:outline-none focus:border-amber-500 resize-y"
+                    />
+                  </div>
+
+                  {/* Hidden Spam Protection Honeypot Field (Off-Screen) */}
+                  <div
+                    aria-hidden="true"
+                    style={{
+                      position: 'absolute',
+                      left: '-9999px',
+                      width: '1px',
+                      height: '1px',
+                      overflow: 'hidden',
+                    }}
+                  >
+                    <label htmlFor="contact-website-url">Website</label>
+                    <input
+                      type="text"
+                      id="contact-website-url"
+                      name="website_url"
+                      tabIndex={-1}
+                      autoComplete="off"
+                      value={honeypot}
+                      onChange={(e) => setHoneypot(e.target.value)}
                     />
                   </div>
 
                   <button
                     type="submit"
-                    className="w-full py-4 rounded-full bg-gradient-to-r from-[#FBBF24] via-[#F59E0B] to-[#F59E0B] hover:from-[#FCD34D] hover:to-[#D97706] text-[#14111B] text-sm font-extrabold shadow-lg shadow-amber-500/25 flex items-center justify-center gap-2 transition hover:scale-[1.01] cursor-pointer"
+                    disabled={isSubmitting}
+                    className="w-full py-4 rounded-full bg-gradient-to-r from-[#FBBF24] via-[#F59E0B] to-[#F59E0B] hover:from-[#FCD34D] hover:to-[#D97706] disabled:opacity-75 text-[#14111B] text-sm font-extrabold shadow-lg shadow-amber-500/25 flex items-center justify-center gap-2 transition hover:scale-[1.01] active:scale-[0.99] cursor-pointer"
                   >
-                    <Send className="w-4 h-4" />
-                    <span>Send Inquiry to BWise</span>
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin text-[#14111B]" />
+                        <span>Sending Inquiry to BWise...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Send className="w-4 h-4" />
+                        <span>Send Inquiry to BWise</span>
+                      </>
+                    )}
                   </button>
                 </form>
               )}

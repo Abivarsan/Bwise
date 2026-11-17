@@ -1,6 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, CheckCircle2, Loader2, Sparkles } from 'lucide-react';
+import { sendFormEmail } from '../../utils/sendEmail';
+import {
+  buildConsultationEmailHTML,
+  buildConsultationAutoReplyHTML,
+} from '../../utils/emailTemplates';
+import { ToastNotification, ToastData } from '../ui/ToastNotification';
 
 interface ConsultationModalProps {
   isOpen: boolean;
@@ -21,6 +27,8 @@ interface FormErrors {
   companyName?: string;
   workEmail?: string;
   phoneNumber?: string;
+  address?: string;
+  helpMessage?: string;
 }
 
 const INITIAL_FORM: FormData = {
@@ -34,21 +42,27 @@ const INITIAL_FORM: FormData = {
 
 export const ConsultationModal: React.FC<ConsultationModalProps> = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState<FormData>(INITIAL_FORM);
+  const [honeypot, setHoneypot] = useState('');
   const [errors, setErrors] = useState<FormErrors>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [toast, setToast] = useState<ToastData | null>(null);
 
   const modalRef = useRef<HTMLDivElement>(null);
+  const openedAtRef = useRef<number>(Date.now());
   const previousActiveElementRef = useRef<HTMLElement | null>(null);
   const fullNameInputRef = useRef<HTMLInputElement>(null);
   const companyInputRef = useRef<HTMLInputElement>(null);
   const emailInputRef = useRef<HTMLInputElement>(null);
   const phoneInputRef = useRef<HTMLInputElement>(null);
+  const addressInputRef = useRef<HTMLInputElement>(null);
+  const helpMessageInputRef = useRef<HTMLTextAreaElement>(null);
 
   // Preserve and restore focus on open/close
   useEffect(() => {
     if (isOpen) {
+      openedAtRef.current = Date.now();
       previousActiveElementRef.current = document.activeElement as HTMLElement;
       // Prevent background scrolling while modal is active
       const originalOverflow = document.body.style.overflow;
@@ -72,6 +86,7 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({ isOpen, on
         setIsSuccess(false);
         setErrors({});
         setTouched({});
+        setHoneypot('');
         setFormData(INITIAL_FORM);
       }, 300);
       return () => clearTimeout(resetTimer);
@@ -110,6 +125,14 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({ isOpen, on
           return 'Please enter a valid phone number.';
         }
         return undefined;
+      case 'address':
+        if (!value.trim()) return 'Address is required.';
+        if (value.trim().length < 3) return 'Please enter a valid address.';
+        return undefined;
+      case 'helpMessage':
+        if (!value.trim()) return 'Please let us know how we can help you.';
+        if (value.trim().length < 5) return 'Please provide a brief description (at least 5 characters).';
+        return undefined;
       default:
         return undefined;
     }
@@ -128,19 +151,24 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({ isOpen, on
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSubmitting) return;
 
     const fullNameError = validateField('fullName', formData.fullName);
     const companyError = validateField('companyName', formData.companyName);
     const emailError = validateField('workEmail', formData.workEmail);
     const phoneError = validateField('phoneNumber', formData.phoneNumber);
+    const addressError = validateField('address', formData.address);
+    const helpMessageError = validateField('helpMessage', formData.helpMessage);
 
     const newErrors: FormErrors = {
       fullName: fullNameError,
       companyName: companyError,
       workEmail: emailError,
       phoneNumber: phoneError,
+      address: addressError,
+      helpMessage: helpMessageError,
     };
 
     setErrors(newErrors);
@@ -149,6 +177,8 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({ isOpen, on
       companyName: true,
       workEmail: true,
       phoneNumber: true,
+      address: true,
+      helpMessage: true,
     });
 
     // Check if any error exists
@@ -168,17 +198,69 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({ isOpen, on
       phoneInputRef.current?.focus();
       return;
     }
+    if (addressError) {
+      addressInputRef.current?.focus();
+      return;
+    }
+    if (helpMessageError) {
+      helpMessageInputRef.current?.focus();
+      return;
+    }
 
-    // Simulate submission
     setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
+
+    const payloadData = {
+      ...formData,
+      helpDetails: formData.helpMessage,
+    };
+
+    const result = await sendFormEmail(
+      {
+        // Company notification template variables
+        email_subject: `Free Consultation: ${formData.fullName} (${formData.companyName})`,
+        email_html: buildConsultationEmailHTML(payloadData),
+
+        // Shared routing & fallback variables
+        form_type: 'Free Consultation',
+        user_name: formData.fullName,
+        user_email: formData.workEmail,
+        reply_summary: `Thank you for booking a free consultation for ${formData.companyName}. Our team will contact you at ${formData.phoneNumber} or via email shortly to confirm your session.`,
+
+        // User auto-reply template variables
+        user_reply_subject: 'Consultation Request Confirmed – BWise',
+        user_reply_html: buildConsultationAutoReplyHTML(payloadData),
+      },
+      {
+        honeypot,
+        formOpenedAt: openedAtRef.current,
+      }
+    );
+
+    setIsSubmitting(false);
+
+    if (result.ok) {
       setIsSuccess(true);
-    }, 600);
+      setToast({
+        id: String(Date.now()),
+        type: 'success',
+        title: 'Consultation Request Sent!',
+        message: `Confirmation sent to ${formData.workEmail}. Our Jaffna studio team will reach out within 24 hours.`,
+      });
+    } else {
+      setToast({
+        id: String(Date.now()),
+        type: result.isRateLimited ? 'warning' : 'error',
+        title: result.isRateLimited ? 'Please Wait Before Retrying' : 'Email Delivery Notice',
+        message:
+          result.error || 'Could not send request right now. Please try again or email hello@bwise.lk.',
+      });
+    }
   };
 
   return (
-    <AnimatePresence>
+    <>
+      <ToastNotification toast={toast} onDismiss={() => setToast(null)} />
+      <AnimatePresence>
       {isOpen && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto"
@@ -428,48 +510,95 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({ isOpen, on
                     )}
                   </div>
 
-                  {/* 5. Address (Optional) */}
+                  {/* 5. Address (Required) */}
                   <div>
-                    <div className="flex items-center justify-between mb-1">
-                      <label
-                        htmlFor="consultation-address"
-                        className="block text-xs sm:text-sm font-bold text-stone-900"
-                      >
-                        Address
-                      </label>
-                      <span className="text-[11px] font-semibold text-stone-400">Optional</span>
-                    </div>
+                    <label
+                      htmlFor="consultation-address"
+                      className="block text-xs sm:text-sm font-bold text-stone-900 mb-1"
+                    >
+                      Address <span className="text-amber-600 font-extrabold" aria-hidden="true">*</span>
+                    </label>
                     <input
+                      ref={addressInputRef}
                       type="text"
                       id="consultation-address"
                       name="address"
                       autoComplete="street-address"
+                      required
+                      aria-required="true"
+                      aria-invalid={touched.address && !!errors.address}
+                      aria-describedby={errors.address ? 'address-error' : undefined}
                       value={formData.address}
                       onChange={(e) => handleChange('address', e.target.value)}
+                      onBlur={() => handleBlur('address')}
                       placeholder="Jaffna, Sri Lanka"
-                      className="w-full px-4 py-3 rounded-xl sm:rounded-2xl border border-amber-200/90 hover:border-amber-300 text-sm sm:text-base text-stone-900 placeholder:text-stone-400 bg-[#FAF8F5]/90 hover:bg-white focus:bg-white transition-all focus:outline-none focus:border-amber-500 focus:ring-4 focus:ring-amber-500/20"
+                      className={`w-full px-4 py-3 rounded-xl sm:rounded-2xl border text-sm sm:text-base text-stone-900 placeholder:text-stone-400 transition-all focus:outline-none ${
+                        touched.address && errors.address
+                          ? 'bg-red-50/40 border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-400/15'
+                          : 'bg-[#FAF8F5]/90 hover:bg-white border-amber-200/90 hover:border-amber-300 focus:bg-white focus:border-amber-500 focus:ring-4 focus:ring-amber-500/20'
+                      }`}
                     />
+                    {touched.address && errors.address && (
+                      <p id="address-error" className="text-xs text-red-600 font-medium mt-1">
+                        {errors.address}
+                      </p>
+                    )}
                   </div>
 
-                  {/* 6. How Can We Help? (Optional - Textarea) */}
+                  {/* 6. How Can We Help? (Required - Textarea) */}
                   <div>
-                    <div className="flex items-center justify-between mb-1">
-                      <label
-                        htmlFor="consultation-helpMessage"
-                        className="block text-xs sm:text-sm font-bold text-stone-900"
-                      >
-                        How Can We Help?
-                      </label>
-                      <span className="text-[11px] font-semibold text-stone-400">Optional</span>
-                    </div>
+                    <label
+                      htmlFor="consultation-helpMessage"
+                      className="block text-xs sm:text-sm font-bold text-stone-900 mb-1"
+                    >
+                      How Can We Help? <span className="text-amber-600 font-extrabold" aria-hidden="true">*</span>
+                    </label>
                     <textarea
+                      ref={helpMessageInputRef}
                       id="consultation-helpMessage"
                       name="helpMessage"
                       rows={3}
+                      required
+                      aria-required="true"
+                      aria-invalid={touched.helpMessage && !!errors.helpMessage}
+                      aria-describedby={errors.helpMessage ? 'helpMessage-error' : undefined}
                       value={formData.helpMessage}
                       onChange={(e) => handleChange('helpMessage', e.target.value)}
+                      onBlur={() => handleBlur('helpMessage')}
                       placeholder="Tell us about your project goals, timeline, or requirements..."
-                      className="w-full px-4 py-3 rounded-xl sm:rounded-2xl border border-amber-200/90 hover:border-amber-300 text-sm sm:text-base text-stone-900 placeholder:text-stone-400 bg-[#FAF8F5]/90 hover:bg-white focus:bg-white transition-all focus:outline-none focus:border-amber-500 focus:ring-4 focus:ring-amber-500/20 resize-y"
+                      className={`w-full px-4 py-3 rounded-xl sm:rounded-2xl border text-sm sm:text-base text-stone-900 placeholder:text-stone-400 transition-all focus:outline-none resize-y ${
+                        touched.helpMessage && errors.helpMessage
+                          ? 'bg-red-50/40 border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-400/15'
+                          : 'bg-[#FAF8F5]/90 hover:bg-white border-amber-200/90 hover:border-amber-300 focus:bg-white focus:border-amber-500 focus:ring-4 focus:ring-amber-500/20'
+                      }`}
+                    />
+                    {touched.helpMessage && errors.helpMessage && (
+                      <p id="helpMessage-error" className="text-xs text-red-600 font-medium mt-1">
+                        {errors.helpMessage}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Hidden Spam Protection Honeypot Field (Off-Screen) */}
+                  <div
+                    aria-hidden="true"
+                    style={{
+                      position: 'absolute',
+                      left: '-9999px',
+                      width: '1px',
+                      height: '1px',
+                      overflow: 'hidden',
+                    }}
+                  >
+                    <label htmlFor="consultation-website-url">Website</label>
+                    <input
+                      type="text"
+                      id="consultation-website-url"
+                      name="website_url"
+                      tabIndex={-1}
+                      autoComplete="off"
+                      value={honeypot}
+                      onChange={(e) => setHoneypot(e.target.value)}
                     />
                   </div>
 
@@ -483,7 +612,7 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({ isOpen, on
                       {isSubmitting ? (
                         <>
                           <Loader2 className="w-5 h-5 animate-spin text-[#14111B]" />
-                          <span>Submitting Request...</span>
+                          <span>Sending Consultation Request...</span>
                         </>
                       ) : (
                         <span>Submit Request</span>
@@ -496,6 +625,7 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({ isOpen, on
           </motion.div>
         </div>
       )}
-    </AnimatePresence>
+      </AnimatePresence>
+    </>
   );
 };
