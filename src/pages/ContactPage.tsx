@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { getServiceBySlug } from '../data/servicesData';
 import { HiveCornerDecorations } from '../components/layout/HiveCornerDecorations';
+import { ParallaxImage, Reveal, StaggerGroup, StaggerItem } from '../components/motion/ScrollReveal';
 import { ToastNotification, ToastData } from '../components/ui/ToastNotification';
 import { sendFormEmail } from '../utils/sendEmail';
 import {
@@ -165,7 +166,7 @@ export const ContactPage: React.FC = () => {
         {/* =====================================================================
             CONCISE HEADER
            ===================================================================== */}
-        <div className="mb-10">
+        <Reveal className="mb-10">
           <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-extrabold uppercase tracking-wider">
             <MapPin className="w-3.5 h-3.5" />
             BWise · Jaffna, Sri Lanka
@@ -173,17 +174,17 @@ export const ContactPage: React.FC = () => {
           <h1 className="text-3xl sm:text-5xl font-extrabold text-stone-900 tracking-tight mt-2.5">
             Let&apos;s Discuss Your Project.
           </h1>
-        </div>
+        </Reveal>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* =====================================================================
               LEFT COLUMN: VISUAL JAFFNA STUDIO CARD & OFFICIAL SOCIAL CHANNELS
              ===================================================================== */}
-          <div className="lg:col-span-5 space-y-5">
+          <Reveal direction="left" className="lg:col-span-5 space-y-5">
             {/* Realistic Studio Visual Card */}
             <div className="rounded-[28px] overflow-hidden bg-stone-900 border-2 border-amber-300/80 shadow-[0_18px_45px_rgba(245,158,11,0.14)] group">
               <div className="relative h-56 overflow-hidden">
-                <img
+                <ParallaxImage
                   src={assetUrl('/assets/pages/careers/hive-studio-hero.jpg')}
                   alt="BWise Software & Digital Marketing Studio in Jaffna, Sri Lanka"
                   fetchPriority="high"
@@ -224,8 +225,8 @@ export const ContactPage: React.FC = () => {
             </div>
 
             {/* Direct Contact & Location Channels */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3">
-              <div className="flex items-center gap-3.5 p-4 rounded-2xl bg-white/95 border border-amber-200/80 shadow-2xs">
+            <StaggerGroup className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3" stagger={0.08}>
+              <StaggerItem distance={14} className="flex items-center gap-3.5 p-4 rounded-2xl bg-white/95 border border-amber-200/80 shadow-2xs">
                 <div className="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center shrink-0">
                   <MapPin className="w-5 h-5" />
                 </div>
@@ -235,53 +236,56 @@ export const ContactPage: React.FC = () => {
                   </p>
                   <p className="text-sm font-extrabold text-stone-900">Jaffna, Sri Lanka</p>
                 </div>
-              </div>
+              </StaggerItem>
 
-              <a
-                href="mailto:info@bwise.lk"
-                className="flex items-center gap-3.5 p-4 rounded-2xl bg-white/95 border border-amber-200/80 hover:border-amber-400 shadow-2xs transition group"
-              >
-                <div className="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                  <Mail className="w-5 h-5" />
-                </div>
-                <div>
-                  <p className="text-[11px] font-bold uppercase tracking-wider text-stone-400">
-                    Official Email
-                  </p>
-                  <p className="text-sm font-extrabold text-stone-900">info@bwise.lk</p>
-                </div>
-              </a>
-            </div>
+              <StaggerItem distance={14}>
+                <a
+                  href="mailto:info@bwise.lk"
+                  className="flex items-center gap-3.5 p-4 rounded-2xl bg-white/95 border border-amber-200/80 hover:border-amber-400 shadow-2xs transition group"
+                >
+                  <div className="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                    <Mail className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <p className="text-[11px] font-bold uppercase tracking-wider text-stone-400">
+                      Official Email
+                    </p>
+                    <p className="text-sm font-extrabold text-stone-900">info@bwise.lk</p>
+                  </div>
+                </a>
+              </StaggerItem>
+            </StaggerGroup>
 
             {/* Official Social Media Cards */}
             <div className="rounded-2xl bg-white/95 border border-amber-200/80 p-4 shadow-2xs space-y-2.5">
               <p className="text-[11px] font-extrabold uppercase tracking-wider text-stone-500">
                 Connect on Official Social Media
               </p>
-              <div className="grid grid-cols-1 gap-2">
+              <StaggerGroup className="grid grid-cols-1 gap-2" stagger={0.06}>
                 {OFFICIAL_SOCIAL_CARDS.map((soc) => (
-                  <a
-                    key={soc.name}
-                    href={soc.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-between p-3 rounded-xl bg-[#FAF8F5] hover:bg-amber-50 border border-amber-200/70 hover:border-amber-400 transition group"
-                  >
-                    <div>
-                      <p className="text-xs font-extrabold text-stone-900">{soc.name}</p>
-                      <p className="text-[11px] text-stone-500">{soc.handle}</p>
-                    </div>
-                    <ArrowUpRight className="w-4 h-4 text-amber-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                  </a>
+                  <StaggerItem key={soc.name} distance={12}>
+                    <a
+                      href={soc.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-between p-3 rounded-xl bg-[#FAF8F5] hover:bg-amber-50 border border-amber-200/70 hover:border-amber-400 transition group"
+                    >
+                      <div>
+                        <p className="text-xs font-extrabold text-stone-900">{soc.name}</p>
+                        <p className="text-[11px] text-stone-500">{soc.handle}</p>
+                      </div>
+                      <ArrowUpRight className="w-4 h-4 text-amber-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                    </a>
+                  </StaggerItem>
                 ))}
-              </div>
+              </StaggerGroup>
             </div>
-          </div>
+          </Reveal>
 
           {/* =====================================================================
               RIGHT COLUMN: STREAMLINED INTERACTIVE BRIEFING FORM
              ===================================================================== */}
-          <div className="lg:col-span-7">
+          <Reveal direction="right" delay={0.1} className="lg:col-span-7">
             <div className="bg-white/95 rounded-[32px] p-6 sm:p-10 shadow-[0_24px_60px_rgba(26,22,18,0.06)] border-2 border-amber-200/80">
               {submitted ? (
                 <div className="text-center py-12 space-y-5">
@@ -479,7 +483,7 @@ export const ContactPage: React.FC = () => {
                 </form>
               )}
             </div>
-          </div>
+          </Reveal>
         </div>
       </div>
     </div>

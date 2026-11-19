@@ -22,6 +22,7 @@ import {
 import { ServiceIcon } from '../components/hive/HoneycombGrid3D';
 import { BwiseBeeCharacter } from '../components/hive/BwiseBeeCharacter';
 import { HiveCornerDecorations } from '../components/layout/HiveCornerDecorations';
+import { ParallaxImage, Reveal, StaggerGroup, StaggerItem } from '../components/motion/ScrollReveal';
 import { useConsultationModal } from '../context/ConsultationModalContext';
 import { assetUrl } from '../utils/assets';
 
@@ -72,10 +73,14 @@ const SubServiceSubsection: React.FC<{
     >
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
         {/* Visual Showcase Column (Alternates Left/Right on Desktop for Visual Rhythm) */}
-        <div className={`lg:col-span-6 ${isEven ? 'lg:order-2' : 'lg:order-1'}`}>
+        <Reveal
+          direction={isEven ? 'right' : 'left'}
+          delay={0.08}
+          className={`lg:col-span-6 ${isEven ? 'lg:order-2' : 'lg:order-1'}`}
+        >
           <div className="relative rounded-[26px] overflow-hidden bg-stone-900 border-2 border-amber-300/70 shadow-[0_18px_45px_rgba(26,22,18,0.14)]">
             <div className="relative aspect-[16/11] overflow-hidden">
-              <img
+              <ParallaxImage
                 src={assetUrl(photoPath)}
                 alt={service.title}
                 loading="lazy"
@@ -133,10 +138,13 @@ const SubServiceSubsection: React.FC<{
               </div>
             </div>
           </div>
-        </div>
+        </Reveal>
 
         {/* Concise Content & Interactive Capabilities Column */}
-        <div className={`lg:col-span-6 space-y-5 ${isEven ? 'lg:order-1' : 'lg:order-2'}`}>
+        <Reveal
+          direction={isEven ? 'left' : 'right'}
+          className={`lg:col-span-6 space-y-5 ${isEven ? 'lg:order-1' : 'lg:order-2'}`}
+        >
           <div className="flex items-center gap-2.5">
             <span className="text-[11px] font-extrabold uppercase tracking-wider text-amber-800 bg-amber-100/90 px-3 py-1 rounded-full">
               Studio #{String(index + 1).padStart(2, '0')}
@@ -157,11 +165,12 @@ const SubServiceSubsection: React.FC<{
           </div>
 
           {/* 3 Scannable Outcome Pills */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+          <StaggerGroup className="grid grid-cols-1 sm:grid-cols-3 gap-2.5" stagger={0.07}>
             {detail.problemsSolved.map((prob, i) => (
-              <div
+              <StaggerItem
                 key={i}
-                className="p-3.5 rounded-2xl bg-[#FFFDF8] border border-amber-200/80 hover:border-amber-400 hover:-translate-y-0.5 transition-all"
+                distance={16}
+                className="p-3.5 rounded-2xl bg-[#FFFDF8] border border-amber-200/80 hover:border-amber-400 hover:-translate-y-0.5 transition-[border-color,translate]"
               >
                 <CheckCircle2 className="w-4 h-4 text-amber-600 mb-1.5" />
                 <h3 className="text-xs font-extrabold text-stone-900 leading-snug">
@@ -170,9 +179,9 @@ const SubServiceSubsection: React.FC<{
                 <p className="text-[11px] text-stone-600 mt-1 line-clamp-2 leading-relaxed">
                   {condenseSentence(prob.description)}
                 </p>
-              </div>
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerGroup>
 
           {/* Tech Stack & Action Bar */}
           <div className="pt-3 border-t border-stone-200/70 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -205,7 +214,7 @@ const SubServiceSubsection: React.FC<{
               </button>
             </div>
           </div>
-        </div>
+        </Reveal>
       </div>
     </motion.section>
   );
@@ -352,28 +361,32 @@ export const ServicesPage: React.FC = () => {
           </div>
 
           {/* Interactive Sub-Service Jump Pills */}
-          <div className="mt-6 pt-5 border-t border-amber-200/70 flex flex-wrap items-center gap-2">
+          <StaggerGroup
+            className="mt-6 pt-5 border-t border-amber-200/70 flex flex-wrap items-center gap-2"
+            stagger={0.04}
+          >
             {subServices.map((sub, sIdx) => (
-              <a
-                key={sub.id}
-                href={`#${sub.slug}`}
-                onClick={(e) => {
-                  e.preventDefault();
-                  const el = document.getElementById(sub.slug);
-                  if (el) {
-                    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    navigate(`/services?category=${activeCategory.slug}#${sub.slug}`, { replace: true });
-                  }
-                }}
-                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white hover:bg-amber-500 hover:text-white text-stone-700 text-xs font-bold border border-amber-200/80 shadow-2xs transition-all hover:scale-105"
-              >
-                <ServiceIcon name={sub.iconName} className="w-3.5 h-3.5" />
-                <span>
-                  {sIdx + 1}. {sub.title}
-                </span>
-              </a>
+              <StaggerItem key={sub.id} distance={10}>
+                <a
+                  href={`#${sub.slug}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    const el = document.getElementById(sub.slug);
+                    if (el) {
+                      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                      navigate(`/services?category=${activeCategory.slug}#${sub.slug}`, { replace: true });
+                    }
+                  }}
+                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white hover:bg-amber-500 hover:text-white text-stone-700 text-xs font-bold border border-amber-200/80 shadow-2xs transition-all hover:scale-105"
+                >
+                  <ServiceIcon name={sub.iconName} className="w-3.5 h-3.5" />
+                  <span>
+                    {sIdx + 1}. {sub.title}
+                  </span>
+                </a>
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerGroup>
         </motion.div>
       </div>
 
@@ -401,7 +414,7 @@ export const ServicesPage: React.FC = () => {
       {/* =====================================================================
           CONCISE BOTTOM CTA BANNER
          ===================================================================== */}
-      <div className="max-w-[1240px] mx-auto px-4 sm:px-8 mt-8">
+      <Reveal scale={0.97} className="max-w-[1240px] mx-auto px-4 sm:px-8 mt-8">
         <div className="relative rounded-[32px] bg-gradient-to-r from-[#F9E2AE]/90 via-[#FFF8E7]/95 to-[#F9E4B7]/90 p-7 sm:p-10 text-stone-900 shadow-[0_18px_50px_rgba(245,158,11,0.16)] border-2 border-amber-300/80 flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="space-y-1.5">
             <span className="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-amber-800">
@@ -423,7 +436,7 @@ export const ServicesPage: React.FC = () => {
             </button>
           </div>
         </div>
-      </div>
+      </Reveal>
     </div>
   );
 };

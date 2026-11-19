@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import { AnimatePresence, MotionConfig, motion, useReducedMotion } from 'framer-motion';
 import { Navbar } from './components/layout/Navbar';
 import { Footer } from './components/layout/Footer';
 import { FloatingChatWidget } from './components/layout/FloatingChatWidget';
@@ -49,16 +49,18 @@ const AnimatedRoutes: React.FC = () => {
 export function App() {
   return (
     <BrowserRouter basename={import.meta.env.BASE_URL}>
-      <ConsultationModalProvider>
-        <div className="min-h-screen flex flex-col bg-[#FAF8F5] text-[#1A1612]">
-          <Navbar />
-          <main className="flex-1">
-            <AnimatedRoutes />
-          </main>
-          <Footer />
-          <FloatingChatWidget />
-        </div>
-      </ConsultationModalProvider>
+      <MotionConfig reducedMotion="user">
+        <ConsultationModalProvider>
+          <div className="min-h-screen flex flex-col bg-[#FAF8F5] text-[#1A1612]">
+            <Navbar />
+            <main className="flex-1">
+              <AnimatedRoutes />
+            </main>
+            <Footer />
+            <FloatingChatWidget />
+          </div>
+        </ConsultationModalProvider>
+      </MotionConfig>
     </BrowserRouter>
   );
 }

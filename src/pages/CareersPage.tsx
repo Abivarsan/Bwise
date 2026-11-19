@@ -15,6 +15,7 @@ import {
   AlertCircle,
 } from 'lucide-react';
 import { HiveCornerDecorations } from '../components/layout/HiveCornerDecorations';
+import { ParallaxImage, Reveal, StaggerGroup, StaggerItem } from '../components/motion/ScrollReveal';
 import { assetUrl } from '../utils/assets';
 
 type RoleDepartment = 'All' | 'Engineering' | 'Design' | 'Marketing';
@@ -136,7 +137,7 @@ export const CareersPage: React.FC = () => {
           1. VISUAL STUDIO HERO + 3-PHOTO DOCUMENTARY MOSAIC
          ===================================================================== */}
       <section className="max-w-[1320px] mx-auto px-4 sm:px-8 pb-14 relative z-10">
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10">
+        <Reveal className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10">
           <div>
             <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-extrabold uppercase tracking-wider">
               <span className="w-2 h-2 rounded-full bg-amber-500 animate-ping" />
@@ -157,12 +158,12 @@ export const CareersPage: React.FC = () => {
               View Open Roles <ArrowUpRight className="w-4 h-4" />
             </a>
           </div>
-        </div>
+        </Reveal>
 
         {/* 3-Photo Studio Documentary Mosaic */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
-          <div className="lg:col-span-7 relative rounded-[28px] overflow-hidden bg-stone-900 aspect-[16/10] shadow-lg border-2 border-amber-300/70 group">
-            <img
+        <StaggerGroup className="grid grid-cols-1 lg:grid-cols-12 gap-5" stagger={0.1}>
+          <StaggerItem className="lg:col-span-7 relative rounded-[28px] overflow-hidden bg-stone-900 aspect-[16/10] shadow-lg border-2 border-amber-300/70 group">
+            <ParallaxImage
               src={assetUrl('/assets/pages/careers/hive-studio-hero.jpg')}
               alt="BWise engineers and designers collaborating in Jaffna studio"
               fetchPriority="high"
@@ -182,10 +183,10 @@ export const CareersPage: React.FC = () => {
                 Software &amp; Digital Agency
               </span>
             </div>
-          </div>
+          </StaggerItem>
 
           <div className="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-5">
-            <div className="relative rounded-[24px] overflow-hidden bg-stone-900 aspect-[16/9] border border-amber-200/80 group">
+            <StaggerItem className="relative rounded-[24px] overflow-hidden bg-stone-900 aspect-[16/9] border border-amber-200/80 group">
               <img
                 src={assetUrl('/assets/pages/careers/engineering-pairing.jpg')}
                 alt="Software engineers collaborating on web and mobile code"
@@ -199,9 +200,9 @@ export const CareersPage: React.FC = () => {
                 </p>
                 <p className="text-sm font-extrabold">Full-Stack, Mobile &amp; QA</p>
               </div>
-            </div>
+            </StaggerItem>
 
-            <div className="relative rounded-[24px] overflow-hidden bg-stone-900 aspect-[16/9] border border-amber-200/80 group">
+            <StaggerItem className="relative rounded-[24px] overflow-hidden bg-stone-900 aspect-[16/9] border border-amber-200/80 group">
               <img
                 src={assetUrl('/assets/pages/careers/design-critique.jpg')}
                 alt="Brand designers and digital marketers reviewing campaign creatives"
@@ -215,9 +216,9 @@ export const CareersPage: React.FC = () => {
                 </p>
                 <p className="text-sm font-extrabold">Branding, UI/UX &amp; Social Media</p>
               </div>
-            </div>
+            </StaggerItem>
           </div>
-        </div>
+        </StaggerGroup>
       </section>
 
       {/* =====================================================================
@@ -225,11 +226,11 @@ export const CareersPage: React.FC = () => {
          ===================================================================== */}
       <section className="bg-white/90 backdrop-blur-xs py-14 border-y border-amber-200/70">
         <div className="max-w-[1320px] mx-auto px-4 sm:px-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <StaggerGroup className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5" stagger={0.08}>
             {CULTURE_CARDS.map((card) => (
-              <div
+              <StaggerItem
                 key={card.title}
-                className="p-6 rounded-3xl bg-[#FAF8F5] border border-amber-200/80 hover:border-amber-400 hover:bg-white transition-all duration-300 hover:-translate-y-1 shadow-2xs flex flex-col justify-between"
+                className="p-6 rounded-3xl bg-[#FAF8F5] border border-amber-200/80 hover:border-amber-400 hover:bg-white transition-[background-color,border-color,translate] duration-300 hover:-translate-y-1 shadow-2xs flex flex-col justify-between"
               >
                 <div>
                   <h2 className="text-sm sm:text-base font-extrabold text-stone-900 leading-snug">
@@ -237,17 +238,17 @@ export const CareersPage: React.FC = () => {
                   </h2>
                   <p className="text-xs text-stone-600 mt-2 leading-relaxed">{card.desc}</p>
                 </div>
-              </div>
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerGroup>
         </div>
       </section>
 
       {/* =====================================================================
           3. STREAMLINED INTERACTIVE OPEN ROLES BOARD
          ===================================================================== */}
-      <section id="open-positions" className="max-w-[1320px] mx-auto px-4 sm:px-8 pt-16 scroll-mt-24">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+      <section id="open-positions" className="max-w-[1320px] mx-auto px-4 sm:px-8 pt-16 scroll-mt-24 relative z-10">
+        <Reveal className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
           <div>
             <span className="text-xs font-extrabold uppercase tracking-wider text-amber-700">
               Active Openings · Hiring Now
@@ -291,9 +292,10 @@ export const CareersPage: React.FC = () => {
               );
             })}
           </div>
-        </div>
+        </Reveal>
 
         {/* Roles List or Empty State */}
+        <Reveal delay={0.08}>
         {filteredRoles.length === 0 ? (
           <div className="rounded-3xl border border-amber-200/90 bg-white/95 p-8 sm:p-12 text-center max-w-2xl mx-auto shadow-sm">
             <div className="w-14 h-14 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center mx-auto mb-4">
@@ -543,9 +545,10 @@ export const CareersPage: React.FC = () => {
             })}
           </div>
         )}
+        </Reveal>
 
         {/* Social Media Recruitment Strip */}
-        <div className="mt-10 rounded-3xl bg-white/95 border border-amber-200/90 p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <Reveal className="mt-10 rounded-3xl bg-white/95 border border-amber-200/90 p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <Sparkles className="w-5 h-5 text-amber-600 shrink-0" />
             <p className="text-xs sm:text-sm font-bold text-stone-800">
@@ -578,7 +581,7 @@ export const CareersPage: React.FC = () => {
               Instagram <ArrowUpRight className="w-3.5 h-3.5" />
             </a>
           </div>
-        </div>
+        </Reveal>
       </section>
     </div>
   );

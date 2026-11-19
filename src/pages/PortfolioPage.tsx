@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUpRight, CheckCircle2, Sparkles, Layers } from 'lucide-react';
 import { HiveCornerDecorations } from '../components/layout/HiveCornerDecorations';
+import { ParallaxImage, Reveal, StaggerGroup, StaggerItem } from '../components/motion/ScrollReveal';
 import { useConsultationModal } from '../context/ConsultationModalContext';
 import { assetUrl } from '../utils/assets';
 
@@ -158,7 +159,7 @@ export const PortfolioPage: React.FC = () => {
           1. CONCISE VISUAL HEADER & FILTER PILLS
          ===================================================================== */}
       <section className="max-w-[1320px] mx-auto px-4 sm:px-8 pb-8 relative z-10">
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+        <Reveal className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
           <div>
             <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-bold uppercase tracking-wider">
               <Sparkles className="w-3.5 h-3.5" />
@@ -189,7 +190,7 @@ export const PortfolioPage: React.FC = () => {
               );
             })}
           </div>
-        </div>
+        </Reveal>
       </section>
 
       {/* =====================================================================
@@ -321,33 +322,36 @@ export const PortfolioPage: React.FC = () => {
       {/* =====================================================================
           3. INTERACTIVE VISUAL CASE STUDY GALLERY CARDS
          ===================================================================== */}
-      <section className="max-w-[1320px] mx-auto px-4 sm:px-8">
-        <div className="flex items-center justify-between mb-6">
+      <section className="max-w-[1320px] mx-auto px-4 sm:px-8 relative z-10">
+        <Reveal className="flex items-center justify-between mb-6">
           <h2 className="text-lg sm:text-xl font-extrabold text-stone-900 flex items-center gap-2">
             <Layers className="w-5 h-5 text-amber-600" />
             Select Any Project to Preview Details ({filteredStudies.length})
           </h2>
-        </div>
+        </Reveal>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <StaggerGroup
+          key={activeFilter}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          stagger={0.09}
+        >
           {filteredStudies.map((study) => {
             const isSelected = selectedStudy.id === study.id;
             return (
-              <motion.div
-                layout
+              <StaggerItem
                 key={study.id}
                 onClick={() => {
                   setSelectedStudy(study);
                   window.scrollTo({ top: 120, behavior: 'smooth' });
                 }}
-                className={`group rounded-3xl overflow-hidden cursor-pointer transition-all duration-300 flex flex-col border ${
+                className={`group rounded-3xl overflow-hidden cursor-pointer transition-[box-shadow,border-color,translate] duration-300 flex flex-col border ${
                   isSelected
                     ? 'bg-white border-amber-500 ring-2 ring-amber-400/30 shadow-[0_20px_50px_rgba(245,158,11,0.18)] -translate-y-1'
                     : 'bg-white/95 border-amber-200/80 hover:border-amber-400 shadow-[0_12px_30px_rgba(26,22,18,0.05)] hover:shadow-[0_18px_45px_rgba(245,158,11,0.14)] hover:-translate-y-1'
                 }`}
               >
                 <div className="relative h-56 overflow-hidden bg-stone-900">
-                  <img
+                  <ParallaxImage
                     src={assetUrl(study.image)}
                     alt={study.imageAlt}
                     loading="lazy"
@@ -391,16 +395,16 @@ export const PortfolioPage: React.FC = () => {
                     </span>
                   </div>
                 </div>
-              </motion.div>
+              </StaggerItem>
             );
           })}
-        </div>
+        </StaggerGroup>
       </section>
 
       {/* =====================================================================
           4. CONCISE VISUAL CTA BANNER
          ===================================================================== */}
-      <section className="max-w-[1320px] mx-auto px-4 sm:px-8 mt-14">
+      <Reveal scale={0.97} as="section" className="max-w-[1320px] mx-auto px-4 sm:px-8 mt-14 relative z-10">
         <div className="rounded-[32px] bg-gradient-to-r from-[#F9E2AE]/90 via-[#FFF8E7]/95 to-[#F9E4B7]/90 border-2 border-amber-300/80 p-8 sm:p-12 shadow-[0_18px_50px_rgba(245,158,11,0.16)] flex flex-col md:flex-row items-center justify-between gap-6">
           <div>
             <span className="text-xs font-extrabold uppercase tracking-wider text-amber-800">
@@ -418,7 +422,7 @@ export const PortfolioPage: React.FC = () => {
             Book a Free Consultation →
           </button>
         </div>
-      </section>
+      </Reveal>
     </div>
   );
 };

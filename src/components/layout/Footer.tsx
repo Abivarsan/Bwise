@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowUpRight, Globe, Mail, MapPin } from 'lucide-react';
 import { BwiseLogo } from './BwiseLogo';
+import { StaggerGroup, StaggerItem } from '../motion/ScrollReveal';
 import { getServicesByCategory } from '../../data/servicesData';
 
 const SOCIAL_LINKS = [
@@ -41,9 +42,9 @@ export const Footer: React.FC = () => {
   return (
     <footer data-theme="dark" className="bg-[#161310] text-stone-300 border-t border-amber-500/20">
       <div className="max-w-[1360px] mx-auto px-4 sm:px-8 pt-16 pb-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 pb-12 border-b border-stone-800">
+        <StaggerGroup className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 pb-12 border-b border-stone-800" stagger={0.07}>
           {/* Column 1: Brand, Jaffna HQ & Official Socials */}
-          <div className="lg:col-span-4 space-y-4">
+          <StaggerItem distance={16} className="lg:col-span-4 space-y-4">
             <Link
               to="/"
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
@@ -88,10 +89,10 @@ export const Footer: React.FC = () => {
                 </a>
               ))}
             </div>
-          </div>
+          </StaggerItem>
 
           {/* Column 2: Software Solutions Studios (1-7) */}
-          <div className="lg:col-span-3 space-y-3">
+          <StaggerItem distance={16} className="lg:col-span-3 space-y-3">
             <h3 className="text-xs font-bold uppercase tracking-wider text-amber-400">
               Software Solutions
             </h3>
@@ -108,10 +109,10 @@ export const Footer: React.FC = () => {
                 </li>
               ))}
             </ul>
-          </div>
+          </StaggerItem>
 
           {/* Column 3: Marketing & Strategy Studios (8-13) */}
-          <div className="lg:col-span-3 space-y-3">
+          <StaggerItem distance={16} className="lg:col-span-3 space-y-3">
             <h3 className="text-xs font-bold uppercase tracking-wider text-amber-400">
               Marketing &amp; Brand Studios
             </h3>
@@ -131,10 +132,10 @@ export const Footer: React.FC = () => {
                 </li>
               ))}
             </ul>
-          </div>
+          </StaggerItem>
 
           {/* Column 4: Quick Navigation */}
-          <div className="lg:col-span-2 space-y-3">
+          <StaggerItem distance={16} className="lg:col-span-2 space-y-3">
             <h3 className="text-xs font-bold uppercase tracking-wider text-amber-400">
               Explore BWise
             </h3>
@@ -170,8 +171,8 @@ export const Footer: React.FC = () => {
                 </Link>
               </li>
             </ul>
-          </div>
-        </div>
+          </StaggerItem>
+        </StaggerGroup>
 
         {/* Bottom Copyright Strip */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-stone-500">

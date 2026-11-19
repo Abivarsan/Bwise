@@ -16,6 +16,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { HiveCornerDecorations } from '../components/layout/HiveCornerDecorations';
+import { ParallaxImage, Reveal, StaggerGroup, StaggerItem } from '../components/motion/ScrollReveal';
 import { useConsultationModal } from '../context/ConsultationModalContext';
 import { assetUrl } from '../utils/assets';
 
@@ -207,7 +208,7 @@ export const IndustriesPage: React.FC = () => {
           1. CONCISE HERO + 6-SECTOR VISUAL SELECTOR PILLS
          ===================================================================== */}
       <section className="max-w-[1320px] mx-auto px-4 sm:px-8 pb-8 relative z-10">
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+        <Reveal className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
           <div>
             <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-bold uppercase tracking-wider">
               <Sparkles className="w-3.5 h-3.5" />
@@ -220,39 +221,40 @@ export const IndustriesPage: React.FC = () => {
           <p className="text-sm sm:text-base text-stone-600 max-w-md">
             From Jaffna and across Sri Lanka to global markets, we build custom digital solutions tailored to your industry.
           </p>
-        </div>
+        </Reveal>
 
         {/* Interactive 6-Vertical Selector Bar */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 mt-8">
+        <StaggerGroup className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 mt-8" stagger={0.05}>
           {INDUSTRIES.map((sector) => {
             const Icon = sector.icon;
             const isSelected = sector.id === activeId;
             return (
-              <button
-                key={sector.id}
-                type="button"
-                onClick={() => setActiveId(sector.id)}
-                className={`p-3.5 rounded-2xl border text-left transition-all duration-300 cursor-pointer flex flex-col justify-between ${
-                  isSelected
-                    ? 'bg-gradient-to-br from-amber-500 to-amber-600 text-white border-amber-500 shadow-lg shadow-amber-500/25 -translate-y-0.5'
-                    : 'bg-white/95 hover:bg-amber-50/70 text-stone-800 border-amber-200/80 hover:border-amber-400'
-                }`}
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <span
-                    className={`text-[10px] font-extrabold ${
-                      isSelected ? 'text-amber-100' : 'text-amber-700'
-                    }`}
-                  >
-                    #{sector.number}
-                  </span>
-                  <Icon className={`w-4 h-4 ${isSelected ? 'text-white' : 'text-amber-600'}`} />
-                </div>
-                <p className="text-xs font-extrabold leading-snug">{sector.shortName}</p>
-              </button>
+              <StaggerItem key={sector.id} distance={14}>
+                <button
+                  type="button"
+                  onClick={() => setActiveId(sector.id)}
+                  className={`w-full h-full p-3.5 rounded-2xl border text-left transition-all duration-300 cursor-pointer flex flex-col justify-between ${
+                    isSelected
+                      ? 'bg-gradient-to-br from-amber-500 to-amber-600 text-white border-amber-500 shadow-lg shadow-amber-500/25 -translate-y-0.5'
+                      : 'bg-white/95 hover:bg-amber-50/70 text-stone-800 border-amber-200/80 hover:border-amber-400'
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <span
+                      className={`text-[10px] font-extrabold ${
+                        isSelected ? 'text-amber-100' : 'text-amber-700'
+                      }`}
+                    >
+                      #{sector.number}
+                    </span>
+                    <Icon className={`w-4 h-4 ${isSelected ? 'text-white' : 'text-amber-600'}`} />
+                  </div>
+                  <p className="text-xs font-extrabold leading-snug">{sector.shortName}</p>
+                </button>
+              </StaggerItem>
             );
           })}
-        </div>
+        </StaggerGroup>
       </section>
 
       {/* =====================================================================
@@ -391,25 +393,25 @@ export const IndustriesPage: React.FC = () => {
       {/* =====================================================================
           3. ALL 6 SECTORS QUICK VISUAL GRID
          ===================================================================== */}
-      <section className="max-w-[1320px] mx-auto px-4 sm:px-8 pb-12">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      <section className="max-w-[1320px] mx-auto px-4 sm:px-8 pb-12 relative z-10">
+        <StaggerGroup className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5" stagger={0.08}>
           {INDUSTRIES.map((sector) => {
             const isCurrent = sector.id === activeId;
             return (
-              <div
+              <StaggerItem
                 key={sector.id}
                 onClick={() => {
                   setActiveId(sector.id);
                   window.scrollTo({ top: 140, behavior: 'smooth' });
                 }}
-                className={`group rounded-3xl overflow-hidden border cursor-pointer transition-all duration-300 ${
+                className={`group rounded-3xl overflow-hidden border cursor-pointer transition-[box-shadow,border-color,translate] duration-300 ${
                   isCurrent
                     ? 'bg-white border-amber-500 ring-2 ring-amber-400/25 shadow-lg'
                     : 'bg-white/90 border-amber-200/80 hover:border-amber-400 hover:-translate-y-1 shadow-xs'
                 }`}
               >
                 <div className="relative h-44 overflow-hidden bg-stone-900">
-                  <img
+                  <ParallaxImage
                     src={assetUrl(sector.image)}
                     alt={sector.imageAlt}
                     loading="lazy"
@@ -432,16 +434,16 @@ export const IndustriesPage: React.FC = () => {
                   <span className="text-xs text-stone-600 truncate pr-2">{sector.tagline}</span>
                   <ArrowUpRight className="w-4 h-4 text-amber-600 shrink-0 group-hover:translate-x-0.5 transition-transform" />
                 </div>
-              </div>
+              </StaggerItem>
             );
           })}
-        </div>
+        </StaggerGroup>
       </section>
 
       {/* =====================================================================
           4. COMPACT QUALITY & DELIVERY COMMITMENT BAR
          ===================================================================== */}
-      <section className="max-w-[1320px] mx-auto px-4 sm:px-8">
+      <Reveal scale={0.97} as="section" className="max-w-[1320px] mx-auto px-4 sm:px-8 relative z-10">
         <div className="rounded-[28px] bg-gradient-to-r from-[#F9E2AE]/85 via-[#FFF8E7]/95 to-[#F9E4B7]/85 border-2 border-amber-300/80 p-6 sm:p-8 shadow-md flex flex-col lg:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-3.5">
             <div className="w-12 h-12 rounded-2xl bg-amber-500 text-white flex items-center justify-center shrink-0 shadow-xs">
@@ -470,7 +472,7 @@ export const IndustriesPage: React.FC = () => {
             )}
           </div>
         </div>
-      </section>
+      </Reveal>
     </div>
   );
 };

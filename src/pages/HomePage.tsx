@@ -4,6 +4,7 @@ import { ArrowRight, Code2, Cpu, Sparkles, TrendingUp, Users } from 'lucide-reac
 import { BeehiveLandingExperience } from '../components/hive/BeehiveLandingExperience';
 import { BwiseBeeCharacter } from '../components/hive/BwiseBeeCharacter';
 import { HiveCornerDecorations } from '../components/layout/HiveCornerDecorations';
+import { ParallaxImage, Reveal, StaggerGroup, StaggerItem } from '../components/motion/ScrollReveal';
 import { assetUrl } from '../utils/assets';
 
 const STUDIO_SHOWCASES = [
@@ -106,20 +107,20 @@ export const HomePage: React.FC = () => {
          ===================================================================== */}
       <section className="bg-gradient-to-r from-[#F9E4B7]/65 via-[#FFF8E7] to-[#F5E8D0]/75 text-stone-900 py-10 border-y border-amber-300/60">
         <div className="max-w-[1360px] mx-auto px-4 sm:px-8">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+          <StaggerGroup className="grid grid-cols-2 lg:grid-cols-4 gap-6">
             {agencyStats.map((stat, idx) => (
-              <div
+              <StaggerItem
                 key={idx}
-                className="group rounded-2xl bg-white/75 backdrop-blur-xs border border-amber-300/60 px-5 py-4 shadow-xs hover:shadow-md hover:border-amber-400 transition-all duration-300 hover:-translate-y-0.5"
+                className="group rounded-2xl bg-white/75 backdrop-blur-xs border border-amber-300/60 px-5 py-4 shadow-xs hover:shadow-md hover:border-amber-400 transition-[box-shadow,border-color,translate] duration-300 hover:-translate-y-0.5"
               >
                 <p className="text-3xl sm:text-4xl font-extrabold text-amber-700 tracking-tight group-hover:scale-105 transition-transform origin-left">
                   {stat.value}
                 </p>
                 <p className="text-sm font-bold text-stone-900 mt-1">{stat.label}</p>
                 <p className="text-xs text-stone-600 mt-0.5">{stat.detail}</p>
-              </div>
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerGroup>
         </div>
       </section>
 
@@ -129,7 +130,7 @@ export const HomePage: React.FC = () => {
       <section className="relative overflow-hidden py-16 sm:py-20">
         <HiveCornerDecorations />
         <div className="relative z-10 max-w-[1360px] mx-auto px-4 sm:px-8">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
+          <Reveal className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
             <div>
               <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-bold uppercase tracking-wider">
                 <Sparkles className="w-3.5 h-3.5" />
@@ -146,20 +147,21 @@ export const HomePage: React.FC = () => {
               Explore All 12 Studios
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
-          </div>
+          </Reveal>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-7">
+          <StaggerGroup className="grid grid-cols-1 lg:grid-cols-3 gap-7" stagger={0.12}>
             {STUDIO_SHOWCASES.map((studio) => {
               const Icon = studio.icon;
               return (
-                <div
+                <StaggerItem
                   key={studio.slug}
                   onClick={() => navigate(`/services?category=${studio.slug}#${studio.slug}`)}
-                  className="group relative bg-white/95 rounded-3xl overflow-hidden border border-amber-200/90 hover:border-amber-400 shadow-[0_14px_35px_rgba(26,22,18,0.06)] hover:shadow-[0_24px_55px_rgba(245,158,11,0.18)] transition-all duration-500 hover:-translate-y-1.5 cursor-pointer flex flex-col"
+                  className="group relative bg-white/95 rounded-3xl overflow-hidden border border-amber-200/90 hover:border-amber-400 shadow-[0_14px_35px_rgba(26,22,18,0.06)] hover:shadow-[0_24px_55px_rgba(245,158,11,0.18)] transition-[box-shadow,border-color,translate] duration-500 hover:-translate-y-1.5 cursor-pointer flex flex-col"
+                  distance={28}
                 >
                   {/* Realistic Photography Header with Interactive Telemetry Overlay */}
                   <div className="relative h-60 overflow-hidden bg-stone-900">
-                    <img
+                    <ParallaxImage
                       src={assetUrl(studio.image)}
                       alt={studio.title}
                       loading="lazy"
@@ -221,10 +223,10 @@ export const HomePage: React.FC = () => {
                       </div>
                     </div>
                   </div>
-                </div>
+                </StaggerItem>
               );
             })}
-          </div>
+          </StaggerGroup>
         </div>
       </section>
 
@@ -235,7 +237,7 @@ export const HomePage: React.FC = () => {
         <div className="max-w-[1360px] mx-auto px-4 sm:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
             {/* Left Interactive Controls (Concise & Tactile) */}
-            <div className="lg:col-span-5 space-y-5">
+            <Reveal direction="left" className="lg:col-span-5 space-y-5">
               <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-bold uppercase tracking-wider">
                 <Cpu className="w-3.5 h-3.5" />
                 Live Studio Lookbook
@@ -295,13 +297,13 @@ export const HomePage: React.FC = () => {
                   Explore 12 Studios
                 </Link>
               </div>
-            </div>
+            </Reveal>
 
             {/* Right Interactive Visual Frame */}
-            <div className="lg:col-span-7">
+            <Reveal direction="right" delay={0.1} className="lg:col-span-7">
               <div className="relative rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(245,158,11,0.16)] border-2 border-amber-300/80 bg-stone-900 group">
                 <div className="relative aspect-[16/10] overflow-hidden">
-                  <img
+                  <ParallaxImage
                     key={currentTab.image}
                     src={assetUrl(currentTab.image)}
                     alt={currentTab.title}
@@ -336,7 +338,7 @@ export const HomePage: React.FC = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </Reveal>
           </div>
         </div>
       </section>
@@ -345,7 +347,7 @@ export const HomePage: React.FC = () => {
           BOTTOM CALL TO ACTION BANNER (Matching S6.jpg)
          ===================================================================== */}
       <section className="relative bg-gradient-to-b from-[#F5E8D0] to-[#EFE0C2] py-16 px-4 sm:px-8 overflow-hidden">
-        <div className="max-w-[1180px] mx-auto relative z-10 text-center">
+        <Reveal scale={0.97} className="max-w-[1180px] mx-auto relative z-10 text-center">
           <p className="text-base sm:text-lg font-semibold text-stone-700 mb-4">
             Ready to accelerate your digital growth?
           </p>
@@ -374,7 +376,7 @@ export const HomePage: React.FC = () => {
               Schedule a Consultation →
             </Link>
           </div>
-        </div>
+        </Reveal>
       </section>
     </div>
   );
