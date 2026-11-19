@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, Code2, Cpu, Sparkles, TrendingUp, Users } from 'lucide-react';
-import { BeehiveLandingExperience } from '../components/hive/BeehiveLandingExperience';
+import { IntelligentHiveHero } from '../components/hive/IntelligentHiveHero';
+import { DigitalEcosystemSection } from '../components/hive/DigitalEcosystemSection';
 import { BwiseBeeCharacter } from '../components/hive/BwiseBeeCharacter';
 import { HiveCornerDecorations } from '../components/layout/HiveCornerDecorations';
 import { ParallaxImage, Reveal, StaggerGroup, StaggerItem } from '../components/motion/ScrollReveal';
@@ -12,7 +13,8 @@ const STUDIO_SHOWCASES = [
     slug: 'software-solutions',
     badge: 'Division 01',
     title: 'Software Solutions',
-    tagline: 'Custom web applications, mobile apps, UI/UX design, QA automation & modern search engineering.',
+    tagline:
+      'Custom web applications, mobile apps, UI/UX design, QA automation & modern search engineering.',
     kpi: 'Full-Stack & Mobile',
     metricDelta: 'Scalable Modern Codebases',
     image: '/assets/pages/industries/enterprise-saas.jpg',
@@ -49,7 +51,8 @@ const HIVE_VISUAL_TABS = [
     label: 'Jaffna Hive Studio',
     badge: 'Connected Agency Model',
     title: 'Software Engineers & Digital Marketers Under One Roof',
-    caption: 'Based in Jaffna, Sri Lanka, our software, design, and marketing teams collaborate daily in one unified workspace.',
+    caption:
+      'Based in Jaffna, Sri Lanka, our software, design, and marketing teams collaborate daily in one unified workspace.',
     image: '/reference/S4.jpg',
     stats: [
       { label: 'Studio Base', value: 'Jaffna, Sri Lanka' },
@@ -61,7 +64,8 @@ const HIVE_VISUAL_TABS = [
     label: 'Custom Engineering',
     badge: 'Modern Tech Stack',
     title: 'Web, Mobile & AI Solutions Built for Growing Businesses',
-    caption: 'Direct collaboration with the developers and designers building your web platform or mobile application.',
+    caption:
+      'Direct collaboration with the developers and designers building your web platform or mobile application.',
     image: '/assets/pages/careers/hive-studio-hero.jpg',
     stats: [
       { label: 'Architecture', value: 'Web, Mobile & Cloud' },
@@ -73,7 +77,8 @@ const HIVE_VISUAL_TABS = [
     label: 'Digital Growth',
     badge: 'Creative & Performance',
     title: 'Branding, Social Media & Search That Drive Real Customers',
-    caption: 'From memorable logo design to targeted Facebook, Instagram, LinkedIn, and Google search campaigns.',
+    caption:
+      'From memorable logo design to targeted Facebook, Instagram, LinkedIn, and Google search campaigns.',
     image: '/assets/pages/portfolio/aetherpay-fintech.jpg',
     stats: [
       { label: 'Channels', value: 'SEO, Social & Web' },
@@ -98,12 +103,15 @@ export const HomePage: React.FC = () => {
   return (
     <div className="min-h-screen bg-honeycomb-pattern relative overflow-hidden">
       {/* =====================================================================
-          HERO: S1 -> S2 -> S3 -> 3D TUNNEL -> S4 INTERACTIVE BEE & BEEHIVE
+          1. SCOPED DARK SECTION ONLY: "THE INTELLIGENT HIVE" HERO + ECOSYSTEM
          ===================================================================== */}
-      <BeehiveLandingExperience />
+      <div data-theme="dark" className="bg-cyber-hive text-white relative overflow-hidden">
+        <IntelligentHiveHero />
+        <DigitalEcosystemSection />
+      </div>
 
       {/* =====================================================================
-          AGENCY IMPACT METRICS STRIP
+          2. AGENCY IMPACT METRICS STRIP (ORIGINAL WARM HONEY THEME)
          ===================================================================== */}
       <section className="bg-gradient-to-r from-[#F9E4B7]/65 via-[#FFF8E7] to-[#F5E8D0]/75 text-stone-900 py-10 border-y border-amber-300/60">
         <div className="max-w-[1360px] mx-auto px-4 sm:px-8">
@@ -125,7 +133,7 @@ export const HomePage: React.FC = () => {
       </section>
 
       {/* =====================================================================
-          INTERACTIVE 3-STUDIO VISUAL SHOWCASE
+          3. INTERACTIVE 3-STUDIO VISUAL SHOWCASE (ORIGINAL WARM HONEY THEME)
          ===================================================================== */}
       <section className="relative overflow-hidden py-16 sm:py-20">
         <HiveCornerDecorations />
@@ -197,9 +205,7 @@ export const HomePage: React.FC = () => {
 
                   {/* Concise Body & Interactive Sub-Studio Pills */}
                   <div className="p-6 flex-1 flex flex-col justify-between">
-                    <p className="text-sm text-stone-600 leading-relaxed">
-                      {studio.tagline}
-                    </p>
+                    <p className="text-sm text-stone-600 leading-relaxed">{studio.tagline}</p>
 
                     <div className="mt-5 pt-4 border-t border-amber-100/90 space-y-3">
                       <div className="flex flex-wrap gap-1.5">
@@ -231,7 +237,7 @@ export const HomePage: React.FC = () => {
       </section>
 
       {/* =====================================================================
-          INTERACTIVE VISUAL HIVE EXPERIENCE SWITCHER
+          4. INTERACTIVE VISUAL HIVE EXPERIENCE SWITCHER (ORIGINAL LIGHT THEME)
          ===================================================================== */}
       <section className="bg-white/85 backdrop-blur-xs py-16 border-y border-amber-200/70">
         <div className="max-w-[1360px] mx-auto px-4 sm:px-8">
@@ -274,9 +280,7 @@ export const HomePage: React.FC = () => {
                         {tab.title}
                       </h3>
                       {isActive && (
-                        <p className="text-xs text-stone-600 mt-1 leading-relaxed">
-                          {tab.caption}
-                        </p>
+                        <p className="text-xs text-stone-600 mt-1 leading-relaxed">{tab.caption}</p>
                       )}
                     </button>
                   );
@@ -344,7 +348,7 @@ export const HomePage: React.FC = () => {
       </section>
 
       {/* =====================================================================
-          BOTTOM CALL TO ACTION BANNER (Matching S6.jpg)
+          5. BOTTOM CALL TO ACTION BANNER (ORIGINAL WARM HONEY THEME)
          ===================================================================== */}
       <section className="relative bg-gradient-to-b from-[#F5E8D0] to-[#EFE0C2] py-16 px-4 sm:px-8 overflow-hidden">
         <Reveal scale={0.97} className="max-w-[1180px] mx-auto relative z-10 text-center">

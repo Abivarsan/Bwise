@@ -178,3 +178,63 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* ==========================================================================
+   The Intelligent Hive — Cybernetic Dark Mode Surfaces & Utilities
+   ========================================================================== */
+.font-cyber {
+  font-family: 'Orbitron', 'Space Grotesk', var(--font-display);
+}
+
+.font-tech {
+  font-family: 'Space Grotesk', var(--font-display);
+}
+
+.bg-cyber-hive {
+  background-color: #050811;
+  background-image:
+    radial-gradient(ellipse 65% 55% at 72% 42%, rgba(245, 158, 11, 0.14) 0%, rgba(234, 88, 12, 0.04) 40%, transparent 72%),
+    radial-gradient(ellipse 50% 45% at 15% 20%, rgba(30, 58, 138, 0.22) 0%, transparent 65%),
+    radial-gradient(ellipse 55% 45% at 85% 92%, rgba(217, 119, 6, 0.08) 0%, transparent 60%),
+    linear-gradient(180deg, #060913 0%, #070C18 48%, #050811 100%);
+}
+
+.cyber-grid-overlay {
+  background-image:
+    linear-gradient(to right, rgba(148, 163, 184, 0.055) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(148, 163, 184, 0.055) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+.glass-cyber-card {
+  background: linear-gradient(145deg, rgba(22, 29, 46, 0.78) 0%, rgba(11, 15, 27, 0.88) 100%);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 20px 50px rgba(0, 0, 0, 0.45);
+}
+
+.glass-hud-pill {
+  background: linear-gradient(135deg, rgba(24, 30, 44, 0.82) 0%, rgba(14, 18, 28, 0.90) 100%);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 12px 32px rgba(0, 0, 0, 0.50);
+}
+
+@keyframes cyberPulseGlow {
+  0%, 100% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.18);
+  }
+}
+
+.animate-cyber-dot {
+  animation: cyberPulseGlow 2.4s ease-in-out infinite;
+}
