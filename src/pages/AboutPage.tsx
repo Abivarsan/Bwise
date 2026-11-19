@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { BwiseBeeCharacter } from '../components/hive/BwiseBeeCharacter';
 import { HiveCornerDecorations } from '../components/layout/HiveCornerDecorations';
+import { ParallaxImage, Reveal, StaggerGroup, StaggerItem } from '../components/motion/ScrollReveal';
 import { useConsultationModal } from '../context/ConsultationModalContext';
 import { assetUrl } from '../utils/assets';
 
@@ -130,7 +131,7 @@ export const AboutPage: React.FC = () => {
       <section className="max-w-[1280px] mx-auto px-4 sm:px-8 pb-16 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
           {/* Left Concise Story */}
-          <div className="lg:col-span-6 space-y-5">
+          <Reveal direction="left" className="lg:col-span-6 space-y-5">
             <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-100/90 border border-amber-300/70 text-amber-900 text-xs font-extrabold uppercase tracking-wider">
               <MapPin className="w-3.5 h-3.5 text-amber-600" />
               Based in Jaffna, Sri Lanka
@@ -148,22 +149,23 @@ export const AboutPage: React.FC = () => {
             </p>
 
             {/* Compact Highlights Row */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-1">
+            <StaggerGroup className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-1" stagger={0.07}>
               {[
                 { value: 'Jaffna', label: 'Sri Lanka HQ' },
                 { value: '12', label: 'Specialist Studios' },
                 { value: '3', label: 'Core Divisions' },
                 { value: '360°', label: 'Tech & Marketing' },
               ].map((st) => (
-                <div
+                <StaggerItem
                   key={st.label}
+                  distance={14}
                   className="rounded-2xl bg-white/90 border border-amber-200/80 p-3.5 shadow-2xs"
                 >
                   <p className="text-xl sm:text-2xl font-extrabold text-amber-700">{st.value}</p>
                   <p className="text-[11px] font-bold text-stone-600 mt-0.5">{st.label}</p>
-                </div>
+                </StaggerItem>
               ))}
-            </div>
+            </StaggerGroup>
 
             {/* Official Social Links */}
             <div className="pt-1">
@@ -202,10 +204,10 @@ export const AboutPage: React.FC = () => {
                 Explore Our Services
               </Link>
             </div>
-          </div>
+          </Reveal>
 
           {/* Right Interactive Studio Photo Switcher */}
-          <div className="lg:col-span-6">
+          <Reveal direction="right" delay={0.1} className="lg:col-span-6">
             <div className="rounded-[32px] bg-white/95 p-4 border-2 border-amber-300/80 shadow-[0_24px_60px_rgba(245,158,11,0.15)]">
               <div className="relative aspect-[16/10] rounded-2xl overflow-hidden bg-stone-900 group">
                 <img
@@ -260,7 +262,7 @@ export const AboutPage: React.FC = () => {
                 })}
               </div>
             </div>
-          </div>
+          </Reveal>
         </div>
       </section>
 
@@ -269,7 +271,7 @@ export const AboutPage: React.FC = () => {
          ===================================================================== */}
       <section className="bg-white/90 backdrop-blur-xs py-16 border-y border-amber-200/70">
         <div className="max-w-[1280px] mx-auto px-4 sm:px-8">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
+          <Reveal className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
             <div>
               <span className="text-xs font-extrabold uppercase tracking-wider text-amber-700 flex items-center gap-1.5">
                 <Sparkles className="w-3.5 h-3.5" />
@@ -282,15 +284,15 @@ export const AboutPage: React.FC = () => {
             <p className="text-xs sm:text-sm text-stone-600 max-w-md">
               Instead of juggling separate developers, designers, and social media freelancers, you get one coordinated team in Jaffna.
             </p>
-          </div>
+          </Reveal>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <StaggerGroup className="grid grid-cols-1 md:grid-cols-3 gap-6" stagger={0.1}>
             {HIVE_PILLARS.map((pillar) => {
               const Icon = pillar.icon;
               return (
-                <div
+                <StaggerItem
                   key={pillar.number}
-                  className="group rounded-3xl p-6 bg-[#FAF8F5] border border-amber-200/80 hover:border-amber-400 hover:bg-white transition-all duration-300 hover:-translate-y-1 shadow-xs"
+                  className="group rounded-3xl p-6 bg-[#FAF8F5] border border-amber-200/80 hover:border-amber-400 hover:bg-white transition-[background-color,border-color,translate] duration-300 hover:-translate-y-1 shadow-xs"
                 >
                   <div className="flex items-center justify-between mb-4">
                     <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 text-white flex items-center justify-center shadow-xs">
@@ -304,10 +306,10 @@ export const AboutPage: React.FC = () => {
                   <p className="text-xs sm:text-sm text-stone-600 mt-2 leading-relaxed">
                     {pillar.summary}
                   </p>
-                </div>
+                </StaggerItem>
               );
             })}
-          </div>
+          </StaggerGroup>
         </div>
       </section>
 
@@ -315,7 +317,7 @@ export const AboutPage: React.FC = () => {
           3. 4 VISUAL SPECIALIST PODS
          ===================================================================== */}
       <section className="max-w-[1280px] mx-auto px-4 sm:px-8 py-16">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
+        <Reveal className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
           <div>
             <span className="text-xs font-extrabold uppercase tracking-wider text-amber-700">
               Our In-House Teams
@@ -330,16 +332,16 @@ export const AboutPage: React.FC = () => {
           >
             Join Our Team in Jaffna <ArrowRight className="w-4 h-4" />
           </Link>
-        </div>
+        </Reveal>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <StaggerGroup className="grid grid-cols-1 md:grid-cols-2 gap-6" stagger={0.1}>
           {LEADERSHIP_PODS.map((pod) => (
-            <div
+            <StaggerItem
               key={pod.pod}
-              className="group rounded-3xl bg-white/95 border border-amber-200/80 hover:border-amber-400 overflow-hidden shadow-[0_12px_35px_rgba(26,22,18,0.05)] hover:shadow-[0_20px_50px_rgba(245,158,11,0.15)] transition-all duration-300 flex flex-col sm:flex-row"
+              className="group rounded-3xl bg-white/95 border border-amber-200/80 hover:border-amber-400 overflow-hidden shadow-[0_12px_35px_rgba(26,22,18,0.05)] hover:shadow-[0_20px_50px_rgba(245,158,11,0.15)] transition-[box-shadow,border-color] duration-300 flex flex-col sm:flex-row"
             >
               <div className="sm:w-48 h-48 sm:h-auto relative overflow-hidden bg-stone-900 shrink-0">
-                <img
+                <ParallaxImage
                   src={assetUrl(pod.image)}
                   alt={pod.name}
                   loading="lazy"
@@ -371,15 +373,15 @@ export const AboutPage: React.FC = () => {
                   ))}
                 </div>
               </div>
-            </div>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerGroup>
       </section>
 
       {/* =====================================================================
           4. CONCISE BOTTOM CTA BANNER
          ===================================================================== */}
-      <section className="max-w-[1280px] mx-auto px-4 sm:px-8">
+      <Reveal scale={0.97} as="section" className="max-w-[1280px] mx-auto px-4 sm:px-8">
         <div className="rounded-[32px] bg-gradient-to-r from-[#F9E2AE]/90 via-[#FFF8E7]/95 to-[#F9E4B7]/90 border-2 border-amber-300/80 p-8 sm:p-12 shadow-[0_18px_50px_rgba(245,158,11,0.16)] flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-5">
             <div className="hidden sm:block shrink-0">
@@ -404,7 +406,7 @@ export const AboutPage: React.FC = () => {
             Book a Free Consultation →
           </button>
         </div>
-      </section>
+      </Reveal>
     </div>
   );
 };
