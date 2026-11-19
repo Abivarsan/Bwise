@@ -3,6 +3,8 @@ import React from 'react';
 interface HiveCornerDecorationsProps {
   leftClassName?: string;
   rightClassName?: string;
+  className?: string;
+  opacityClassName?: string;
 }
 
 /**
@@ -10,14 +12,16 @@ interface HiveCornerDecorationsProps {
  * referenced from ServicesPage to maintain visual continuity across all pages.
  */
 export const HiveCornerDecorations: React.FC<HiveCornerDecorationsProps> = ({
-  leftClassName = 'top-10 -left-20',
-  rightClassName = 'top-16 -right-16',
+  leftClassName = 'top-6 2xl:-left-44',
+  rightClassName = 'top-10 2xl:-right-52',
+  className = 'hidden 2xl:block',
+  opacityClassName = 'opacity-15',
 }) => {
   return (
     <>
       {/* Decorative Honeycomb/Pentagon Line Art at Top-Left Edge */}
       <div
-        className={`hidden md:block absolute ${leftClassName} w-72 h-96 opacity-25 pointer-events-none z-0`}
+        className={`${className} absolute ${leftClassName} w-72 h-96 ${opacityClassName} pointer-events-none z-0`}
         aria-hidden="true"
       >
         <svg viewBox="0 0 200 300" fill="none" stroke="#D97706" strokeWidth="1.5">
@@ -31,7 +35,7 @@ export const HiveCornerDecorations: React.FC<HiveCornerDecorationsProps> = ({
 
       {/* Decorative Honeycomb/Pentagon Line Art at Top-Right Edge */}
       <div
-        className={`hidden md:block absolute ${rightClassName} w-80 h-96 opacity-25 pointer-events-none z-0`}
+        className={`${className} absolute ${rightClassName} w-80 h-96 ${opacityClassName} pointer-events-none z-0`}
         aria-hidden="true"
       >
         <svg viewBox="0 0 200 300" fill="none" stroke="#D97706" strokeWidth="1.5">

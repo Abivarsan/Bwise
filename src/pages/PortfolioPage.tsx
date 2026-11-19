@@ -157,7 +157,7 @@ export const PortfolioPage: React.FC = () => {
       {/* =====================================================================
           1. CONCISE VISUAL HEADER & FILTER PILLS
          ===================================================================== */}
-      <section className="max-w-[1320px] mx-auto px-4 sm:px-8 pb-8">
+      <section className="max-w-[1320px] mx-auto px-4 sm:px-8 pb-8 relative z-10">
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
           <div>
             <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-bold uppercase tracking-wider">
@@ -195,7 +195,7 @@ export const PortfolioPage: React.FC = () => {
       {/* =====================================================================
           2. INTERACTIVE SPOTLIGHT VIEWER (LARGE REALISTIC PHOTOGRAPHY + KPIs)
          ===================================================================== */}
-      <section className="max-w-[1320px] mx-auto px-4 sm:px-8 pb-12">
+      <section className="max-w-[1320px] mx-auto px-4 sm:px-8 pb-12 relative z-10">
         <AnimatePresence mode="wait">
           <motion.div
             key={selectedStudy.id}
@@ -207,7 +207,7 @@ export const PortfolioPage: React.FC = () => {
           >
             <div className="grid grid-cols-1 lg:grid-cols-12">
               {/* Left: High-Resolution Realistic Photography */}
-              <div className="lg:col-span-7 relative min-h-[320px] sm:min-h-[440px] bg-stone-950 overflow-hidden group">
+              <div className="lg:col-span-7 relative min-h-[360px] sm:min-h-[440px] bg-stone-950 overflow-hidden group">
                 <img
                   src={assetUrl(selectedStudy.image)}
                   alt={selectedStudy.imageAlt}
@@ -217,27 +217,27 @@ export const PortfolioPage: React.FC = () => {
                 <div className="absolute inset-0 bg-gradient-to-t from-stone-950/90 via-stone-950/20 to-transparent" />
 
                 {/* Top Floating Badges */}
-                <div className="absolute top-5 left-5 right-5 flex items-center justify-between gap-2">
-                  <span className="px-3.5 py-1.5 rounded-full bg-white/90 backdrop-blur-md text-stone-900 text-xs font-extrabold shadow-sm">
+                <div className="absolute top-3.5 left-3.5 right-3.5 sm:top-5 sm:left-5 sm:right-5 flex flex-wrap items-center justify-between gap-2">
+                  <span className="px-3 sm:px-3.5 py-1 sm:py-1.5 rounded-full bg-white/90 backdrop-blur-md text-stone-900 text-[11px] sm:text-xs font-extrabold shadow-sm">
                     Showcase #{selectedStudy.number} · {selectedStudy.sector}
                   </span>
-                  <span className="px-3.5 py-1.5 rounded-full bg-amber-400 text-stone-950 text-xs font-extrabold shadow-md">
+                  <span className="px-3 sm:px-3.5 py-1 sm:py-1.5 rounded-full bg-amber-400 text-stone-950 text-[11px] sm:text-xs font-extrabold shadow-md">
                     Timeline: {selectedStudy.timeline}
                   </span>
                 </div>
 
                 {/* Bottom Floating Hero Metric */}
-                <div className="absolute bottom-5 left-5 right-5 flex flex-wrap items-end justify-between gap-4 text-white">
+                <div className="absolute bottom-3.5 left-3.5 right-3.5 sm:bottom-5 sm:left-5 sm:right-5 flex flex-wrap items-end justify-between gap-3 sm:gap-4 text-white">
                   <div>
                     <p className="text-xs font-bold uppercase tracking-widest text-amber-300">
                       {selectedStudy.client}
                     </p>
-                    <h2 className="text-xl sm:text-2xl font-extrabold tracking-tight mt-0.5 max-w-xl">
+                    <h2 className="text-lg sm:text-2xl font-extrabold tracking-tight mt-0.5 max-w-xl">
                       {selectedStudy.headline}
                     </h2>
                   </div>
-                  <div className="rounded-2xl bg-white/95 backdrop-blur-md px-4 py-2.5 text-stone-900 border border-amber-300 shadow-lg">
-                    <p className="text-xl sm:text-2xl font-extrabold text-amber-700 leading-none">
+                  <div className="rounded-2xl bg-white/95 backdrop-blur-md px-3.5 sm:px-4 py-2 sm:py-2.5 text-stone-900 border border-amber-300 shadow-lg">
+                    <p className="text-lg sm:text-2xl font-extrabold text-amber-700 leading-none">
                       {selectedStudy.heroMetric.value}
                     </p>
                     <p className="text-[10px] font-bold uppercase tracking-wider text-stone-600 mt-1">
@@ -267,13 +267,13 @@ export const PortfolioPage: React.FC = () => {
                   </div>
 
                   {/* 3 Visual KPI Cards */}
-                  <div className="grid grid-cols-3 gap-2.5">
+                  <div className="grid grid-cols-3 gap-2 sm:gap-2.5">
                     {selectedStudy.metrics.map((m) => (
                       <div
                         key={m.label}
-                        className="rounded-2xl bg-white p-3.5 border border-amber-200/80 shadow-2xs text-center"
+                        className="rounded-2xl bg-white p-2.5 sm:p-3.5 border border-amber-200/80 shadow-2xs text-center flex flex-col justify-center"
                       >
-                        <p className="text-lg sm:text-xl font-extrabold text-amber-700 tracking-tight">
+                        <p className="text-sm sm:text-xl font-extrabold text-amber-700 tracking-tight break-words">
                           {m.value}
                         </p>
                         <p className="text-[10px] font-bold text-stone-600 mt-1 leading-tight">

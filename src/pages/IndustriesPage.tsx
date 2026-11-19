@@ -206,7 +206,7 @@ export const IndustriesPage: React.FC = () => {
       {/* =====================================================================
           1. CONCISE HERO + 6-SECTOR VISUAL SELECTOR PILLS
          ===================================================================== */}
-      <section className="max-w-[1320px] mx-auto px-4 sm:px-8 pb-8">
+      <section className="max-w-[1320px] mx-auto px-4 sm:px-8 pb-8 relative z-10">
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
           <div>
             <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-bold uppercase tracking-wider">
@@ -258,7 +258,7 @@ export const IndustriesPage: React.FC = () => {
       {/* =====================================================================
           2. INTERACTIVE VISUAL SECTOR DOSSIER
          ===================================================================== */}
-      <section className="max-w-[1320px] mx-auto px-4 sm:px-8 pb-12">
+      <section className="max-w-[1320px] mx-auto px-4 sm:px-8 pb-12 relative z-10">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeSector.id}
@@ -270,7 +270,7 @@ export const IndustriesPage: React.FC = () => {
           >
             <div className="grid grid-cols-1 lg:grid-cols-12">
               {/* Left: Realistic Photography + Floating Benchmark Badges */}
-              <div className="lg:col-span-6 relative min-h-[320px] sm:min-h-[420px] bg-stone-950 overflow-hidden group">
+              <div className="lg:col-span-6 relative min-h-[360px] sm:min-h-[420px] bg-stone-950 overflow-hidden group">
                 <img
                   src={assetUrl(activeSector.image)}
                   alt={activeSector.imageAlt}
@@ -280,29 +280,31 @@ export const IndustriesPage: React.FC = () => {
                 <div className="absolute inset-0 bg-gradient-to-t from-stone-950/90 via-stone-950/25 to-transparent" />
 
                 {/* Top Deliverable Badges */}
-                <div className="absolute top-5 left-5 right-5 flex flex-wrap items-center gap-2">
+                <div className="absolute top-3.5 left-3.5 right-3.5 sm:top-5 sm:left-5 sm:right-5 flex flex-wrap items-center gap-1.5 sm:gap-2">
                   {activeSector.complianceBadges.map((badge) => (
                     <span
                       key={badge}
-                      className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-white/90 backdrop-blur-md text-stone-900 text-[11px] font-extrabold shadow-xs"
+                      className="inline-flex items-center gap-1 px-2.5 sm:px-3 py-1 rounded-full bg-white/90 backdrop-blur-md text-stone-900 text-[10px] sm:text-[11px] font-extrabold shadow-xs"
                     >
-                      <ShieldCheck className="w-3.5 h-3.5 text-amber-600" />
+                      <ShieldCheck className="w-3.5 h-3.5 text-amber-600 shrink-0" />
                       {badge}
                     </span>
                   ))}
                 </div>
 
                 {/* Bottom Benchmark Counters */}
-                <div className="absolute bottom-5 left-5 right-5 grid grid-cols-2 gap-3">
+                <div className="absolute bottom-3.5 left-3.5 right-3.5 sm:bottom-5 sm:left-5 sm:right-5 grid grid-cols-2 gap-2.5 sm:gap-3">
                   {activeSector.benchmarks.map((b) => (
                     <div
                       key={b.label}
-                      className="rounded-2xl bg-white/95 backdrop-blur-md p-4 border border-amber-200 shadow-lg"
+                      className="rounded-2xl bg-white/95 backdrop-blur-md p-3 sm:p-4 border border-amber-200 shadow-lg"
                     >
-                      <p className="text-2xl sm:text-3xl font-extrabold text-amber-700 leading-none">
+                      <p className="text-xl sm:text-3xl font-extrabold text-amber-700 leading-none">
                         {b.metric}
                       </p>
-                      <p className="text-[11px] font-bold text-stone-600 mt-1">{b.label}</p>
+                      <p className="text-[10px] sm:text-[11px] font-bold text-stone-600 mt-1 leading-tight">
+                        {b.label}
+                      </p>
                     </div>
                   ))}
                 </div>
@@ -368,14 +370,14 @@ export const IndustriesPage: React.FC = () => {
                   <button
                     type="button"
                     onClick={openConsultationModal}
-                    className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-[#FBBF24] via-[#F59E0B] to-[#F59E0B] hover:from-[#FCD34D] hover:to-[#D97706] text-[#14111B] text-xs sm:text-sm font-extrabold shadow-md transition hover:scale-105 cursor-pointer"
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-[#FBBF24] via-[#F59E0B] to-[#F59E0B] hover:from-[#FCD34D] hover:to-[#D97706] text-[#14111B] text-xs sm:text-sm font-extrabold shadow-md transition hover:scale-105 cursor-pointer"
                   >
                     <span>Discuss Your {activeSector.shortName} Project</span>
-                    <ArrowRight className="w-4 h-4" />
+                    <ArrowRight className="w-4 h-4 shrink-0" />
                   </button>
                   <Link
                     to="/portfolio"
-                    className="text-xs font-extrabold text-amber-700 hover:text-amber-800 inline-flex items-center gap-1"
+                    className="text-xs font-extrabold text-amber-700 hover:text-amber-800 inline-flex items-center gap-1 mx-auto sm:mx-0"
                   >
                     View Project Showcases <ArrowUpRight className="w-3.5 h-3.5" />
                   </Link>

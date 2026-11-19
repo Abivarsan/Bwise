@@ -135,7 +135,7 @@ export const CareersPage: React.FC = () => {
       {/* =====================================================================
           1. VISUAL STUDIO HERO + 3-PHOTO DOCUMENTARY MOSAIC
          ===================================================================== */}
-      <section className="max-w-[1320px] mx-auto px-4 sm:px-8 pb-14">
+      <section className="max-w-[1320px] mx-auto px-4 sm:px-8 pb-14 relative z-10">
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10">
           <div>
             <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-extrabold uppercase tracking-wider">
@@ -169,16 +169,16 @@ export const CareersPage: React.FC = () => {
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-transparent to-transparent" />
-            <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between text-white">
+            <div className="absolute bottom-3.5 left-3.5 right-3.5 sm:bottom-5 sm:left-5 sm:right-5 flex flex-wrap items-end justify-between gap-2 text-white">
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-widest text-amber-300">
                   BWise Studio Culture
                 </span>
-                <p className="text-base sm:text-lg font-extrabold mt-0.5">
+                <p className="text-sm sm:text-lg font-extrabold mt-0.5">
                   Jaffna, Sri Lanka · On-Site &amp; Hybrid Pods
                 </p>
               </div>
-              <span className="px-3 py-1 rounded-full bg-amber-400 text-stone-950 text-xs font-extrabold">
+              <span className="px-3 py-1 rounded-full bg-amber-400 text-stone-950 text-[11px] sm:text-xs font-extrabold shrink-0">
                 Software &amp; Digital Agency
               </span>
             </div>

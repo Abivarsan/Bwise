@@ -73,7 +73,7 @@ export const Footer: React.FC = () => {
             </div>
 
             {/* Official Social Media Links */}
-            <div className="pt-2 flex items-center gap-2.5">
+            <div className="pt-2 flex flex-wrap items-center gap-2.5">
               {SOCIAL_LINKS.map((item) => (
                 <a
                   key={item.name}

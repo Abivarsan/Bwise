@@ -73,28 +73,30 @@ const SubServiceSubsection: React.FC<{
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
         {/* Visual Showcase Column (Alternates Left/Right on Desktop for Visual Rhythm) */}
         <div className={`lg:col-span-6 ${isEven ? 'lg:order-2' : 'lg:order-1'}`}>
-          <div className="relative rounded-[26px] overflow-hidden bg-stone-900 border-2 border-amber-300/70 shadow-[0_18px_45px_rgba(26,22,18,0.14)] aspect-[16/11]">
-            <img
-              src={assetUrl(photoPath)}
-              alt={service.title}
-              loading="lazy"
-              className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-stone-950/90 via-stone-950/25 to-stone-950/10" />
+          <div className="relative rounded-[26px] overflow-hidden bg-stone-900 border-2 border-amber-300/70 shadow-[0_18px_45px_rgba(26,22,18,0.14)]">
+            <div className="relative aspect-[16/11] overflow-hidden">
+              <img
+                src={assetUrl(photoPath)}
+                alt={service.title}
+                loading="lazy"
+                className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-stone-950/90 via-stone-950/25 to-stone-950/10" />
 
-            {/* Top Floating Studio Badges */}
-            <div className="absolute top-4 left-4 right-4 flex items-center justify-between gap-2">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 backdrop-blur-md text-stone-900 text-[11px] font-extrabold shadow-xs">
-                <Activity className="w-3.5 h-3.5 text-amber-600" />
-                {service.hiveCell.roomInteriorLabel}
-              </span>
-              <span className="px-3 py-1 rounded-full bg-amber-400 text-stone-950 text-[11px] font-extrabold shadow-md">
-                {detail.mobileMockupStat}
-              </span>
+              {/* Top Floating Studio Badges */}
+              <div className="absolute top-3 left-3 right-3 sm:top-4 sm:left-4 sm:right-4 flex flex-wrap items-center justify-between gap-2">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 backdrop-blur-md text-stone-900 text-[11px] font-extrabold shadow-xs">
+                  <Activity className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+                  {service.hiveCell.roomInteriorLabel}
+                </span>
+                <span className="px-3 py-1 rounded-full bg-amber-400 text-stone-950 text-[11px] font-extrabold shadow-md">
+                  {detail.mobileMockupStat}
+                </span>
+              </div>
             </div>
 
-            {/* Bottom Interactive Telemetry Overlay */}
-            <div className="absolute bottom-4 left-4 right-4 rounded-2xl bg-white/95 backdrop-blur-md p-4 border border-amber-200/90 shadow-lg">
+            {/* Bottom Interactive Telemetry Overlay — Stacks below photo on mobile, floats over photo from sm: upward */}
+            <div className="m-3 sm:m-0 sm:absolute sm:bottom-4 sm:left-4 sm:right-4 rounded-2xl bg-white/95 backdrop-blur-md p-3.5 sm:p-4 border border-amber-200/90 shadow-lg">
               <div className="flex items-center justify-between gap-3 mb-2.5">
                 <div>
                   <p className="text-[10px] font-extrabold uppercase tracking-wider text-amber-700">
@@ -186,17 +188,17 @@ const SubServiceSubsection: React.FC<{
               ))}
             </div>
 
-            <div className="flex items-center gap-2.5 shrink-0">
+            <div className="flex items-center gap-2.5 w-full sm:w-auto shrink-0">
               <Link
                 to="/portfolio"
-                className="px-3.5 py-2 rounded-full bg-stone-100 hover:bg-amber-100/80 text-stone-800 text-xs font-bold transition"
+                className="flex-1 sm:flex-initial text-center px-3.5 py-2 rounded-full bg-stone-100 hover:bg-amber-100/80 text-stone-800 text-xs font-bold transition"
               >
                 Case Studies
               </Link>
               <button
                 type="button"
                 onClick={onBookStudio}
-                className="inline-flex items-center gap-1.5 px-5 py-2 rounded-full bg-gradient-to-r from-[#FBBF24] via-[#F59E0B] to-[#F59E0B] hover:from-[#FCD34D] hover:to-[#D97706] text-[#14111B] text-xs font-extrabold shadow-sm transition hover:scale-105 cursor-pointer"
+                className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-5 py-2 rounded-full bg-gradient-to-r from-[#FBBF24] via-[#F59E0B] to-[#F59E0B] hover:from-[#FCD34D] hover:to-[#D97706] text-[#14111B] text-xs font-extrabold shadow-sm transition hover:scale-105 cursor-pointer"
               >
                 <span>Book Studio</span>
                 <ArrowRight className="w-3.5 h-3.5" />

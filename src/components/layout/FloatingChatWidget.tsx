@@ -28,9 +28,9 @@ export const FloatingChatWidget: React.FC = () => {
   };
 
   return (
-    <div className="fixed bottom-5 right-5 z-50">
+    <div className="fixed bottom-4 right-4 sm:bottom-5 sm:right-5 z-50">
       {isOpen && (
-        <div className="mb-3 w-[330px] sm:w-[360px] bg-white rounded-3xl shadow-[0_24px_60px_rgba(0,0,0,0.22)] border border-amber-200/80 overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-200">
+        <div className="mb-3 w-[calc(100vw-2rem)] max-w-[340px] sm:w-[360px] sm:max-w-none bg-white rounded-3xl shadow-[0_24px_60px_rgba(0,0,0,0.22)] border border-amber-200/80 overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-200">
           <div className="bg-gradient-to-r from-amber-500 to-amber-600 px-5 py-4 text-white flex items-center justify-between">
             <div className="flex items-center gap-2.5">
               <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
@@ -51,7 +51,7 @@ export const FloatingChatWidget: React.FC = () => {
             </button>
           </div>
 
-          <div className="p-4 max-h-[320px] overflow-y-auto space-y-3 bg-[#FAF8F5]">
+          <div className="p-4 max-h-[min(320px,55vh)] overflow-y-auto space-y-3 bg-[#FAF8F5]">
             <div className="bg-white p-3.5 rounded-2xl rounded-tl-sm shadow-sm border border-stone-200/70 text-xs text-stone-700 leading-relaxed">
               👋 <strong>Welcome to the Bwise Hive!</strong> Which of our 12 specialized service studios would you like to explore right now?
             </div>

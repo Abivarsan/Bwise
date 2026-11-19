@@ -117,12 +117,17 @@ export const AboutPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-honeycomb-pattern relative overflow-hidden pt-24 sm:pt-28 pb-20">
-      <HiveCornerDecorations />
+      <HiveCornerDecorations
+        className="hidden 2xl:block"
+        leftClassName="top-6 2xl:-left-44"
+        rightClassName="top-10 2xl:-right-52"
+        opacityClassName="opacity-15"
+      />
 
       {/* =====================================================================
           1. VISUAL HERO + JAFFNA STUDIO MOSAIC
          ===================================================================== */}
-      <section className="max-w-[1280px] mx-auto px-4 sm:px-8 pb-16">
+      <section className="max-w-[1280px] mx-auto px-4 sm:px-8 pb-16 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
           {/* Left Concise Story */}
           <div className="lg:col-span-6 space-y-5">
