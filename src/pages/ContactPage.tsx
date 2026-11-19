@@ -207,7 +207,7 @@ export const ContactPage: React.FC = () => {
               </div>
 
               {/* Studio Presence Strip */}
-              <div className="p-4 bg-white grid grid-cols-3 gap-2">
+              <div className="p-4 bg-white grid grid-cols-1 sm:grid-cols-3 gap-2">
                 {STUDIO_PRESENCE.map((hub) => (
                   <div
                     key={hub.label}

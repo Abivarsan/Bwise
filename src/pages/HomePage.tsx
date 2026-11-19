@@ -311,28 +311,28 @@ export const HomePage: React.FC = () => {
                   <div className="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-stone-950/15 to-transparent" />
 
                   {/* Floating Telemetry Pill */}
-                  <div className="absolute top-4 left-4">
+                  <div className="absolute top-3.5 left-3.5 sm:top-4 sm:left-4">
                     <span className="px-3.5 py-1.5 rounded-full bg-amber-400 text-stone-950 text-xs font-extrabold shadow-md">
                       {currentTab.badge}
                     </span>
                   </div>
+                </div>
 
-                  {/* Floating Bottom Metrics Overlay */}
-                  <div className="absolute bottom-4 left-4 right-4 flex flex-wrap items-center justify-between gap-3 bg-white/95 backdrop-blur-md rounded-2xl p-4 border border-amber-200 shadow-lg">
-                    <div>
-                      <p className="text-xs font-extrabold text-stone-900">{currentTab.title}</p>
-                      <p className="text-[11px] text-stone-600">{currentTab.caption}</p>
-                    </div>
-                    <div className="flex items-center gap-4">
-                      {currentTab.stats.map((st) => (
-                        <div key={st.label} className="border-l-2 border-amber-400 pl-3">
-                          <p className="text-[10px] font-bold uppercase tracking-wider text-stone-500">
-                            {st.label}
-                          </p>
-                          <p className="text-xs font-extrabold text-amber-700">{st.value}</p>
-                        </div>
-                      ))}
-                    </div>
+                {/* Bottom Metrics Card — Stacks below image on mobile, floats over image from sm: upward */}
+                <div className="m-3 sm:m-0 sm:absolute sm:bottom-4 sm:left-4 sm:right-4 flex flex-wrap items-center justify-between gap-3 bg-white/95 backdrop-blur-md rounded-2xl p-4 border border-amber-200 shadow-lg">
+                  <div>
+                    <p className="text-xs font-extrabold text-stone-900">{currentTab.title}</p>
+                    <p className="text-[11px] text-stone-600">{currentTab.caption}</p>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    {currentTab.stats.map((st) => (
+                      <div key={st.label} className="border-l-2 border-amber-400 pl-3">
+                        <p className="text-[10px] font-bold uppercase tracking-wider text-stone-500">
+                          {st.label}
+                        </p>
+                        <p className="text-xs font-extrabold text-amber-700">{st.value}</p>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
