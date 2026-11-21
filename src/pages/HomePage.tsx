@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, Code2, Cpu, Sparkles, TrendingUp, Users } from 'lucide-react';
-import { IntelligentHiveHero } from '../components/hive/IntelligentHiveHero';
-import { DigitalEcosystemSection } from '../components/hive/DigitalEcosystemSection';
+import { FluidIntelligenceHero } from '../components/hive/FluidIntelligenceHero';
+import { CoreCapabilitiesSection } from '../components/hive/CoreCapabilitiesSection';
 import { BwiseBeeCharacter } from '../components/hive/BwiseBeeCharacter';
 import { HiveCornerDecorations } from '../components/layout/HiveCornerDecorations';
 import { ParallaxImage, Reveal, StaggerGroup, StaggerItem } from '../components/motion/ScrollReveal';
@@ -103,11 +103,11 @@ export const HomePage: React.FC = () => {
   return (
     <div className="min-h-screen bg-honeycomb-pattern relative overflow-hidden">
       {/* =====================================================================
-          1. SCOPED DARK SECTION ONLY: "THE INTELLIGENT HIVE" HERO + ECOSYSTEM
+          1. SCOPED DARK SECTION ONLY: "THE FLUID INTELLIGENCE (DIGITAL FLUX)"
          ===================================================================== */}
-      <div data-theme="dark" className="bg-cyber-hive text-white relative overflow-hidden">
-        <IntelligentHiveHero />
-        <DigitalEcosystemSection />
+      <div data-theme="dark" className="bg-fluid-flux text-white relative overflow-hidden">
+        <FluidIntelligenceHero />
+        <CoreCapabilitiesSection />
       </div>
 
       {/* =====================================================================

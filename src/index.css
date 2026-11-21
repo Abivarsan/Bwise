@@ -199,6 +199,16 @@
     linear-gradient(180deg, #060913 0%, #070C18 48%, #050811 100%);
 }
 
+.bg-fluid-flux {
+  background-color: #060913;
+  background-image:
+    radial-gradient(ellipse 55% 50% at 72% 40%, rgba(245, 158, 11, 0.15) 0%, rgba(234, 88, 12, 0.04) 42%, transparent 72%),
+    radial-gradient(ellipse 50% 50% at 18% 22%, rgba(23, 37, 84, 0.28) 0%, transparent 65%),
+    radial-gradient(ellipse 40% 35% at 0% 100%, rgba(245, 158, 11, 0.14) 0%, transparent 65%),
+    radial-gradient(ellipse 40% 35% at 100% 100%, rgba(245, 158, 11, 0.14) 0%, transparent 65%),
+    linear-gradient(180deg, #060913 0%, #090E1C 52%, #070B15 100%);
+}
+
 .cyber-grid-overlay {
   background-image:
     linear-gradient(to right, rgba(148, 163, 184, 0.055) 1px, transparent 1px),
