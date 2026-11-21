@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, Code2, Cpu, Sparkles, TrendingUp, Users } from 'lucide-react';
-import { IntelligentHiveHero } from '../components/hive/IntelligentHiveHero';
+import { CinematicBwiseHero } from '../components/hive/CinematicBwiseHero';
 import { DigitalEcosystemSection } from '../components/hive/DigitalEcosystemSection';
 import { BwiseBeeCharacter } from '../components/hive/BwiseBeeCharacter';
 import { HiveCornerDecorations } from '../components/layout/HiveCornerDecorations';
@@ -103,11 +103,13 @@ export const HomePage: React.FC = () => {
   return (
     <div className="min-h-screen bg-honeycomb-pattern relative overflow-hidden">
       {/* =====================================================================
-          1. SCOPED DARK SECTION ONLY: "THE INTELLIGENT HIVE" HERO + ECOSYSTEM
+          1. SCOPED DARK SECTION ONLY: CINEMATIC BWISE HERO + DIGITAL ECOSYSTEM
          ===================================================================== */}
-      <div data-theme="dark" className="bg-cyber-hive text-white relative overflow-hidden">
-        <IntelligentHiveHero />
-        <DigitalEcosystemSection />
+      <div data-theme="dark" className="bg-[#000000] text-white relative overflow-x-clip">
+        <CinematicBwiseHero />
+        <div className="bg-gradient-to-b from-[#000000] via-[#0B0B0B] to-[#141414] pt-10 sm:pt-14 border-t border-white/[0.06]">
+          <DigitalEcosystemSection />
+        </div>
       </div>
 
       {/* =====================================================================
